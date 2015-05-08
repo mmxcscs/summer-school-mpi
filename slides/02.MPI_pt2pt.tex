@@ -1,0 +1,514 @@
+\documentclass[aspectratio=43]{beamer}
+\usepackage{ragged2e}
+\usepackage{multirow}
+
+\usetheme{CSCS}
+
+\newcommand{\footlinetext}{Summer School 2015 - MPI}
+
+% Select the image for the title page
+%\newcommand{\picturetitle}{cscs_images/image3.pdf}
+%\newcommand{\picturetitle}{cscs_images/image5.pdf}
+\newcommand{\picturetitle}{cscs_images/image6.pdf}
+
+\author{Maxime Martinasso, CSCS}
+\title{Message Passing Interface (MPI)}
+\subtitle{Summer School 2015 - Effective High Performance Computing}
+\date{\today}
+
+\begin{document}
+
+% TITLE SLIDE
+\cscstitle
+
+\begin{frame}{Previous course summary}
+\begin{itemize}
+\item MPI, message passing paradigm
+\item Distributed memory (but also shared memory)
+\item Write a simple program, no communication
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Course Objectives}
+\begin{itemize}
+\item The understanding of a point-to-point communications
+\item The understanding of their different flavors
+\item The importance of buffer availability and scope
+\end{itemize}
+\end{frame}
+
+% TABLE OF CONTENT SLIDE
+\cscstableofcontents[hideallsubsections]{General Course Structure}
+
+\section{An introduction to MPI}
+\section{Point-to-point communications}
+\cscstableofcontents[currentsection]{General Course Structure}
+
+% CHAPTER SLIDE
+\cscschapter{Point-to-point communications}
+
+\subsection{Communication}
+
+\begin{frame}{Point-to-Point communication}
+It is the fundamental communication facility provided by MPI library.
+Communication between 2 processes:
+\begin{itemize}
+\item It is conceptually simple: source process A sends a message to destination process B, B receive the message from A.
+\item Communication take places within a communicator
+\item Source and Destination are identified by their rank in the communicator
+\end{itemize}
+\end{frame}
+
+
+\subsection{Message}
+\begin{frame}{Message}
+\justifying
+Data is exchanged in the buffer, an array of count elements of some particular MPI data type
+\begin{itemize}
+\item One argument that usually must be given to MPI routines is the type of the data being passed.
+\item This allows MPI programs to run automatically in heterogeneous environments
+\end{itemize}
+Messages are identified by their envelopes. A message could be exchanged only if the sender and receiver specify the correct envelope.\\[5mm]
+\begin{tabular}{|c|c|c||c|c|c|c|}
+\hline
+\multicolumn{3}{|c||}{body} & \multicolumn{4}{c|}{envelope} \\\hline
+buffer & count & datatype & source & destination & communicator & tag\\\hline
+\end{tabular}
+\end{frame}
+
+\begin{frame}{Message ordering}
+\justifying
+Each process has a FIFO receipt (queue), incoming messages never overtake each other.\\[5mm]
+
+If process A does multiple sends to process B those messages arrive in the same order.
+\end{frame}
+
+\subsection{Data types}
+\begin{frame}{Data types}
+MPI provides its own data type for send and recv buffers.
+\begin{itemize}
+\item Handle type conversion in a heterogeneous collection of machines
+\end{itemize}
+\begin{red1block}{General rule}
+MPI datatype must match datatypes among pairs of send and recv
+\end{red1block}
+MPI defines "handles" to allow programmers to refer to data types.
+\end{frame}
+
+
+\begin{frame}[fragile]{Fortran - MPI Intrinsic Datatypes}
+\begin{center}
+\begin{tabular}{|c||c|}
+    \hline
+    \color{cscsblue}\textbf{MPI Data type} & \color{cscsbrown}\textbf{Fortran Data type} \\\hline\hline
+    \verb+MPI_INTEGER+ & \verb+INTEGER+ \\\hline
+    \verb+MPI_REAL+ & \verb+REAL+ \\\hline
+    \verb+MPI_DOUBLE_PRECISION+ & \verb+DOUBLE PRECISION+ \\\hline
+    \verb+MPI_COMPLEX+ & \verb+COMPLEX+ \\\hline
+    \verb+MPI_DOUBLE_COMPLEX+ & \verb+DOUBLE COMPLEX+\\\hline
+    \verb+MPI_LOGICAL+ & \verb+LOGICAL+ \\\hline
+    \verb+MPI_CHARACTER+ & \verb+CHARACTER(1)+ \\\hline
+    \verb+MPI_PACKED+ & -\\\hline
+    \verb+MPI_BYTE+ & -\\\hline
+\end{tabular}
+\end{center}
+\end{frame}
+
+\begin{frame}[fragile]{C - MPI Intrinsic Datatypes}
+\begin{center}
+\begin{tabular}{|c||c|}
+    \hline
+    \color{cscsblue}\textbf{MPI Data type} & \color{cscsbrown}\textbf{C Data type} \\\hline\hline
+    \verb+MPI_CHAR+ & \verb+signed char+\\\hline
+    \verb+MPI_SHORT+ & \verb+signed short int+\\\hline
+    \verb+MPI_INT+ & \verb+signed int+\\\hline
+    \verb+MPI_LONG+ & \verb+signed log int+\\\hline
+    \verb+MPI_UNSIGNED_CHAR+ & \verb+unsigned char+\\\hline
+    \verb+MPI_UNSIGNED_SHORT+ & \verb+unsigned short int+\\\hline
+    \verb+MPI_UNSIGNED+ & \verb+unsigned int+\\\hline
+    \verb+MPI_UNSIGNED_LONG+ & \verb+unsigned long int+\\\hline
+    \verb+MPI_FLOAT+ & \verb+float+\\\hline
+    \verb+MPI_DOUBLE+ & \verb+double+\\\hline
+    \verb+MPI_LONG_DOUBLE+ & \verb+long double+\\\hline
+    \verb+MPI_BYTE+ & -\\\hline
+    \verb+MPI_PACKED+ & -\\\hline
+\end{tabular}
+\end{center}
+\end{frame}
+
+
+\subsection{Standard Send/Recv}
+\begin{frame}[fragile]{Basic Send/Recv}
+\footnotesize
+C:
+\vspace{-0.2cm}
+\begin{verbatim}
+int MPI_Send(void *buf, int count, MPI_Datatype type, int dest,
+             int tag, MPI_Comm comm);
+int MPI_Recv(void *buf, int count, MPI_Datatype type, int dest,
+             int tag, MPI_Comm comm, MPI_Status *status);
+\end{verbatim}
+\vspace{-0.2cm}
+Fortran:
+\vspace{-0.2cm}
+\begin{verbatim}
+MPI_SEND(buf, count, type, dest, tag, comm, ierr)
+MPI_RECV(buf, count, type, dest, tag, comm, status, ierr)
+\end{verbatim}
+\only<1>{
+\begin{black1block}{}
+\begin{tabular}{rl}
+    \textbf{buf} & array of type type see table\\
+    \textbf{count} & (INTEGER) number of element of buf to be sent\\
+    \textbf{type} & (INTEGER) MPI type of buf\\
+    \textbf{dest} & (INTEGER) rank of the destination process\\
+    \textbf{tag} & (INTEGER) number identifying the message\\
+    \textbf{comm} & (INTEGER) communicator of the sender and receiver\\
+    \textbf{status} & (INTEGER) array containing communication status\\
+    \textbf{ierr} & (INTEGER) error code (if ierr=0 no error occurs)\\
+\end{tabular}
+\end{black1block}
+}
+\only<2>{
+\begin{black1block}{}
+\begin{tabular}{rl}
+    \color{cscsbrown}\textbf{buf} & \multirow{3}{*}{\color{cscsbrown}BODY}\\
+    \color{cscsbrown}\textbf{count} & \\
+    \color{cscsbrown}\textbf{type} & \\\hline
+    \color{cscsgreen}\textbf{dest} &  \multirow{4}{*}{\color{cscsgreen}ENVELOPE}\\
+    \color{cscsgreen}\textbf{tag} & \\
+    \color{cscsgreen}\textbf{comm} & \\
+    \color{cscsgreen}\textbf{status} & \\\hline
+    \textbf{ierr} & (INTEGER) error code (if ierr=0 no error occurs)\\
+\end{tabular}
+\end{black1block}
+}
+\end{frame}
+
+\subsection{Communication status}
+\begin{frame}[fragile]{MPI Status}
+\justifying
+\verb+MPI_Status+ structures are used by the message receiving functions to return data about a message.
+It is an \verb+INTEGER+ array of \verb+MPI_STATUS_SIZE+ elements in Fortran.
+The array contains the following info:
+\begin{itemize}
+\item \verb+MPI_SOURCE+ - id of processor sending the message
+\item \verb+MPI_TAG+ - the message tag
+\item \verb+MPI_ERROR+ - error status
+\end{itemize}
+There may also be other fields in the structure, but these are reserved for the implementation.
+\end{frame}
+
+\subsection{Wildcards}
+\begin{frame}[fragile]{Wildcards}
+Both in Fortran and C,  \verb+MPI_Recv+ accepts wildcards:
+\begin{itemize}
+\item To receive from any source: \verb+MPI_ANY_SOURCE+
+\item To receive with any tag: \verb+MPI_ANY_TAG+
+\item Actual source and tag are returned in the receiver’s status parameter
+\end{itemize}
+\end{frame}
+
+
+\subsection{Synchronization}
+\begin{frame}[fragile]{Synchronization}
+\justifying
+In a perfect world, every send operation would be perfectly synchronized with its matching receive.
+This is actually never the case.
+A send resp. a receive can be triggered before or after its corresponding receive resp. send.\\
+Is the receiving rank prepared to receive the data?...
+\begin{blue1block}{Rendez-vous protocol}
+\footnotesize
+\begin{verbatim}
+if (size_to_send < CSTE ) {
+    // eager protocol
+    copy the send buffer to a kernel buffer
+    post a send request using kernel buffer
+} else {
+    // rendez-vous protocol
+    prepare a rendez-vous buffer (send buffer size)
+    post a send request using the rendez-vous buffer
+    wait for the send request to be acknowledged
+    post a send request using buffer
+}
+\end{verbatim}
+\end{blue1block}
+\end{frame}
+
+\begin{frame}{Practicals}
+    \begin{brown2block}{Exercise 2}
+        Standard Send/Recv communication\\
+        Ping-pong\\
+        Measuring bandwidth\\
+        Rendez-vous protocol effect
+    \end{brown2block}
+\end{frame}
+
+\subsection{Blocking and non-blocking}
+\begin{frame}{Blocking and non-blocking communications}
+\begin{green1block}{A blocking communication means...}
+    That the buffer can be re-used after the function as returned.
+\end{green1block}
+\begin{green1block}{A non-blocking communication means...}
+    That the buffer can only be re-used after a wait function as returned.\\
+    Until then, the buffer must not be overwrite (and even read).
+\end{green1block}
+\begin{red1block}{\textbf{Blocking} and non-blocking do not mean...}
+    That the communication is completed after the function as returned.
+\end{red1block}
+\begin{itemize}
+    \item[\color{cscsred}$\Rightarrow$]\color{cscsred}\textbf{It is all about buffer availability!}
+\end{itemize}
+%    \includegraphics[scale=0.3]{blocksend.pdf}
+%\begin{itemize}
+%\end{itemize}
+\end{frame}
+
+
+\begin{frame}[fragile]{Blocking and non-blocking examples}
+    \begin{columns}
+        \begin{column}{0.4\paperwidth}
+            Blocking example:
+            \footnotesize
+            \begin{verbatim}
+int buf[120];
+MPI_Send(buf,MPI_INT,120,...);
+// from here buffer can be re-used
+but[3]=5
+
+
+
+            \end{verbatim}
+        \end{column}
+        \begin{column}{0.4\paperwidth}
+            Non-blocking example:
+            \footnotesize
+            \begin{verbatim}
+int buf[120];
+MPI_Isend(buf,MPI_INT,120,...);
+// do not overwrite buf
+// do some computation...
+MPI_Wait(...);
+// from here buffer can be re-used
+but[3]=5
+            \end{verbatim}
+        \end{column}
+    \end{columns}
+Each rank does not necessary know if the communication has been completed by the time the MPI send function returns.\\
+The {\color{cscsred}\verb+I+} in \verb+MPI_+{\color{cscsred}\verb+I+}\verb+send+ means {\color{cscsred}immediate}, the function returns "immediately" after its call.
+\end{frame}
+
+\begin{frame}[fragile]{Non-blocking MPI\_Isend and MPI\_Irecv}
+\footnotesize
+C:
+\vspace{-0.2cm}
+\begin{verbatim}
+int MPI_Isend(void *buf, int count, MPI_Datatype type, int dest,
+             int tag, MPI_Comm comm, MPI_Request *req);
+int MPI_Irecv(void *buf, int count, MPI_Datatype type, int dest,
+             int tag, MPI_Comm comm, MPI_Request *req);
+\end{verbatim}
+\vspace{-0.2cm}
+Fortran:
+\vspace{-0.2cm}
+\begin{verbatim}
+MPI_ISEND(buf, count, type, dest, tag, comm, req, ierr)
+MPI_IRECV(buf, count, type, dest, tag, comm, req, ierr)
+\end{verbatim}
+\begin{black1block}{}
+\begin{tabular}{rl}
+    \textbf{buf} & array of type type see table\\
+    \textbf{count} & (INTEGER) number of element of buf to be sent\\
+    \textbf{type} & (INTEGER) MPI type of buf\\
+    \textbf{dest} & (INTEGER) rank of the destination process\\
+    \textbf{tag} & (INTEGER) number identifying the message\\
+    \textbf{comm} & (INTEGER) communicator of the sender and receiver\\
+    \textbf{req} & (INTEGER) identifier of the communications handle\\
+    \textbf{ierr} & (INTEGER) error code (if ierr=0 no error occurs)\\
+\end{tabular}
+\end{black1block}
+\end{frame}
+
+\begin{frame}[fragile]{Waiting for completion}
+\footnotesize
+C:
+\vspace{-0.2cm}
+\begin{verbatim}
+int MPI_Wait(MPI_Request *req, MPI_Status *status)
+int MPI_Waitall(int count, MPI_Request array_of_requests[],
+                MPI_Status array_of_statuses[])
+\end{verbatim}
+\vspace{-0.2cm}
+Fortran:
+\vspace{-0.2cm}
+\begin{verbatim}
+MPI_WAIT(req, status, ierr)
+MPI_WAITALL(count, array_of_requests, array_of_statuses, ierr)
+\end{verbatim}
+\begin{black1block}{}
+\begin{tabular}{rl}
+    \textbf{req} & (INTEGER) identifier of the communications handle\\
+    \textbf{status} & (INTEGER) array containing communication status\\
+    \textbf{count} & (INTEGER) number of element of in arrays\\
+    \textbf{ierr} & (INTEGER) error code (if ierr=0 no error occurs)\\
+\end{tabular}
+\end{black1block}
+\end{frame}
+
+\begin{frame}[fragile]{Testing for completion}
+\footnotesize
+C:
+\vspace{-0.2cm}
+\begin{verbatim}
+int MPI_Test(MPI_Request *request, int *flag, MPI_Status *status)
+int MPI_Testall(int count, MPI_Request array_of_requests[], int *flag,
+                MPI_Status array_of_statuses[])
+\end{verbatim}
+\vspace{-0.2cm}
+Fortran:
+\vspace{-0.2cm}
+\begin{verbatim}
+MPI_TEST(req, flag, status, ierr)
+MPI_TESTALL(count, array_of_requests, flag, array_of_statuses, ierr)
+\end{verbatim}
+\begin{black1block}{}
+\begin{tabular}{rl}
+    \textbf{req} & (INTEGER) identifier of the communications handle\\
+    \textbf{flag} & (LOGICAL) true if communication req has completed false otherwise\\
+    \textbf{status} & (INTEGER) array containing communication status\\
+    \textbf{count} & (INTEGER) number of element of in arrays\\
+    \textbf{ierr} & (INTEGER) error code (if ierr=0 no error occurs)\\
+\end{tabular}
+\end{black1block}
+\end{frame}
+
+\subsection{Transfer modes}
+\begin{frame}{Transfer modes}
+Five different communication modes are supported for the Send:
+\begin{itemize}
+    \item Standard Mode
+    \item Synchronous Mode
+    \item Buffered Mode
+    \item Ready Mode
+\end{itemize}
+All of them can be Blocking or Non-Blocking.
+\end{frame}
+
+
+\begin{frame}{Transfer modes: Standard Mode}
+\begin{itemize}
+\item A send operation can be started whether or not a matching receive has started
+\item Can be buffered or synchronous. It is up to implementation (and not MPI standard) to decide whether outgoing messages will be buffered
+\item May complete before a matching receive is posted
+\item Non-local operation (in general)
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Transfer modes: Synchronous Mode}
+\begin{itemize}
+\item A send operation can be started whether or not a matching receive has started
+\item The send will complete successfully only if a matching receive was posted and the receive operation has reached a certain point in its execution
+\item The completion of a synchronous send not only indicates that the send buffer can be reused but also indicates that the receiver has reached a certain point in its execution (usually it has received all data)
+\item Non-local operation
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Transfer modes: Buffered Mode}
+\begin{itemize}
+\item A send operation can be started whether or not a matching receive has been posted
+\item It completes whether or not a matching receive has been posted (independent from the receive)
+\item Buffer space is allocated on demand (\verb+MPI_Buffer_Attach+)
+\item Local operation
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Transfer modes: Ready Mode}
+\begin{itemize}
+\item A send operation may be started only if the matching receive is already started
+\item The completion of the send operation does not depend on the status of a matching receive and merely indicates the send buffer can be reused
+\item Used for performance reasons
+\item Non-local operation
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Transfer modes overview}
+\small
+
+\begin{tabular}{|l|p{3.7cm}|l|l|}
+\hline
+\textbf{Mode} & \textbf{Completion Condition} & \textbf{Blocking} & \textbf{Non-blocking}\\\hline
+    Standard send & Message sent (receive state unknown)&  \verb+MPI_SEND+ & \verb+MPI_ISEND+ \\\hline
+    Receive & Completes when a matching message has arrived & \verb+MPI_RECV+ & \verb+MPI_IRECV+ \\\hline
+Synchronous send & Only completes after a matching recv() is posted and the receive operation is at some stages. & \verb+MPI_SSEND+ & \verb+MPI_ISSEND+ \\\hline
+Buffered send & Always completes, irrespective of receiver. Guarantees the message to be buffered. & \verb+MPI_BSEND+ & \verb+ MPI_IBSEND+ \\\hline
+
+Ready send & Always completes, irrespective of whether the receive has completed. & \verb+MPI_RSEND+ & \verb+MPI_IRSEND+ \\\hline
+\end{tabular}
+
+
+\end{frame}
+
+\subsection{Summary}
+\begin{frame}{Communication - summary}
+\begin{blue2block}{Blocking send and recv}
+\begin{itemize}
+\item Does not mean that the process is stopped during communication.
+\item It means that, at return, it is safe to use the variables involved in communication.
+\end{itemize}
+\end{blue2block}
+
+\begin{blue2block}{Non Blocking send and recv}
+\begin{itemize}
+\item Cannot use variables involved in communication until completion functions are called.
+\end{itemize}
+\end{blue2block}
+
+\begin{blue2block}{Transfer modes}
+\begin{itemize}
+\item Define the behaviour of the various function for point to point communication. The behaviour can be implementation dependent.
+\end{itemize}
+\end{blue2block}
+\end{frame}
+
+\begin{frame}[fragile]{Combined Send and Recv in one function}
+\justifying
+The send-receive operations combine in one call the sending of a message to one destination and the receiving of another message, from another process.
+The two (source and destination) are possibly the same.
+A send-receive operation is very useful for executing a shift operation across a chain of processes.
+Will block until the sending application buffer is free for reuse and until the receiving application buffer contains the received message.
+\begin{verbatim}
+CALL MPI_SENDRECV(sndbuf, snd_size, snd_type, rcvid, tag,
+                  rcvbuf, rcv_size, rcv_type, sndid, tag,
+                  comm, status, ierr)
+\end{verbatim}
+\end{frame}
+
+\begin{frame}[fragile]{Other functions}
+\begin{itemize}
+    \item Test if a message has arrived:\\\hspace{1cm}\verb+MPI_Probe, MPI_Iprobe+
+    \item Abort the application:\\\hspace{1cm}\verb+MPI_Abort+
+    \item Buffer management:\\\hspace{1cm}\verb+MPI_Buffer_attach, MPI_Buffer_detach+
+    \item Wait functions:\\\hspace{1cm}\verb+MPI_Waitany, MPI_Waitsome+
+    \item Test functions:\\\hspace{1cm}\verb+MPI_Testany, MPI_Testsome+
+    \item Cancel a request:\\\hspace{1cm}\verb+MPI_Cancel+
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Practicals}
+    \begin{brown2block}{Exercise 3}
+        Send-Recv with deadlock\\
+        Isend-Irecv\\
+        SendRecv\\
+        Buffer management errors...\\
+    \end{brown2block}
+\end{frame}
+
+\section{Collective communications}
+\section{Topology}
+\section{Datatypes}
+\section{Parallel I/O with MPI}
+
+% THANK YOU SLIDE
+\cscsthankyou{Thank you for your attention.}
+
+\end{document}
