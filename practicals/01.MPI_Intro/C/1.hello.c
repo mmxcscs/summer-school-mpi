@@ -13,8 +13,8 @@
  * Authors: Joel Malard, Alan Simpson,            (EPCC)        *
  *          Rolf Rabenseifner, Traugott Streicher (HLRS)        *
  *                                                              *
- * Contact: rabenseifner@hlrs.de                                * 
- *                                                              *  
+ * Contact: rabenseifner@hlrs.de                                *
+ *                                                              *
  * Purpose: a simple MPI-program printing "hello world!"        *
  *                                                              *
  * Contents: C-Source                                           *
@@ -30,9 +30,9 @@
 int main(int argc, char *argv[])
 {
 
-  /*  initialize MPI */
+    /*  initialize MPI */
 
-  /*  print hello world from each process */
+    /*  print hello world from each process */
 
-  /* finalize MPI */
+    /* finalize MPI */
 }

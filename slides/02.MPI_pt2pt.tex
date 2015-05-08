@@ -236,11 +236,12 @@ if (size_to_send < CSTE ) {
 \end{frame}
 
 \begin{frame}{Practicals}
-    \begin{brown2block}{Exercise 2}
-        Standard Send/Recv communication\\
-        Ping-pong\\
-        Measuring bandwidth\\
-        Rendez-vous protocol effect
+    \begin{brown2block}{Exercise: 02.MPI\_pt2pt}
+    \begin{enumerate}
+    \item  Standard Send/Recv communication
+    \item  Ping-pong
+    \item  Measuring bandwidth
+    \end{enumerate}
     \end{brown2block}
 \end{frame}
 
@@ -495,11 +496,13 @@ CALL MPI_SENDRECV(sndbuf, snd_size, snd_type, rcvid, tag,
 \end{frame}
 
 \begin{frame}{Practicals}
-    \begin{brown2block}{Exercise 3}
-        Send-Recv with deadlock\\
-        Isend-Irecv\\
-        SendRecv\\
-        Buffer management errors...\\
+    \begin{brown2block}{Exercise: 02.MPI\_pt2pt}
+    \begin{enumerate}
+        \setcounter{enumi}{3}
+        \item Parallel sum using a ring
+        \item Send and Recv neighbor ghost cells
+        \item Identify bugs in the buffer management
+    \end{enumerate}
     \end{brown2block}
 \end{frame}
 

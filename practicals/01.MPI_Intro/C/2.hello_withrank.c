@@ -27,17 +27,17 @@
 
 int main(int argc, char *argv[])
 {
-  /* declare any variables you need */
+    /* declare any variables you need */
 
 
-   MPI_Init(&argc, &argv);
+    MPI_Init(&argc, &argv);
 
-   /* Get the rank of each process */
+    /* Get the rank of each process */
 
-   /* Get the size of the communicator */
+    /* Get the size of the communicator */
 
-   /* Write code such that every process writes its rank and the size of the communicator,
-    * but only process 0 prints "hello world*/
+    /* Write code such that every process writes its rank and the size of the communicator,
+     * but only process 0 prints "hello world*/
 
-   MPI_Finalize();
+    MPI_Finalize();
 }
