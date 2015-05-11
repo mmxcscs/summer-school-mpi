@@ -43,7 +43,7 @@ int main(int argc, char *argv[])
     /* send the contents of number from rank 0 to rank 1 using MPI_Send --- MPI_Recv */
 
     if (rank == 1)
-        printf("number communicated %i\n", number);
+        printf("The communicated number is %i\n", number);
     MPI_Finalize();
     return 0;
 }
