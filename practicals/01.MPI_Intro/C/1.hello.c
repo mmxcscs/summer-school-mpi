@@ -19,20 +19,19 @@
  *                                                              *
  * Contents: C-Source                                           *
  *                                                              *
- * modified by Themis Athanassiadou                             *                                *
  ****************************************************************/
 
 /* Write a minimal  MPI program which prints "hello world by each MPI process  */
 
 #include <stdio.h>
-/* include mpi header file: */
+/* include mpi header file */
 
 int main(int argc, char *argv[])
 {
 
-    /*  initialize MPI */
+    /* initialize MPI */
 
-    /*  print hello world from each process */
+    /* print hello world from each process */
 
     /* finalize MPI */
 }

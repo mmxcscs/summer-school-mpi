@@ -2,17 +2,10 @@
  *                                                              *
  * This file has been written as a sample solution to an        *
  * exercise in a course given at the CSCS Summer School.        *
- * The examples are based on the examples in the MPI course of  *
- * the Edinburgh Parallel Computing Centre (EPCC) and           *
- * the High Performance Computing Centre Stuttgart (HLRS).      *
  * It is made freely available with the understanding that      *
  * every copy of this file must include this header and that    *
- * CSCS, HLRS and EPCC take no responsibility for the use       *
- * of the enclosed teaching material.                           *
- *                                                              *
- * Authors: Joel Malard, Alan Simpson,            (EPCC)        *
- *          Rolf Rabenseifner, Traugott Streicher (HLRS)        *
- *          Maxime Martinasso (CSCS)                            *
+ * CSCS take no responsibility for the use of the enclosed      *
+ * teaching material.                                           *
  *                                                              *
  * Purpose: A ping-pong                                         *
  *                                                              *
@@ -35,11 +28,8 @@
 int main(int argc, char *argv[])
 {
     int my_rank;
-
     float buffer[SIZE];
-
     double start, finish, time;
-
     MPI_Status status;
 
 
@@ -49,8 +39,8 @@ int main(int argc, char *argv[])
 
     start = MPI_Wtime();
 
-    /* write a loop of number_of_messages iterations. Within the loop, process A sends a message
-     * (ping) to process B. After receiving the message, process B sends a message (pong) to process A
+    /* Write a loop of NMESSAGES iterations. Within the loop, process A sends a message (ping) to process B.
+     * After receiving the message, process B sends a message (pong) to process A.
      */
 
     finish = MPI_Wtime();

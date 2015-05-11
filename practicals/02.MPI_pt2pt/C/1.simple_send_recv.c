@@ -7,8 +7,6 @@
  * CSCS take no responsibility for the use of the enclosed      *
  * teaching material.                                           *
  *                                                              *
- * Authors: Maxime Martinasso (CSCS)                            *
- *                                                              *
  * Purpose: Simple point-to-point communication                 *
  *                                                              *
  * Contents: C-Source                                           *
@@ -25,7 +23,7 @@ int main(int argc, char *argv[])
 {
 
     int rank, size, number;
-    char string_comm[1000];
+    char string_comm[1024];
     MPI_Status stat;
 
     MPI_Init(&argc, &argv);
@@ -42,7 +40,7 @@ int main(int argc, char *argv[])
         printf("enter number \n");
         scanf("%d",&number);
     }
-    // send the contents of number from rank 0 to rank 1 using MPI_Send --- MPI_Recv
+    /* send the contents of number from rank 0 to rank 1 using MPI_Send --- MPI_Recv */
 
     if (rank == 1)
         printf("number communicated %i\n", number);

@@ -18,7 +18,6 @@
  * Purpose: A program to try MPI_Comm_size and MPI_Comm_rank.   *
  *                                                              *
  * Contents: C-Source                                           *
- * modified by Themis Athanassiadou                                                             *
  ****************************************************************/
 
 #include <stdio.h>
@@ -28,7 +27,6 @@
 int main(int argc, char *argv[])
 {
     /* declare any variables you need */
-
 
     MPI_Init(&argc, &argv);
 

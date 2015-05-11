@@ -7,8 +7,6 @@
  * CSCS take no responsibility for the use of the enclosed      *
  * teaching material.                                           *
  *                                                              *
- * Authors: Maxime Martinasso (CSCS)                            *
- *                                                              *
  * Purpose: Exchange ghost cell in 2 directions                 *
  *                                                              *
  * Contents: C-Source                                           *

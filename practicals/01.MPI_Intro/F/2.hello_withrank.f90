@@ -27,7 +27,8 @@ PROGRAM hello
 
   IMPLICIT NONE
 
-  ! don't forget to declare variables
+  ! Don't forget to declare variables
+
   INTEGER :: ierror
 
   CALL MPI_INIT(ierror)

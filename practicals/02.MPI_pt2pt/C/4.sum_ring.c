@@ -2,17 +2,10 @@
  *                                                              *
  * This file has been written as a sample solution to an        *
  * exercise in a course given at the CSCS Summer School.        *
- * The examples are based on the examples in the MPI course of  *
- * the Edinburgh Parallel Computing Centre (EPCC) and           *
- * the High Performance Computing Centre Stuttgart (HLRS).      *
  * It is made freely available with the understanding that      *
  * every copy of this file must include this header and that    *
- * CSCS, HLRS and EPCC take no responsibility for the use       *
- * of the enclosed teaching material.                           *
- *                                                              *
- * Authors: Joel Malard, Alan Simpson,            (EPCC)        *
- *          Rolf Rabenseifner, Traugott Streicher (HLRS)        *
- *          Maxime Martinasso (CSCS)                            *
+ * CSCS take no responsibility for the use of the enclosed      *
+ * teaching material.                                           *
  *                                                              *
  * Purpose: Parallel sum using a ping-pong                      *
  *                                                              *
@@ -46,7 +39,7 @@ int main (int argc, char *argv[])
     right = /* get rank of neighbor to your right */
     left  = /* get rank of neighbor to your left */
 
-    /*Implement ring addition code */
+    /* Implement ring addition code */
 
     printf ("Process %i:\tSum = %i\n", my_rank, sum);
 

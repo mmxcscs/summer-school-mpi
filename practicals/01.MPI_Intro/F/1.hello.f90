@@ -20,19 +20,18 @@ PROGRAM hello
 ! Purpose: A simple MPI-program printing "Hello world!"        !
 !                                                              !
 ! Contents: F-Source                                           !
-! modified by Themis Athanassiadou                                                              !
 !==============================================================!
 
 ! Write a minimal  MPI program which prints "hello world by each MPI process
 
-!include header file
+! Include header file
 
   IMPLICIT NONE
 
-  !initialize MPI
+  ! Initialize MPI
 
-  !print hello world from each process
+  ! Print hello world from each process
 
-  !finalize MPI
+  ! Finalize MPI
 
 END PROGRAM
