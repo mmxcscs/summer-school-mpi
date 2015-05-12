@@ -44,4 +44,5 @@ int main (int argc, char *argv[])
     printf ("Process %i:\tSum = %i\n", my_rank, sum);
 
     MPI_Finalize();
+    return 0;
 }

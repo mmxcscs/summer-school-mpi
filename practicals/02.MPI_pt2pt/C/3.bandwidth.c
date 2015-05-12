@@ -13,6 +13,14 @@
  *                                                              *
  ****************************************************************/
 
+/*
+ * NOTE: make a reservation with two nodes:
+ * salloc ... -N 2 -n 2 ....
+ * start mpi using 2 nodes with one process per node:
+ * aprun -N 1 -n 2 .......
+ * use gnuplot to plot the result:
+ * gnuplot bandwidth.gp
+ */
 
 #include <stdio.h>
 #include <string.h>
@@ -30,15 +38,6 @@
 #define REFINE_SIZE_MAX (16*1024)
 #define SUM_SIZE (1*1024)
 #define MAX_SIZE (1<<29) /* 512 MBytes */
-
-/*
- * NOTE: make a reservation with two nodes:
- * salloc ... -N 2 -n 2 ....
- * start mpi using 2 nodes with one process per node:
- * aprun -N 1 -n 2 .......
- * use gnuplot to plot the result:
- * gnuplot bandwidth.gp
- */
 
 int main(int argc, char *argv[])
 {

@@ -1,4 +1,4 @@
-PROGRAM hello
+PROGRAM broadcast
 
 !==============================================================!
 !                                                              !
@@ -9,21 +9,27 @@ PROGRAM hello
 ! CSCS take no responsibility for the use of the enclosed      !
 ! teaching material.                                           !
 !                                                              !
-! Purpose: a simple MPI-program printing "hello world!"        !
+! Purpose: a simple broadcast                                  !
 !                                                              !
 ! Contents: F-Source                                           !
 !==============================================================!
 
-! Write a minimal  MPI program which prints "hello world by each MPI process
+   USE MPI
+   IMPLICIT NONE
+   INTEGER rank, data, ierror
 
-! Include header file
+   CALL MPI_Init(ierror)
+   CALL MPI_Comm_rank(MPI_COMM_WORLD, rank, ierror)
 
-  IMPLICIT NONE
+   IF (rank.EQ.0) THEN
+      WRITE (*,*) 'enter value'
+      READ (*,*) data
+   END IF
 
-  ! Initialize MPI
+   ! broadcast the value of data of rank 0 to all ranks
 
-  ! Print hello world from each process
+   WRITE (*,*) "I am rank", rank, "and the value is", data
 
-  ! Finalize MPI
+   CALL MPI_Finalize(ierror)
 
 END PROGRAM

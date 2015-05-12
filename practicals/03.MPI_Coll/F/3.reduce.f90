@@ -1,4 +1,4 @@
-PROGRAM hello
+PROGRAM reduce
 
 !==============================================================!
 !                                                              !
@@ -9,21 +9,28 @@ PROGRAM hello
 ! CSCS take no responsibility for the use of the enclosed      !
 ! teaching material.                                           !
 !                                                              !
-! Purpose: a simple MPI-program printing "hello world!"        !
+! Purpose: a simple reduce                                     !
 !                                                              !
 ! Contents: F-Source                                           !
 !==============================================================!
 
-! Write a minimal  MPI program which prints "hello world by each MPI process
 
-! Include header file
+   USE MPI
+   IMPLICIT NONE
+   INTEGER rank, input, result, ierror
 
-  IMPLICIT NONE
+   CALL MPI_Init(ierror)
+   CALL MPI_Comm_rank(MPI_COMM_WORLD, rank, ierror)
 
-  ! Initialize MPI
+   input=rank+1
 
-  ! Print hello world from each process
+   ! reduce the values of the different ranks in input to result of rank 0
+   ! with the operation sum (max, logical and)
 
-  ! Finalize MPI
+   IF (rank.EQ.0) THEN
+      write (*,*) 'result', result
+   END IF
+
+   CALL MPI_Finalize(ierror)
 
 END PROGRAM

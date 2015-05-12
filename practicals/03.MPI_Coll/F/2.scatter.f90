@@ -1,4 +1,4 @@
-PROGRAM hello
+PROGRAM scatter
 
 !==============================================================!
 !                                                              !
@@ -9,21 +9,37 @@ PROGRAM hello
 ! CSCS take no responsibility for the use of the enclosed      !
 ! teaching material.                                           !
 !                                                              !
-! Purpose: a simple MPI-program printing "hello world!"        !
+! Purpose: a simple scatter                                    !
 !                                                              !
 ! Contents: F-Source                                           !
 !==============================================================!
 
-! Write a minimal  MPI program which prints "hello world by each MPI process
 
-! Include header file
+   USE MPI
+   IMPLICIT NONE
+   INTEGER i, rank, size, senddata(20), receivedata, ierror
 
-  IMPLICIT NONE
+   CALL MPI_Init(ierror)
+   CALL MPI_Comm_rank(MPI_COMM_WORLD, rank, ierror)
+   CALL MPI_Comm_size(MPI_COMM_WORLD, size, ierror)
 
-  ! Initialize MPI
+   IF (size.GT.20) THEN
+      IF (rank.EQ.0) THEN
+         WRITE (*,*) "do not use more than 20 processors"
+         CALL MPI_Finalize(ierror)
+      END IF
+   END IF
+   IF (rank.EQ.0) THEN
+      DO i=1, size, 1
+         WRITE (*,*) 'enter value'
+         READ (*,*) senddata(i)
+      END DO
+   END IF
 
-  ! Print hello world from each process
+   ! scatter the value of senddata of rank 0 to receivedata of all ranks
 
-  ! Finalize MPI
+   WRITE (*,*) "I am rank", rank, "and the value is", receivedata
+
+   CALL MPI_Finalize(ierror)
 
 END PROGRAM

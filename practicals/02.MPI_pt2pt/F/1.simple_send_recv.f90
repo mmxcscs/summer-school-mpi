@@ -1,4 +1,4 @@
-PROGRAM hello
+PROGRAM simple_send_recv
 
 !==============================================================!
 !                                                              !
@@ -14,16 +14,35 @@ PROGRAM hello
 ! Contents: F-Source                                           !
 !==============================================================!
 
-! Write a minimal  MPI program which prints "hello world by each MPI process
+! Program that sends a number from one process to another
 
-! Include header file
+   USE MPI
+   IMPLICIT NONE
 
-  IMPLICIT NONE
+   INTEGER rank, size, number, stat, ierror
 
-  ! Initialize MPI
+   CALL MPI_Init(ierror)
 
-  ! Print hello world from each process
+   CALL MPI_Comm_rank(MPI_COMM_WORLD, rank, ierror)
+   CALL MPI_Comm_size(MPI_COMM_WORLD, size, ierror)
 
-  ! Finalize MPI
+   IF (size.NE.2) THEN
+      WRITE (*,*) 'please run this with 2 processors'
+      CALL MPI_Finalize(ierror)
+      STOP
+   END IF
 
+   IF (rank.EQ.0) THEN
+      WRITE (*,*) 'enter number'
+      READ (*,*) number
+   END IF
+
+   ! Send the contents of number from rank 0 to rank 1 using MPI_Send --- MPI_Recv
+
+   IF (rank.EQ.1) THEN
+      WRITE (*,*) 'number communicated', number
+   END IF
+
+   CALL MPI_Finalize(ierror)
+      
 END PROGRAM
