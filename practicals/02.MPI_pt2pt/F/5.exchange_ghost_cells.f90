@@ -79,13 +79,15 @@ PROGRAM ghost_cell_exchange
 
   ! c)
 
-  WRITE (*,*) 'data of rank 4 after communication'
-  DO i=1, DOMAINSIZE, 1
+  IF (rank.EQ.9) THEN
+     WRITE (*,*) 'data of rank 9 after communication'
      DO j=1, DOMAINSIZE, 1
-       WRITE (*,'(F6.1)',advance='no') data(i,j)
+        DO i=1, DOMAINSIZE, 1
+          WRITE (*,'(F6.1)',advance='no') data(i,j)
+        END DO
+        WRITE (*,*)
      END DO
-     WRITE (*,*)
-  END DO
+  END IF
 
   CALL MPI_Finalize(ierror);
 

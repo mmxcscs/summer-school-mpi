@@ -102,11 +102,11 @@ int main(int argc, char *argv[])
 
     // c)
 
-    if (rank==4) {
-        printf("data of rank 4 after communication\n");
+    if (rank==9) {
+        printf("data of rank 9 after communication\n");
         for (j=0; j<DOMAINSIZE; j++) {
             for (i=0; i<DOMAINSIZE; i++) {
-                printf("%f ", data[i+j*DOMAINSIZE]);
+                printf("%.1f ", data[i+j*DOMAINSIZE]);
             }
             printf("\n");
         }
