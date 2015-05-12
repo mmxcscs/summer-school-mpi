@@ -1,44 +1,31 @@
-PROGRAM ring
+PROGRAM allreduce
 
 !==============================================================!
 !                                                              !
 ! This file has been written as a sample solution to an        !
-! exercise in a course given at the High Performance           !
-! Computing Centre Stuttgart (HLRS).                           !
-! The examples are based on the examples in the MPI course of  !
-! the Edinburgh Parallel Computing Centre (EPCC).              !
+! exercise in a course given at the CSCS Summer School.        !
 ! It is made freely available with the understanding that      !
 ! every copy of this file must include this header and that    !
-! HLRS and EPCC take no responsibility for the use of the      !
-! enclosed teaching material.                                  !
+! CSCS take no responsibility for the use of the enclosed      !
+! teaching material.                                           !
 !                                                              !
-! Authors: Joel Malard, Alan Simpson,            (EPCC)        !
-!          Rolf Rabenseifner, Traugott Streicher (HLRS)        !
-!                                                              !
-! Contact: rabenseifner@hlrs.de                                !
-!                                                              !
-! Purpose: A program to try MPI_Allreduce.                     !
+! Purpose: a simple reduce to all                              !
 !                                                              !
 ! Contents: F-Source                                           !
-! modified by Themis Athanassiadou                                                             !
 !==============================================================!
 
-  USE mpi
-
+  USE MPI
   IMPLICIT NONE
-
   INTEGER :: ierror, my_rank
-
   INTEGER :: sum   
 
-  CALL MPI_INIT(ierror)
+  CALL MPI_Init(ierror)
+  CALL MPI_Comm_rank(MPI_COMM_WORLD, my_rank, ierror)
 
-  CALL MPI_COMM_RANK(MPI_COMM_WORLD, my_rank, ierror)
-
-  ! calculate sum of all processes 
+  ! calculate sum of all ranks 
 
   WRITE(*,*) "PE", my_rank, ": Sum =", sum
 
-  CALL MPI_FINALIZE(ierror)
+  CALL MPI_Finalize(ierror)
 
 END PROGRAM
