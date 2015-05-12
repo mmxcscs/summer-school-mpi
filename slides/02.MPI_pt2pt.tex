@@ -495,13 +495,13 @@ CALL MPI_SENDRECV(sndbuf, snd_size, snd_type, rcvid, tag,
 \end{itemize}
 \end{frame}
 
-\begin{frame}{Practicals}
+\begin{frame}[fragile]{Practicals}
     \begin{brown2block}{Exercise: 02.MPI\_pt2pt}
     \begin{enumerate}
         \setcounter{enumi}{3}
         \item Parallel sum using a ring
         \item Send and Recv neighbor ghost cells
-        \item Identify bugs in the buffer management
+        \item Identify bugs in the buffer management (only in C, no Fortran version)
     \end{enumerate}
     \end{brown2block}
 \end{frame}

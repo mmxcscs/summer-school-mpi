@@ -111,8 +111,10 @@ CALL MPI_BCAST(buf, count, type, root, comm, ierr)
 \end{frame}
 
 \begin{frame}{Practicals}
-    \begin{brown2block}{Exercise 4}
-        Read from terminal and broadcast the input
+\begin{brown2block}{Exercise: 03.MPI\_Coll}
+    \begin{enumerate}
+        \item Read from the terminal and broadcast the input
+    \end{enumerate}
     \end{brown2block}
 \end{frame}
 
@@ -226,8 +228,11 @@ CALL MPI_GATHERV(sndbuf, sndcount, sndtype,
 \end{frame}
 
 \begin{frame}{Practicals}
-    \begin{brown2block}{Exercise 4}
-        Scatter: initialise an array and scatter it.
+    \begin{brown2block}{Exercise: 03.MPI\_Coll}
+    \begin{enumerate}
+        \setcounter{enumi}{1}
+        \item Initialise an array and scatter it
+    \end{enumerate}
     \end{brown2block}
 \end{frame}
 
@@ -339,8 +344,12 @@ Other functions:\\
 \end{frame}
 
 \begin{frame}{Practicals}
-    \begin{brown2block}{Exercise 4}
-        Read data from terminal and reduce / allreduce
+    \begin{brown2block}{Exercise: 03.MPI\_Coll}
+    \begin{enumerate}
+        \setcounter{enumi}{2}
+        \item Read data from the terminal and reduce
+        \item Read data from the terminal and reduce if to all rank (allreduce)
+    \end{enumerate}
     \end{brown2block}
 \end{frame}
 
