@@ -1,10 +1,10 @@
 CC=ftn
 CFLAGS=-O3
 EXT=f90
-SUBFIX=_solution
+#SUBFIX=_solution
 
 .SUFFIXES: .$(EXT)
-all: 1 2
+#all: 1 2
 
 1: 1.ring$(SUBFIX)
 2: 2.exchange_ghost_cells$(SUBFIX)
