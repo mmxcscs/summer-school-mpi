@@ -81,8 +81,8 @@ PROGRAM ghost_cell_exchange
 
   IF (rank.EQ.9) THEN
      WRITE (*,*) 'data of rank 9 after communication'
-     DO j=1, DOMAINSIZE, 1
-        DO i=1, DOMAINSIZE, 1
+     DO i=1, DOMAINSIZE, 1
+        DO j=1, DOMAINSIZE, 1
           WRITE (*,'(F6.1)',advance='no') data(i,j)
         END DO
         WRITE (*,*)
