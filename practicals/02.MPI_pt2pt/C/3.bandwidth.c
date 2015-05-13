@@ -47,7 +47,7 @@ int main(int argc, char *argv[])
     MPI_Status status;
     char buffer[MAX_SIZE];
     char output_str[512];
-    
+
     FILE* f = fopen("bwd.dat","w");
 
     MPI_Init(&argc, &argv);
@@ -68,10 +68,10 @@ int main(int argc, char *argv[])
             transfer_time = time / (2 * NMESSAGES);
 
             sprintf(output_str, "%i %f %f\n",
-                   length_of_message,
-                   transfer_time,
-                   (length_of_message / transfer_time)/(1024*1024));
-         
+                    length_of_message,
+                    transfer_time,
+                    (length_of_message / transfer_time)/(1024*1024));
+
             fwrite(output_str, sizeof(char), strlen(output_str), f);
             printf("%s", output_str);
 

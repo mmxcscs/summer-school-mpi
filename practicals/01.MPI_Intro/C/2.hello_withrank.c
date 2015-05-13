@@ -24,14 +24,14 @@ int main(int argc, char *argv[])
 
     /* Get the rank of each process */
     MPI_Comm_rank(MPI_COMM_WORLD, &my_rank);
- 
+
     /* Get the size of the communicator */
     MPI_Comm_size(MPI_COMM_WORLD, &size);
 
     /* Write code such that every process writes its rank and the size of the communicator,
      * but only process 0 prints "hello world*/
     if (my_rank == 0) {
-      printf ("Hello world!\n");
+        printf ("Hello world!\n");
     }
 
     printf("I am process %i out of %i.\n", my_rank, size);
