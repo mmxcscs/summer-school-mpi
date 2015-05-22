@@ -501,7 +501,7 @@ CALL MPI_SENDRECV(sndbuf, snd_size, snd_type, rcvid, tag,
         \setcounter{enumi}{3}
         \item Parallel sum using a ring
         \item Send and Recv neighbor ghost cells
-        \item Identify bugs in the buffer management (only in C, no Fortran version)
+        \item Identify (not solve) bugs in the buffer management (only in C, no Fortran version)
     \end{enumerate}
     \end{brown2block}
 \end{frame}
@@ -509,7 +509,6 @@ CALL MPI_SENDRECV(sndbuf, snd_size, snd_type, rcvid, tag,
 \section{Collective communications}
 \section{Topology}
 \section{Datatypes}
-\section{Parallel I/O with MPI}
 
 % THANK YOU SLIDE
 \cscsthankyou{Thank you for your attention.}
