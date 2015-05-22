@@ -17,6 +17,7 @@
  * If compiled with cray compiler and ran with 4 ranks the program works
  * If 16 ranks are used the program fails (easy to find)
  * If compiled with Intel compiler, the program fails (hard to find)
+ * DO NOT TRY TO FIX THE BUGS - YOU JUST HAVE TO IDENTIFY THEM
  */
 
 /* NOTE: to compile with Intel just do:
