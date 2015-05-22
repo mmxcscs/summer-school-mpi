@@ -1,0 +1,85 @@
+\documentclass[aspectratio=43]{beamer}
+\usepackage{ragged2e}
+\usepackage{multirow}
+\usepackage{alltt}
+
+\usetheme{CSCS}
+
+\newcommand{\footlinetext}{Summer School 2015 - MPI}
+
+% Select the image for the title page
+\newcommand{\picturetitle}{cscs_images/image3.pdf}
+%\newcommand{\picturetitle}{cscs_images/image5.pdf}
+%\newcommand{\picturetitle}{cscs_images/image6.pdf}
+
+\author{Maxime Martinasso, CSCS}
+\title{MiniApp with MPI}
+\subtitle{Summer School 2015 - Effective High Performance Computing}
+\date{\today}
+
+\begin{document}
+
+% TITLE SLIDE
+\cscstitle
+
+\begin{frame}{Course Objectives}
+\begin{itemize}
+\item Make the MiniApp runs on multiple nodes
+\item Add MPI function calls in the MiniApp code
+\end{itemize}
+\end{frame}
+
+% TABLE OF CONTENT SLIDE
+\cscstableofcontents[hideallsubsections]{MiniApp changes}
+
+% CHAPTER SLIDE
+\cscschapter{MiniApp changes review}
+
+\section{Initialize and finalize MPI}
+\begin{frame}[fragile]{Initialize and finalize MPI}
+Setup the code to be MPI aware.
+\begin{itemize}
+\item File to edit: \verb+main.cpp+ or \verb+main.f90+
+\item Initialize MPI and get the current rank and the number of ranks
+\item Finalize MPI
+\end{itemize}
+\end{frame}
+
+\section{Create a Cartesian topology}
+\begin{frame}[fragile]{Create a Cartesian topology}
+Minapp uses a 2D grid, each rank will work on a sub part of the grid.\\
+Make a 2D domain decomposition of the grid depending on the number of ranks.\\
+\begin{itemize}
+\item File to edit: \verb+data.cpp+ or \verb+main.f90+
+\item Create the dimmension of the decomposition depending on the number of ranks
+\item Create a non-periodic Cartesian topology for the grid of domains
+\item Identify coordinates of the current rank in the domain grid
+\item Identify neighbours of the current rank: east, west, north and south directions
+\end{itemize}
+\end{frame}
+
+\section{Change linear algebra functions}
+\begin{frame}[fragile]{Change linear algebra functions}
+Make the dot product and the computation of the norm over all ranks.
+\begin{itemize}
+\item File to edit: \verb+linalg.cpp+ or \verb+linalg.f90+
+\item Add a collective operation to compute the dot product
+\item Add a collective operation to compute the norm
+\end{itemize}
+\end{frame}
+
+\section{Exchange ghost cells}
+\begin{frame}[fragile]{Exchange ghost cells}
+Use point to point communication to exchange ghost cells among neighbours.
+\begin{itemize}
+\item File to edit: \verb+operators.cpp+ or \verb+operators.f90+
+\item Add point-to-point communication for all neighbours in all directions
+\item Use Non-blocking communication
+\item Try to overlap computation and communication
+\end{itemize}
+\end{frame}
+
+% THANK YOU SLIDE
+\cscsthankyou{Thank you for your attention.}
+
+\end{document}
