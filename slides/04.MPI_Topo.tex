@@ -31,8 +31,8 @@
 
 \begin{frame}{Course Objectives}
 \begin{itemize}
-\item The understanding of a collective operations
-\item Knowledge of the different collective operations
+\item The understanding of a topology and communicators
+\item How to build and use a topology
 \end{itemize}
 \end{frame}
 
@@ -300,6 +300,13 @@ Note: \verb+MPI_PROC_NULL+=-1\\[0.3cm]
 \end{frame}
 
 \begin{frame}[fragile]{Utility functions}
+Create dimensions:
+\footnotesize
+\begin{verbatim}
+MPI_DIMS_CREATE(NNODES, NDIMS, DIMS, IERROR)
+    INTEGER    NNODES, NDIMS, DIMS(*), IERROR
+\end{verbatim}
+\normalsize
 Retrieves Cartesian topology information associated with a communicator:
 \footnotesize
 \begin{verbatim}
