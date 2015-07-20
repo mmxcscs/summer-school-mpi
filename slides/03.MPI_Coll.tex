@@ -14,7 +14,7 @@
 \author{Maxime Martinasso, CSCS}
 \title{Message Passing Interface (MPI)}
 \subtitle{Summer School 2015 - Effective High Performance Computing}
-\date{\today}
+\date{July 22-23, 2015}
 
 \begin{document}
 
@@ -76,18 +76,12 @@ The MPI library should use the most efficient communication algorithm for the pa
 
 \begin{frame}[fragile]{Barrier}
 Stop processes until all processes within a communicator reach the barrier.\\
-\footnotesize
-C:
-\vspace{-0.2cm}
-\begin{verbatim}
+\begin{Cpplisting}[]{}
 int MPI_Barrier(MPI_Comm comm);
-\end{verbatim}
-\vspace{-0.2cm}
-Fortran:
-\vspace{-0.2cm}
-\begin{verbatim}
+\end{Cpplisting}
+\begin{Fortranlisting}[]{}
 MPI_BARRIER(comm, ierr)
-\end{verbatim}
+\end{Fortranlisting}
 \begin{center}
 \includegraphics[scale=0.5]{03.MPI_Coll/barrier.pdf}
 \end{center}
@@ -96,10 +90,9 @@ MPI_BARRIER(comm, ierr)
 \subsection{Broadcast}
 \begin{frame}[fragile]{Broadcast}
 One-to-all communication: same data sent from root process to all other processes in the communicator.\\
-\footnotesize
-\begin{verbatim}
+\begin{Fortranlisting}[]{}
 CALL MPI_BCAST(buf, count, type, root, comm, ierr)
-\end{verbatim}
+\end{Fortranlisting}
 \begin{black1block}{}
 \begin{tabular}{rp{8cm}}
 \textbf{root} & (INTEGER) rank being the initiator of the collective operation\\
@@ -129,12 +122,11 @@ CALL MPI_BCAST(buf, count, type, root, comm, ierr)
 
 \begin{frame}[fragile]{Scatter}
 One-to-all communication: different data sent from the root process to all other processes in the communicator.\\
-\footnotesize
-\begin{verbatim}
+\begin{Fortranlisting}[]{}
 CALL MPI_SCATTER(sndbuf, sndcount, sndtype,
-                 rcvbuf, rcvcount, rcvtype, root, comm, ierr)
-\end{verbatim}
-\normalsize
+                 rcvbuf, rcvcount, rcvtype,
+                 root, comm, ierr)
+\end{Fortranlisting}
 \begin{black1block}{}
 \begin{tabular}{rp{8cm}}
 \textbf{sndcount} & (INTEGER) number of elements sent to each process, not the size of sndbuf, that should be sndcount times the number of process in the communicator\\
@@ -157,19 +149,18 @@ CALL MPI_SCATTER(sndbuf, sndcount, sndtype,
 
 \begin{frame}[fragile]{Scatter with different buffers size}
 One-to-all communication: Scatter + distributes individual messages from root to each process in communicator. Messages can have different sizes and displacements.\\
-\footnotesize
-\begin{verbatim}
+\begin{Fortranlisting}[]{}
 CALL MPI_SCATTERV(sndbuf, sndcount, displs, sndtype,
-                  rcvbuf, rcvcount, rcvtype, root, comm, ierr)
-\end{verbatim}
-\normalsize
+                  rcvbuf, rcvcount, rcvtype,
+                  root, comm, ierr)
+\end{Fortranlisting}
 \begin{black1block}{}
 \begin{tabular}{rp{8cm}}
 \textbf{displs} & (INTEGER) entry i specifies the displacement (relative to sendbuf) from which to take the outgoing data to process i.\\
 \end{tabular}
 \end{black1block}
 \begin{center}
-\includegraphics[scale=0.4]{03.MPI_Coll/scatterv.pdf}
+\includegraphics[scale=0.33]{03.MPI_Coll/scatterv.pdf}
 \end{center}
 \end{frame}
 
@@ -179,12 +170,11 @@ CALL MPI_SCATTERV(sndbuf, sndcount, displs, sndtype,
 
 \begin{frame}[fragile]{Gather}
 One-to-all communication: different data collected by the root process, from all others processes in the communicator.\\
-\footnotesize
-\begin{verbatim}
+\begin{Fortranlisting}[]{}
 CALL MPI_GATHER(sndbuf, sndcount, sndtype,
-                 rcvbuf, rcvcount, rcvtype, root, comm, ierr)
-\end{verbatim}
-\normalsize
+                rcvbuf, rcvcount, rcvtype,
+                root, comm, ierr)
+\end{Fortranlisting}
 \begin{black1block}{}
 \begin{tabular}{rp{8cm}}
 \textbf{rcvcount} & (INTEGER) the number of elements collected from each process, not the size of rcvbuf, that should be rcvcount times the number of process in the communicator\\
@@ -207,19 +197,18 @@ CALL MPI_GATHER(sndbuf, sndcount, sndtype,
 
 \begin{frame}[fragile]{Gather with different buffers size}
 One-to-all communication: Gather + collects individual messages from each process in communicator to the root process and store them in rank order. Messages can have different sizes and displacements.\\
-\footnotesize
-\begin{verbatim}
+\begin{Fortranlisting}[]{}
 CALL MPI_GATHERV(sndbuf, sndcount, sndtype,
-                 rcvbuf, rcvcount, displs, rcvtype, root, comm, ierr)
-\end{verbatim}
-\normalsize
+                 rcvbuf, rcvcount, displs, rcvtype,
+                 root, comm, ierr)
+\end{Fortranlisting}
 \begin{black1block}{}
 \begin{tabular}{rp{8cm}}
 \textbf{displs} & (INTEGER) entry i specifies the displacement (relative to sendbuf) from which to take the outgoing data to process i.\\
 \end{tabular}
 \end{black1block}
 \begin{center}
-\includegraphics[scale=0.4]{03.MPI_Coll/gatherv.pdf}
+\includegraphics[scale=0.33]{03.MPI_Coll/gatherv.pdf}
 \end{center}
 \end{frame}
 
@@ -240,13 +229,10 @@ CALL MPI_GATHERV(sndbuf, sndcount, sndtype,
 \subsection{All to all}
 \begin{frame}[fragile]{Global exchange: All to All}
 All-to-all communication: global exchange, all processes exchange their data. Useful for data transposition.\\
-\vspace{-0.2cm}
-\footnotesize
-\begin{verbatim}
+\begin{Fortranlisting}[]{}
 CALL MPI_ALLTOALL(sndbuf, sndcount, sndtype,
                   rcvbuf, rcvcount, rcvtype, comm, ierr)
-\end{verbatim}
-\normalsize
+\end{Fortranlisting}
 \begin{center}
 \includegraphics[scale=0.5]{03.MPI_Coll/alltoall.pdf}
 \end{center}
@@ -266,11 +252,10 @@ The reduction operation allows to:
 \end{frame}
 
 \begin{frame}[fragile]{Reduction}
-\begin{verbatim}
-CALL MPI_REDUCE(sndbuf, rcvbuf, count, type, op, 
+\begin{Fortranlisting}[]{}
+CALL MPI_REDUCE(sndbuf, rcvbuf, count, type, op,
                 root, comm, ierr)
-\end{verbatim}
-\normalsize
+\end{Fortranlisting}
 \begin{black1block}{}
 \begin{tabular}{rp{8cm}}
 \textbf{op} & (INTEGER) parallel operation to perform\\
@@ -305,16 +290,18 @@ CALL MPI_REDUCE(sndbuf, rcvbuf, count, type, op,
 \subsection{Global collective operations}
 \begin{frame}[fragile]{Global collective operations}
 The result of the one-to-all operation is known by all ranks at the end of the operation.
-\footnotesize
-\begin{verbatim}
+\begin{Fortranlisting}[]{}
 CALL MPI_ALLGATHER(sndbuf, sndcount, sndtype,
-                   rcvbuf, rcvcount, rcvtype, comm, ierr)
+                   rcvbuf, rcvcount, rcvtype,
+                   comm, ierr)
 
 CALL MPI_ALLGATHERV(sndbuf, sndcount, sndtype,
-                    rcvbuf, rcvcount, displs, rcvtype, comm, ierr)
+                    rcvbuf, rcvcount, displs, rcvtype,
+                    comm, ierr)
 
-CALL MPI_ALLREDUCE(sndbuf, rcvbuf, count, type, op, comm, ierr)
-\end{verbatim}
+CALL MPI_ALLREDUCE(sndbuf, rcvbuf, count, type, op,
+                   comm, ierr)
+\end{Fortranlisting}
 The argument \textbf{root} is missing, the result is stored in all processes.\\
 \end{frame}
 
@@ -322,24 +309,23 @@ The argument \textbf{root} is missing, the result is stored in all processes.\\
 \begin{frame}[fragile]{Non-blocking collective operations}
 All collective operations have a non-blocking version.\\
 Example:
-\footnotesize
-\begin{verbatim}
+\begin{Fortranlisting}[]{}
 MPI_IBCAST(buf, count, type, root, comm, request, ierr)
-\end{verbatim}
-\normalsize
+\end{Fortranlisting}
 Other functions:\\
-\verb+MPI_Iallgather, MPI_Iallgatherv, MPI_Iallreduce+
-\verb+MPI_Ialltoall, MPI_Ibarrier, MPI_Igather, MPI_Igatherv+
-\verb+MPI_Ireduce, MPI_Iscatter, MPI_Iscatterv+
+\begin{Fortranlisting}[]{}
+MPI_Iallgather, MPI_Iallgatherv, MPI_Iallreduce, MPI_Ialltoall
+MPI_Ibarrier, MPI_Igather, MPI_Igatherv, MPI_Ireduce, MPI_Iscatter, MPI_Iscatterv
+\end{Fortranlisting}
 \end{frame}
 
 \begin{frame}[fragile]{Other functions}
 \begin{itemize}
-    \item All-to-All operations, different buffer sizes and types:\\\hspace{1cm}\verb+MPI_AlltoAllv, MPI_AlltoAllw+
-    \item Neighbor operations, based on topology:\\\hspace{1cm}\verb+MPI_Neighbor_gather, MPI_Neighbor_alltoall+
-    \item Partial reduction:\\\hspace{1cm}\verb+MPI_Scan, MPI_Exscan+
-    \item Create your own operator:\\\hspace{1cm}\verb+MPI_Op_create, MPI_Op_free+
-    \item Reduce+Scatter:\\\hspace{1cm}\verb+MPI_Reduce_scatter, MPI_Reduce_scatter_block+
+    \item All-to-All operations, different buffer sizes and types:\\\hspace{1cm}\lstinlineCpp{MPI_AlltoAllv, MPI_AlltoAllw}
+    \item Neighbor operations, based on topology:\\\hspace{1cm}\lstinlineCpp{MPI_Neighbor_gather, MPI_Neighbor_alltoall}
+    \item Partial reduction:\\\hspace{1cm}\lstinlineCpp{MPI_Scan, MPI_Exscan}
+    \item Create your own operator:\\\hspace{1cm}\lstinlineCpp{MPI_Op_create, MPI_Op_free}
+    \item Reduce+Scatter:\\\hspace{1cm}\lstinlineCpp{MPI_Reduce_scatter, MPI_Reduce_scatter_block}
 \end{itemize}
 \end{frame}
 

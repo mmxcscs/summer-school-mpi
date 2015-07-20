@@ -14,7 +14,7 @@
 \author{Maxime Martinasso, CSCS}
 \title{Message Passing Interface (MPI)}
 \subtitle{Summer School 2015 - Effective High Performance Computing}
-\date{\today}
+\date{July 22-23, 2015}
 
 \begin{document}
 
@@ -283,7 +283,7 @@ int buf[120];
 MPI_Isend(buf,MPI_INT,120,...);
 // do not overwrite buf
 // buf[3]=5 illegal
-// leads to undefine behaviour
+// leads to undefined behaviour
 MPI_Wait(...);
 // from here buffer can be re-used
 but[3]=5
