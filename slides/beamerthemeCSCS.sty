@@ -7,6 +7,9 @@
 \RequirePackage{ifthen}
 \RequirePackage[scaled=.85]{helvet}
 \RequirePackage{tcolorbox}
+\RequirePackage{listings}
+\tcbuselibrary{listings,skins}
+
 
 \newlength{\@headerdist}
 \setlength{\@headerdist}{5mm}
@@ -24,6 +27,7 @@
 \definecolor{cscsyellow}{RGB}{167,135,32}
 \definecolor{cscsblack}{RGB}{0,0,0}
 \definecolor{cscswhite}{RGB}{255,255,255}
+
 
 % no navigation
 \setbeamertemplate{navigation symbols}{}
@@ -255,5 +259,82 @@
 \setbeamertemplate{enumerate mini template}{\textcolor{cscsgrey}{\insertenumlabel}}
 
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Code listing
+\newcommand{\lstfont}[1]{\color{#1}\scriptsize\ttfamily}
+\newcommand{\lsttinyfont}[1]{\color{#1}\fontsize{7}{7}\ttfamily}
+\newcommand{\lstinlinefont}[1]{\color{#1}\scriptsize\ttfamily}
+
+\lstdefinestyle{CppStyle}{
+language=[ANSI]C++,
+showstringspaces=false,
+backgroundcolor=\color{cscswhite!10!cscsblack},
+basicstyle=\lstfont{cscsblue!60!cscswhite},
+identifierstyle=\lstfont{cscswhite},
+keywordstyle=\lstfont{magenta!40!cscswhite},
+numberstyle=\lstfont{cscswhite},
+stringstyle=\lstfont{cyan},
+commentstyle=\lstfont{cscsyellow!80!cscswhite},
+moredelim=[is][\lstfont{cscsgreen!60!cscswhite}]{@}{@},
+emph={
+        pragma, omp, shared, private, reduction,
+        omp_get_wtime, omp_get_max_threads, omp_get_thread_num
+},
+emphstyle={\lstfont{cscsgreen!60!cscswhite}},
+breaklines=true
+}
+
+\newtcblisting{Cpplisting}[2][]{
+colback=cscsblack,
+colframe=cscsblack,
+colbacktitle=cscswhite!75!cscsblack,
+coltitle=cscsblack,
+arc=0pt, outer arc=0pt,
+leftrule=0pt, rightrule=0pt, toprule=0pt, bottomrule=0pt, titlerule=0pt,
+boxsep=0pt,
+left=0pt, right=0pt, top=-6pt, bottom=-6pt, bottomtitle=0pt, toptitle=0pt,
+listing only,
+listing style=CppStyle,
+adjusted title=\lsttinyfont{cscsblack}{C/C++ #1},
+#2
+}
+
+\newcommand{\lstinlineCpp}[1]{\colorbox{cscswhite!20!cscsblack}{\lstinline[style=CppStyle]!#1!}}
+
+\lstdefinestyle{FortranStyle}{
+language=[90]Fortran,
+showstringspaces=false,
+backgroundcolor=\color{cscswhite!10!cscsblack},
+basicstyle=\lstfont{cscsblue!60!cscswhite},
+identifierstyle=\lstfont{cscswhite},
+keywordstyle=\lstfont{magenta!40!cscswhite},
+numberstyle=\lstfont{cscswhite},
+stringstyle=\lstfont{cyan},
+commentstyle=\lstfont{cscsyellow!30!cscswhite},
+moredelim=[is][\lstfont{cscsgreen!60!cscswhite}]{@}{@},
+emph={
+        pragma, omp, shared, private, reduction,
+        omp_get_wtime, omp_get_max_threads, omp_get_thread_num
+},
+emphstyle={\lstfont{cscsgreen!60!cscswhite}},
+breaklines=true
+}
+
+\newtcblisting{Fortranlisting}[2][]{
+colback=cscsblack,
+colframe=cscsblack,
+colbacktitle=cscswhite!75!cscsblack,
+coltitle=cscsblack,
+arc=0pt, outer arc=0pt,
+leftrule=0pt, rightrule=0pt, toprule=0pt, bottomrule=0pt, titlerule=0pt,
+boxsep=0pt,
+left=0pt, right=0pt, top=-6pt, bottom=-6pt, bottomtitle=0pt, toptitle=0pt,
+listing only,
+listing style=FortranStyle,
+adjusted title=\lsttinyfont{cscsblack}{Fortran #1},
+#2
+}
+
+\newcommand{\lstinlineFortran}[1]{\colorbox{cscswhite!20!cscsblack}{\lstinline[style=FortranStyle]!#1!}}
 \mode
 <all>
