@@ -44,5 +44,5 @@ PROGRAM simple_send_recv
    END IF
 
    CALL MPI_Finalize(ierror)
-      
+
 END PROGRAM

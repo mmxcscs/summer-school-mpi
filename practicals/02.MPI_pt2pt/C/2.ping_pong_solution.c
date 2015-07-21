@@ -22,7 +22,6 @@
 #define PONG  23 //message tag
 #define SIZE  1024
 
-/* This code times the average time it takes for 2 processes to exchange a message */
 
 int main(int argc, char *argv[])
 {
@@ -47,6 +46,7 @@ int main(int argc, char *argv[])
        MPI_Recv(buffer, SIZE, MPI_FLOAT, PROCESS_A, PING, MPI_COMM_WORLD, &status);
        MPI_Send(buffer, SIZE, MPI_FLOAT, PROCESS_A, PONG, MPI_COMM_WORLD);
     }
+    printf("Ping-pong complete with no deadlock\n");
 
     MPI_Finalize();
     return 0;

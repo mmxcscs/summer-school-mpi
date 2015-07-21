@@ -22,8 +22,6 @@
 #define PONG  23 //message tag
 #define SIZE  1024
 
-/* This code times the average time it takes for 2 processes to exchange a message */
-
 int main(int argc, char *argv[])
 {
     int my_rank;

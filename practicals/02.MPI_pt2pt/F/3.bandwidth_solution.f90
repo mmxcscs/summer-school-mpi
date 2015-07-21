@@ -20,6 +20,9 @@ PROGRAM bandwidth
 ! aprun -N 1 -n 2 .......
 ! use gnuplot to plot the result:
 ! gnuplot bandwidth.gp
+!
+! Advanced: try on only one node, explain the bandwidth values
+! aprun -N 2 -n 2 .......
 
   USE MPI
   IMPLICIT NONE
@@ -32,7 +35,7 @@ PROGRAM bandwidth
 
   INTEGER PING
   PARAMETER(PING=17) ! message tag
-  
+
   INTEGER PONG
   PARAMETER(PONG=23) ! message tag
 
@@ -56,10 +59,10 @@ PROGRAM bandwidth
 
   INTEGER MAX_SIZE
   PARAMETER (MAX_SIZE=536870912)
-  
+
   DOUBLE PRECISION tstart, tstop, transfer_time
   INTEGER status(MPI_STATUS_SIZE)
-  
+
   CHARACTER, ALLOCATABLE :: buffer(:)
 
   INTEGER length_of_message, k
@@ -75,6 +78,7 @@ PROGRAM bandwidth
 
   length_of_message = INI_SIZE;
   DO WHILE(length_of_message.LE.MAX_SIZE)
+
      ! Write a loop of NMESSAGES iterations which do a ping pong.
      ! Make the size of the message variable and display the bandwidth for each of them.
      ! What do you observe? (plot it)
