@@ -24,7 +24,7 @@ int main(int argc, char *argv[])
 
     /* initialize MPI */
     MPI_Init(&argc, &argv);
- 
+
     /* print hello world from each process */
     printf ("Hello world!\n");
 
