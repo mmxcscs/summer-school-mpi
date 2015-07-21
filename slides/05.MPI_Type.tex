@@ -165,7 +165,7 @@ Create a new type of 4 floats representing a col in $a$.\\
 count = 4; blocklength=1; stride = 4;
 MPI_Type_contiguous(count, blocklength, stride, MPI_FLOAT, &MyColType)
 \end{Cpplisting}
-Use the new type to send one row:\\
+Use the new type to send one column:\\
 \begin{Cpplisting}[]{}
 MPI_Send(&a[0][2], 1, MyColType, dest, tag, comm)
 \end{Cpplisting}
@@ -225,8 +225,7 @@ Selected blocks are:
 \lstinlineCpp{MPI_TYPE_STRUCT} constructs a typemap consisting of different datatype from locations defined by an array of block lengths and an array of displacements.
 Displacements are expressed in bytes (since the type can change!!!).
 \begin{Cpplisting}[]{}
-MPI_TYPE_STRUCT(count, array_blocklengths, array_displacements,
-                 array_oldtype, newtype, ierr)
+MPI_TYPE_STRUCT(count, array_blocklengths, array_displacements, array_oldtype, newtype, ierr)
 \end{Cpplisting}
 \begin{black1block}{}
 \begin{tabular}{rp{6.4cm}}
