@@ -36,7 +36,7 @@ PROGRAM hello
   IF (rank .EQ. 0) THEN
       WRITE(*,*) 'Hello world!'
   END IF
-  
+
   WRITE(*,*) 'I am process', rank, ' out of', size
 
   CALL MPI_FINALIZE(ierror)

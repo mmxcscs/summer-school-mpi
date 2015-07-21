@@ -13,6 +13,16 @@
  *                                                              *
  ****************************************************************/
 
+/*
+ * NOTE: make a reservation with two nodes:
+ * salloc ... -N 2 -n 2 ....
+ * start mpi using 2 nodes with one process per node:
+ * aprun -N 1 -n 2 .......
+ * use gnuplot to plot the result:
+ * gnuplot bandwidth.gp
+ *
+ * Advanced: try on only one node, explain the bandwidth values
+ */
 
 #include <stdio.h>
 #include <string.h>
@@ -31,15 +41,6 @@
 #define SUM_SIZE (1*1024)
 #define MAX_SIZE (1<<29) /* 512 MBytes */
 
-/*
- * NOTE: make a reservation with two nodes:
- * salloc ... -N 2 -n 2 ....
- * start mpi using 2 nodes with one process per node:
- * aprun -N 1 -n 2 .......
- * use gnuplot to plot the result:
- * gnuplot bandwidth.gp
- */
-
 int main(int argc, char *argv[])
 {
     int my_rank, k;
@@ -48,7 +49,7 @@ int main(int argc, char *argv[])
     MPI_Status status;
     char buffer[MAX_SIZE];
     char output_str[512];
-    
+
     FILE* f = fopen("bwd.dat","w");
 
     MPI_Init(&argc, &argv);
@@ -63,31 +64,28 @@ int main(int argc, char *argv[])
          * What do you observe? (plot it)
          */
         start = MPI_Wtime();
-        for( k = 0; k < NMESSAGES; k++) {
-	    if (my_rank == PROCESS_A) {
-	        MPI_Send(buffer, length_of_message, MPI_BYTE, PROCESS_B, PING,
-			       MPI_COMM_WORLD);
-	        MPI_Recv(buffer, length_of_message, MPI_BYTE, PROCESS_B, PONG,
-			       MPI_COMM_WORLD, &status);
-	    } else if (my_rank == PROCESS_B) { 
-	        MPI_Recv(buffer, length_of_message, MPI_BYTE, PROCESS_A, PING,
-			       MPI_COMM_WORLD, &status);
-	        MPI_Send(buffer, length_of_message, MPI_BYTE, PROCESS_A, PONG,
-			       MPI_COMM_WORLD);
-	    }
-        }
-        stop = MPI_Wtime();
 
+        for( k = 0; k < NMESSAGES; k++) {
+            if (my_rank == PROCESS_A) {
+                MPI_Send(buffer, length_of_message, MPI_BYTE, PROCESS_B, PING, MPI_COMM_WORLD);
+                MPI_Recv(buffer, length_of_message, MPI_BYTE, PROCESS_B, PONG, MPI_COMM_WORLD, &status);
+            } else if (my_rank == PROCESS_B) {
+                MPI_Recv(buffer, length_of_message, MPI_BYTE, PROCESS_A, PING, MPI_COMM_WORLD, &status);
+                MPI_Send(buffer, length_of_message, MPI_BYTE, PROCESS_A, PONG, MPI_COMM_WORLD);
+            }
+        }
+
+        stop = MPI_Wtime();
         if (my_rank == PROCESS_A) {
             time = stop - start;
 
             transfer_time = time / (2 * NMESSAGES);
 
             sprintf(output_str, "%i %f %f\n",
-                   length_of_message,
-                   transfer_time,
-                   (length_of_message / transfer_time)/(1024*1024));
-         
+                    length_of_message,
+                    transfer_time,
+                    (length_of_message / transfer_time)/(1024*1024));
+
             fwrite(output_str, sizeof(char), strlen(output_str), f);
             printf("%s", output_str);
 

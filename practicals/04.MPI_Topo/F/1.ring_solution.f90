@@ -28,10 +28,10 @@ PROGRAM ring
   INTEGER :: request
   INTEGER(KIND=MPI_ADDRESS_KIND) :: iadummy
 
-  INTEGER :: new_comm          
+  INTEGER :: new_comm
   INTEGER :: dims(max_dims)
   LOGICAL :: reorder, periods(max_dims)
-! INTEGER :: coords(max_dims) 
+! INTEGER :: coords(max_dims)
 
 
   CALL MPI_Init(ierror)
@@ -51,7 +51,7 @@ PROGRAM ring
   ! Get nearest neighbour ranks.
   CALL MPI_CART_SHIFT(new_comm, 0, 1, left, right, ierror)
 
-  ! Compute sum.
+  ! Compute the sum.
   sum = 0
   snd_buf = my_rank
 

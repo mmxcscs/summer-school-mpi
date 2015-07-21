@@ -46,9 +46,9 @@ void compute_and_send(size_t size, float root, int k, MPI_Request* req) {
 
     /* HARD BUG:
      * when exiting the function, the object data of type vector will call its destructor
-     * because it is a local variable to the function. 
-     * However, the send may not be complete and it may lost its buffer after the object is destroyed.
-     * Different compilers implement different strategies to destroy local variables when a function exits
+     * because it is a local variable to the function.
+     * However, the send may not be completed and it may lost its buffer after the object is destroyed.
+     * Different compilers implement different strategies to destroy local variables when a function exits.
      */
 }
 
@@ -96,7 +96,7 @@ int main(int argc, char *argv[])
 
     } else {
       /* EASY BUG:
-       * With more than 9 ranks the string buffer as a size of MAX_SIZE_STRING+1, 
+       * With more than 9 ranks the string buffer has a size of MAX_SIZE_STRING+1,
        * because the number of ranks require 2 characters.
        */
 
@@ -106,7 +106,7 @@ int main(int argc, char *argv[])
 
       // receive size
       MPI_Recv(&rcv_size, 1, MPI_UNSIGNED_LONG, 0, 2, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
-      printf("rank %d recieved size of %d\n",my_rank, rcv_size);
+      printf("rank %d received size of %d\n",my_rank, rcv_size);
       data = (float*)malloc(rcv_size*sizeof(float));
 
       // receive data

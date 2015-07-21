@@ -95,7 +95,7 @@ int main(int argc, char *argv[])
 
         // receive size
         MPI_Recv(&rcv_size, 1, MPI_UNSIGNED_LONG, 0, 2, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
-        printf("rank %d recieved size of %d\n",my_rank, rcv_size);
+        printf("rank %d received size of %d\n",my_rank, rcv_size);
         data = (float*)malloc(rcv_size*sizeof(float));
 
         // receive data

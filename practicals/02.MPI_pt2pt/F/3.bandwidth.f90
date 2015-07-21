@@ -20,6 +20,9 @@ PROGRAM bandwidth
 ! aprun -N 1 -n 2 .......
 ! use gnuplot to plot the result:
 ! gnuplot bandwidth.gp
+!
+! Advanced: try on only one node, explain the bandwidth values
+! aprun -N 2 -n 2 .......
 
   USE MPI
   IMPLICIT NONE
@@ -32,7 +35,7 @@ PROGRAM bandwidth
 
   INTEGER PING
   PARAMETER(PING=17) ! message tag
-  
+
   INTEGER PONG
   PARAMETER(PONG=23) ! message tag
 
@@ -56,18 +59,18 @@ PROGRAM bandwidth
 
   INTEGER MAX_SIZE
   PARAMETER (MAX_SIZE=536870912)
-  
+
   DOUBLE PRECISION tstart, tstop, transfer_time
   INTEGER status(MPI_STATUS_SIZE)
-  
-  REAL, ALLOCATABLE :: buffer(:)
+
+  CHARACTER, ALLOCATABLE :: buffer(:)
 
   INTEGER length_of_message
   INTEGER ierror, my_rank, size
 
   ALLOCATE(buffer(MAX_SIZE))
 
-  OPEN(1,file='bwd.dat',status='new')
+  OPEN(1,file='bwd.dat',status='old')
 
   CALL MPI_INIT(ierror)
 

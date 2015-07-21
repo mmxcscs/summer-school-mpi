@@ -74,11 +74,11 @@ int main(int argc, char *argv[])
         data[i]=rank;
     }
 
-    //  neighbouring ranks with cartesian grid communicator
+    // neighbouring ranks with cartesian grid communicator
 
-    //  we do not allow the reordering of ranks here
-    //  an alternative solution would be to allow the reordering and to use the new communicator for the communication
-    //  then the MPI library has the opportunity to choose the best rank order with respect to performance
+    // we do not allow the reordering of ranks here
+    // an alternative solution would be to allow the reordering and to use the new communicator for the communication
+    // then the MPI library has the opportunity to choose the best rank order with respect to performance
     // CREATE a cartesian communicator (4*4) with periodic boundaries and use it to find your neighboring
     // ranks in all dimensions.
 
@@ -88,21 +88,12 @@ int main(int argc, char *argv[])
 
     //  ghost cell exchange with the neighbouring cells in all directions
     //  to the top
-    MPI_Irecv(&data[2-1+(DOMAINSIZE-1)*DOMAINSIZE], SUBDOMAIN, MPI_DOUBLE, rank_bottom, 0, MPI_COMM_WORLD, &request);
-    MPI_Send(&data[2-1+(2-1)*DOMAINSIZE], SUBDOMAIN, MPI_DOUBLE, rank_top, 0, MPI_COMM_WORLD);
-    MPI_Wait(&request, &status);
+
     //  to the bottom
-    MPI_Irecv(&data[2-1+(1-1)*DOMAINSIZE], SUBDOMAIN, MPI_DOUBLE, rank_top, 0, MPI_COMM_WORLD, &request);
-    MPI_Send(&data[2-1+(DOMAINSIZE-1-1)*DOMAINSIZE], SUBDOMAIN, MPI_DOUBLE, rank_bottom, 0, MPI_COMM_WORLD);
-    MPI_Wait(&request, &status);
+
     //  to the left
-    MPI_Irecv(&data[DOMAINSIZE-1+(2-1)*DOMAINSIZE], 1, data_ghost, rank_right, 0, MPI_COMM_WORLD, &request);
-    MPI_Send(&data[2-1+(2-1)*DOMAINSIZE], 1, data_ghost, rank_left, 0, MPI_COMM_WORLD);
-    MPI_Wait(&request, &status);
+
     //  to the right
-    MPI_Irecv(&data[1-1+(2-1)*DOMAINSIZE], 1, data_ghost, rank_left, 0, MPI_COMM_WORLD, &request);
-    MPI_Send(&data[DOMAINSIZE-1-1+(2-1)*DOMAINSIZE], 1, data_ghost, rank_right, 0, MPI_COMM_WORLD);
-    MPI_Wait(&request, &status);
 
     if (rank==9) {
         printf("data of rank 9 after communication\n");

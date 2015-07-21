@@ -38,7 +38,7 @@ int main(int argc, char *argv[]) {
 
    /* scatter the value of senddata of rank 0 to receivedata of all ranks */
    MPI_Scatter(&senddata, 1, MPI_INT, &receivedata, 1, MPI_INT, 0, MPI_COMM_WORLD);
-  
+
    printf("I am rank %i and the value is %i\n", rank, receivedata);
    MPI_Finalize();
    return 0;

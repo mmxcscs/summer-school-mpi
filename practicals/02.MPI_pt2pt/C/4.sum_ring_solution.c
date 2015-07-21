@@ -38,18 +38,18 @@ int main (int argc, char *argv[])
 
 
     right = (my_rank+1)      % size;
-    left  = (my_rank-1+size) % size;                                                                    
-    /* ... this SPMD-style neighbor computation with modulo has the same meaning as: 
-     * right = my_rank + 1;          
+    left  = (my_rank-1+size) % size;
+    /* ... this SPMD-style neighbor computation with modulo has the same meaning as:
+     * right = my_rank + 1;
      * if (right == size) right = 0; 
-     * left = my_rank - 1;           
+     * left = my_rank - 1;
      * if (left == -1) left = size-1;
      */
 
     /* Implement ring addition code */
     sum = 0;
     snd_buf = my_rank;
- 
+
     for( i = 0; i < size; i++) {
        MPI_Isend(&snd_buf, 1, MPI_INT, right, tag_to_right, MPI_COMM_WORLD, &request);
        MPI_Recv(&rcv_buf, 1, MPI_INT, left, tag_to_right, MPI_COMM_WORLD, &status);

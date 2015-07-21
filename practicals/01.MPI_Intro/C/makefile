@@ -25,4 +25,3 @@ clean:
 	rm -f *.o
 	rm -f 1.hello$(SUBFIX)
 	rm -f 2.hello_withrank$(SUBFIX)
-

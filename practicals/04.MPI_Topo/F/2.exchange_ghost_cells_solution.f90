@@ -68,11 +68,11 @@ PROGRAM ghost_cell_exchange
   ! an alternative solution would be to allow the reordering and to use the new communicator for the communication
   ! then the MPI library has the opportunity to choose the best rank order with respect to performance
   ! CREATE a cartesian communicator (4*4) with periodic boundaries and use it to find your neighboring
-  ! ranks in all dimensions.                           
+  ! ranks in all dimensions.
   CALL MPI_Cart_create(MPI_COMM_WORLD, 2, dims, periods, 0, comm_cart, ierror)
   CALL MPI_Cart_shift(comm_cart, 0, 1, rank_left, rank_right, ierror)
   CALL MPI_Cart_shift(comm_cart, 1, 1, rank_top, rank_bottom, ierror)
-  
+
   ! derived datatype
   CALL MPI_Type_vector(SUBDOMAIN, 1, DOMAINSIZE, MPI_DOUBLE, data_ghost, ierror)
   CALL MPI_Type_commit(data_ghost, ierror)

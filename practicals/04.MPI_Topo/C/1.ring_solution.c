@@ -44,7 +44,7 @@ int main (int argc, char *argv[])
   dims[0] = size;
   periods[0] = 1;
   reorder = 1;
- 
+
   MPI_Cart_create(MPI_COMM_WORLD, max_dims, dims, periods, reorder,&new_comm);
 
   /* Get coords */
@@ -62,11 +62,11 @@ int main (int argc, char *argv[])
   for( i = 0; i < size; i++) 
   {
     MPI_Isend(&snd_buf, 1, MPI_INT, right, to_right, new_comm, &request);
-    
+
     MPI_Recv(&rcv_buf, 1, MPI_INT, left, to_right, new_comm, &status);
-    
+
     MPI_Wait(&request, &status);
-    
+
     snd_buf = rcv_buf;
     sum += rcv_buf;
   }

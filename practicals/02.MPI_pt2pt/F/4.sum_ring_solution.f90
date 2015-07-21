@@ -62,7 +62,7 @@ PROGRAM sum_ring
 
      CALL MPI_WAIT(request, status, ierror)
 
-     CALL MPI_GET_ADDRESS(snd_buf, iadummy, ierror)
+!     CALL MPI_GET_ADDRESS(snd_buf, iadummy, ierror)
 !    ... or with MPI-3.0 and later:
 !    IF (.NOT.MPI_ASYNC_PROTECTS_NONBLOCKING) CALL MPI_F_sync_reg(snd_buf)
 

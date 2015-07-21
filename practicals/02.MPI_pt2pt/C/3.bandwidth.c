@@ -20,6 +20,9 @@
  * aprun -N 1 -n 2 .......
  * use gnuplot to plot the result:
  * gnuplot bandwidth.gp
+ *
+ * Advanced: try on only one node, explain the bandwidth values
+ * aprun -N 2 -n 2 .......
  */
 
 #include <stdio.h>
@@ -61,7 +64,9 @@ int main(int argc, char *argv[])
          * Make the size of the message variable and display the bandwidth for each of them.
          * What do you observe? (plot it)
          */
+        start = MPI_Wtime();
 
+        stop = MPI_Wtime();
         if (my_rank == PROCESS_A) {
             time = stop - start;
 
