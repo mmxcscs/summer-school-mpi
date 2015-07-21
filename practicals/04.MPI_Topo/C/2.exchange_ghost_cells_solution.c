@@ -78,9 +78,9 @@ int main(int argc, char *argv[])
    dims[0]=dims[1]=4;
    periods[0]=periods[1]=1;
 
-   //  we do not allow the reordering of ranks here
-   //  an alternative solution would be to allow the reordering and to use the new communicator for the communication
-   //  then the MPI library has the opportunity to choose the best rank order with respect to performance
+   // we do not allow the reordering of ranks here
+   // an alternative solution would be to allow the reordering and to use the new communicator for the communication
+   // then the MPI library has the opportunity to choose the best rank order with respect to performance
    // CREATE a cartesian communicator (4*4) with periodic boundaries and use it to find your neighboring
    // ranks in all dimensions.
    MPI_Cart_create(MPI_COMM_WORLD, 2, dims, periods, 0, &comm_cart);

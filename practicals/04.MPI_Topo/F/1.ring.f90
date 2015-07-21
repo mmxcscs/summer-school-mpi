@@ -28,10 +28,10 @@ PROGRAM ring
   INTEGER :: request
   INTEGER(KIND=MPI_ADDRESS_KIND) :: iadummy
 
-  INTEGER :: new_comm          
+  INTEGER :: new_comm
   INTEGER :: dims(max_dims)
   LOGICAL :: reorder, periods(max_dims)
-! INTEGER :: coords(max_dims) 
+! INTEGER :: coords(max_dims)
 
 
   CALL MPI_Init(ierror)
@@ -41,12 +41,10 @@ PROGRAM ring
 
   ! Set one-dimensional cartesian topology.
 
- 
+
   ! Get nearest neighbour ranks.
 
- 
-
-  ! Compute sum.
+  ! Compute the sum.
   sum = 0
   snd_buf = my_rank
 
