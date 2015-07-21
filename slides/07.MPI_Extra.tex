@@ -1,0 +1,197 @@
+\documentclass[aspectratio=43]{beamer}
+\usepackage{ragged2e}
+\usepackage{multirow}
+\usepackage{alltt}
+
+\usetheme{CSCS}
+
+\newcommand{\footlinetext}{Summer School 2015 - MPI}
+
+% Select the image for the title page
+%\newcommand{\picturetitle}{cscs_images/image3.pdf}
+\newcommand{\picturetitle}{cscs_images/image5.pdf}
+%\newcommand{\picturetitle}{cscs_images/image6.pdf}
+
+\author{Maxime Martinasso, CSCS}
+\title{Message Passing Interface (MPI)}
+\subtitle{Summer School 2015 - Effective High Performance Computing}
+\date{July 22-23, 2015}
+
+\begin{document}
+
+% TITLE SLIDE
+\cscstitle
+
+\begin{frame}{Course Objectives}
+\begin{itemize}
+\item Hybrid OpenMP/MPI, preparing MPI for OpenMP
+\item One sided MPI communication
+\end{itemize}
+\end{frame}
+
+% TABLE OF CONTENT SLIDE
+\cscstableofcontents[hideallsubsections]{General Course Structure}
+
+\section{An introduction to MPI}
+\section{Point-to-point communications}
+\section{Collective communications}
+\section{Topology}
+\section{Datatypes}
+\section{Other topics}
+\cscstableofcontents[currentsection]{General Course Structure}
+
+% CHAPTER SLIDE
+\cscschapter{Configure MPI to enable OpenMP}
+
+\subsection{Hybrid OpenMP/MPI}
+
+\begin{frame}[fragile]{Why OpenMP with MPI}
+\begin{itemize}
+\item Code not fully parallel with MPI can benefit of extra threads
+\item Memory limit the number of MPI ranks per node
+\item To increase scalability (but you may well be not faster than with MPI alone)
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Preparing MPI for OpenMP}
+MPI requires to be setup with threads enabled:
+\begin{itemize}
+\item \lstinlineCpp{MPI_Init} should be replaced by \lstinlineCpp{MPI_Init_thread}
+\end{itemize}
+\begin{Cpplisting}[]{}
+int MPI_Init_thread(int *argc, char ***argv, int required, int *provided)
+\end{Cpplisting}
+\begin{Fortranlisting}[]{}
+MPI_INIT_THREAD(required, provided, ierror)
+\end{Fortranlisting}
+
+\lstinlineCpp{required} specifies the requested level of thread support, and the actual level of support is then returned into \lstinlineCpp{provided}.\\
+You should check the value of \lstinlineCpp{provided} after the call
+\end{frame}
+
+\begin{frame}[fragile]{MPI Thread level}
+\begin{itemize}
+    \item \lstinlineCpp{MPI_THREAD_SINGLE}: only one thread (MPI-only application)
+    \item \lstinlineCpp{MPI_THREAD_FUNNELED}: Only master thread will make threads (master = the thread calling \lstinlineCpp{MPI_Init_thread})
+    \item \lstinlineCpp{MPI_THREAD_SERIALIZED}: Only one thread at a time will call MPI (user responsibility)
+    \item \lstinlineCpp{MPI_THREAD_MULTIPLE}: Any thread may call MPI at any time, however that leads to slower performance (lock mechanism in MPI)
+\end{itemize}
+\end{frame}
+
+
+% CHAPTER SLIDE
+\cscschapter{One sided communication}
+
+\subsection{One sided communication}
+
+\begin{frame}[fragile]{No more receives?}
+\begin{itemize}
+    \item A memory region is exposed by all ranks (window)
+    \item Each rank can read or write in a region
+    \item Transfers and synchronisation are decoupled
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Terminology}
+\begin{itemize}
+\item Origin process: Process with the source buffer, initiates the operation
+\item Target process: Process with the destination buffer
+\item Epoch: Virtual time where operations are not completed. Data is consistent after new epoch is started.
+\item Ordering: order of message between two processes (can be relaxed compared to a strict order)
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}[fragile]{One sided communication usage}
+\begin{itemize}
+\item Expose memory collectively
+\item Allocate exposed memory
+\item Dynamic memory exposure
+\item Communication (put, get, rput, rget)
+\item Accumulate (acc, racc, get\_acc, rget\_acc, fetch\&op, cas)
+\item Synchronization
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Expose memory}
+
+\begin{Cpplisting}[]{}
+MPI_Win_create(void *base, MPI_Aint size, int disp_unit, MPI_Info info, MPI_Comm comm, MPI_Win *win)
+MPI_Win_allocate(MPI_Aint size, int disp_unit, MPI_Info info, MPI_Comm comm, void *baseptr, MPI_Win *win)
+MPI_Win_free(MPI_Win *win)
+\end{Cpplisting}
+Exposes (and allocate) the memory buffer to other ranks.\\
+It is a collective operations among all ranks.\\
+
+\lstinlineCpp{MPI_Info} contains user configuration.\\
+%\lstinlineCpp{MPI_Aint} type that holds any valid address.
+\end{frame}
+
+\begin{frame}[fragile]{Dynamic memory}
+It is possible to create a window with no memory attached.
+
+\begin{Cpplisting}[]{}
+MPI_Win_create_dynamic(MPI_Info info, MPI_Comm comm, MPI_Win *win)
+\end{Cpplisting}
+
+It is possible to attach/detach memory to/from a window.
+\begin{Cpplisting}[]{}
+MPI_Win_attach(MPI_Win win, void *base, MPI_Aint size)
+MPI_Win_detach(MPI_Win win, const void *base)
+\end{Cpplisting}
+\end{frame}
+
+\begin{frame}[fragile]{Communication}
+Two functions:
+Write data into the window (put)
+\begin{Cpplisting}[]{}
+MPI_Put(const void *origin_addr, int origin_count, MPI_Datatype origin_datatype, int target_rank, MPI_Aint target_disp, int target_count, MPI_Datatype target_datatype, MPI_Win win)
+\end{Cpplisting}
+
+Read data from the window (get)
+\begin{Cpplisting}[]{}
+int MPI_Get(void *origin_addr, int origin_count, MPI_Datatype origin_datatype, int target_rank, MPI_Aint target_disp, int target_count, MPI_Datatype target_datatype, MPI_Win win)
+\end{Cpplisting}
+
+\begin{itemize}
+\item Non blocking communication
+\item Concurrent accesses give undefined behaviour (not an error).
+\end{itemize}
+
+\end{frame}
+
+
+\begin{frame}[fragile]{Accumulate}
+\begin{Cpplisting}[]{}
+MPI_Accumulate(const void *origin_addr, int origin_count, MPI_Datatype origin_datatype, int target_rank, MPI_Aint target_disp, int target_count, MPI_Datatype target_datatype, MPI_Op op, MPI_Win win)
+\end{Cpplisting}
+
+Remote accumulations, replace value in target buffer with accumulated.
+
+\begin{itemize}
+\item Only predefined operations
+\item Conflicting accesses are managed by the selected ordering
+\end{itemize}
+
+Other operations: \lstinlineCpp{MPI_Fetch_and_op, MPI_Compare_and_swap}
+\end{frame}
+
+\begin{frame}[fragile]{Synchronisation}
+\begin{Cpplisting}[]{}
+MPI_Win_fence(int assert, MPI_Win win)
+\end{Cpplisting}
+Collectively synchronizes all RMA calls started before fence on the window.
+
+Other synchronisation:
+\begin{itemize}
+\item Asynchronous with PSCW: Post, Start, Complete, Wait
+\item Lock / Unlock, Lock All
+\item Flush outstanding operations
+\item Synchronise a window
+\end{itemize}
+\end{frame}
+
+% THANK YOU SLIDE
+\cscsthankyou{Thank you for your attention.}
+
+\end{document}
