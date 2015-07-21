@@ -17,12 +17,12 @@ PROGRAM allreduce
   USE MPI
   IMPLICIT NONE
   INTEGER :: ierror, my_rank
-  INTEGER :: sum   
+  INTEGER :: sum
 
   CALL MPI_Init(ierror)
   CALL MPI_Comm_rank(MPI_COMM_WORLD, my_rank, ierror)
 
-  ! calculate sum of all ranks 
+  ! calculate sum of all ranks
 
   WRITE(*,*) "PE", my_rank, ": Sum =", sum
 
