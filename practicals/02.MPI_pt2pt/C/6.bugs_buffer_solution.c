@@ -13,9 +13,10 @@
  *                                                              *
  ****************************************************************/
 
-/* There is two bugs in this application.
+/* There are three bugs in this application.
  * If compiled with cray compiler and ran with 4 ranks the program works
  * If 16 ranks are used the program fails (easy to find)
+ * one bug is hidden and will not make the program fails (easy to find)
  * If compiled with Intel compiler, the program fails (hard to find)
  * DO NOT TRY TO FIX THE BUGS - YOU JUST HAVE TO IDENTIFY THEM
  */
@@ -83,7 +84,12 @@ int main(int argc, char *argv[])
 
          size[k-1] = (unsigned long)(MAX_SIZE_COMPUTE*root[k-1]);
          MPI_Isend(&size[k-1], 1, MPI_UNSIGNED_LONG, k, 2, MPI_COMM_WORLD, &req[k-1+(np-1)]);
-
+       /* EASY BUG:
+        * buffer and size are re-used by MPI_Isend over the iteration loop
+        * such buffer should not be read again when hold by a MPI_Isend
+        * however, many implememtation allows it, not displaying this error
+        * To fix it, add a MPI_Wait
+        */
       }
 
       for( k = 1; k < np; k++ ) {

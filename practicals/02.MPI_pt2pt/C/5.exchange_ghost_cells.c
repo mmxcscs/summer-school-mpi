@@ -14,7 +14,7 @@
  ****************************************************************/
 
 /* Use only 16 processes for this exercise
- * Send the ghost cell in two directions: left to right and right to left
+ * Send the ghost cell in two directions: top to bottom and bottom to top
  *
  * process decomposition on 4*4 grid
  *
@@ -45,10 +45,10 @@
  */
 
 /* Tasks:
- * A. each rank has to find its left and right neighbor
+ * A. each rank has to find its top and bottom neighbor
  * B. send them the data they need
- *    - left array goes to left neighbor
- *    - right array goes to right neighbor
+ *    - top array goes to top neighbor
+ *    - bottom array goes to bottom neighbor
  */
 
 #include <stdio.h>
@@ -79,15 +79,15 @@ int main(int argc, char *argv[])
         data[i]=rank;
     }
 
-    rank_right=/* find the rank of the right neighbor */
-    rank_left=/* find the rank of the left neighbor */
+    rank_bottom=/* find the rank of the bottom neighbor */
+    rank_top=/* find the rank of the top neighbor */
 
 
-    //  ghost cell exchange with the neighbouring cells to the right and to the left
+    //  ghost cell exchange with the neighbouring cells to the bottom and to the top
     //  a) MPI_Send, MPI_Irecv, MPI_Wait
     //  b) MPI_Isend, MPI_Recv, MPI_Wait
     //  c) MPI_Sendrecv
-    //  to the left
+    //  to the top
 
     // a)
 
@@ -95,7 +95,7 @@ int main(int argc, char *argv[])
 
     // c)
 
-    //  to the right
+    //  to the bottom
     // a)
 
     // b)

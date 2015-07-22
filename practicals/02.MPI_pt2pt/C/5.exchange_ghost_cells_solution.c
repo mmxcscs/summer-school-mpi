@@ -14,7 +14,7 @@
  ****************************************************************/
 
 /* Use only 16 processes for this exercise
- * Send the ghost cell in two directions: left to right and right to left
+ * Send the ghost cell in two directions: top to bottom and bottom to top
  *
  * process decomposition on 4*4 grid
  *
@@ -45,10 +45,10 @@
  */
 
 /* Tasks:
- * A. each rank has to find its left and right neighbor
+ * A. each rank has to find its top and bottom neighbor
  * B. send them the data they need
- *    - left array goes to left neighbor
- *    - right array goes to right neighbor
+ *    - top array goes to top neighbor
+ *    - bottom array goes to bottom neighbor
  */
 
 #include <stdio.h>
@@ -60,7 +60,7 @@
 
 int main(int argc, char *argv[])
 {
-    int rank, size, i, j, rank_right, rank_left;
+    int rank, size, i, j, rank_bottom, rank_top;
     double data[DOMAINSIZE*DOMAINSIZE];
     MPI_Request request;
     MPI_Status status;
@@ -79,42 +79,42 @@ int main(int argc, char *argv[])
         data[i]=rank;
     }
 
-    rank_right=(rank+4)%16;
-    rank_left=(rank+16-4)%16;
+    rank_bottom=(rank+4)%16;
+    rank_top=(rank+16-4)%16;
 
 
-    //  ghost cell exchange with the neighbouring cells to the right and to the left
+    //  ghost cell exchange with the neighbouring cells to the bottom and to the top
     //  a) MPI_Send, MPI_Irecv, MPI_Wait
     //  b) MPI_Isend, MPI_Recv, MPI_Wait
     //  c) MPI_Sendrecv
-    //  to the left
+    //  to the top
 
     // a)
-    MPI_Irecv(&data[2-1+(DOMAINSIZE-1)*DOMAINSIZE], SUBDOMAIN, MPI_DOUBLE, rank_right, 0, MPI_COMM_WORLD, &request);
-    MPI_Send(&data[2-1+(2-1)*DOMAINSIZE], SUBDOMAIN, MPI_DOUBLE, rank_left, 0, MPI_COMM_WORLD);
+    MPI_Irecv(&data[2-1+(DOMAINSIZE-1)*DOMAINSIZE], SUBDOMAIN, MPI_DOUBLE, rank_bottom, 0, MPI_COMM_WORLD, &request);
+    MPI_Send(&data[2-1+(2-1)*DOMAINSIZE], SUBDOMAIN, MPI_DOUBLE, rank_top, 0, MPI_COMM_WORLD);
     MPI_Wait(&request, &status);
 
     // b)
-    MPI_Isend(&data[2-1+(2-1)*DOMAINSIZE], SUBDOMAIN, MPI_DOUBLE, rank_left, 0, MPI_COMM_WORLD, &request);
-    MPI_Recv(&data[2-1+(DOMAINSIZE-1)*DOMAINSIZE], SUBDOMAIN, MPI_DOUBLE, rank_right, 0, MPI_COMM_WORLD, &status);
+    MPI_Isend(&data[2-1+(2-1)*DOMAINSIZE], SUBDOMAIN, MPI_DOUBLE, rank_top, 0, MPI_COMM_WORLD, &request);
+    MPI_Recv(&data[2-1+(DOMAINSIZE-1)*DOMAINSIZE], SUBDOMAIN, MPI_DOUBLE, rank_bottom, 0, MPI_COMM_WORLD, &status);
     MPI_Wait(&request, &status);
 
     // c)
-    MPI_Sendrecv(&data[2-1+(2-1)*DOMAINSIZE], SUBDOMAIN, MPI_DOUBLE, rank_left, 0, &data[2-1+(DOMAINSIZE-1)*DOMAINSIZE], SUBDOMAIN, MPI_DOUBLE, rank_right, 0, MPI_COMM_WORLD, &status);
+    MPI_Sendrecv(&data[2-1+(2-1)*DOMAINSIZE], SUBDOMAIN, MPI_DOUBLE, rank_top, 0, &data[2-1+(DOMAINSIZE-1)*DOMAINSIZE], SUBDOMAIN, MPI_DOUBLE, rank_bottom, 0, MPI_COMM_WORLD, &status);
 
-    //  to the right
+    //  to the bottom
     // a)
-    MPI_Irecv(&data[2-1+(1-1)*DOMAINSIZE], SUBDOMAIN, MPI_DOUBLE, rank_left, 0, MPI_COMM_WORLD, &request);
-    MPI_Send(&data[2-1+(DOMAINSIZE-1-1)*DOMAINSIZE], SUBDOMAIN, MPI_DOUBLE, rank_right, 0, MPI_COMM_WORLD);
+    MPI_Irecv(&data[2-1+(1-1)*DOMAINSIZE], SUBDOMAIN, MPI_DOUBLE, rank_top, 0, MPI_COMM_WORLD, &request);
+    MPI_Send(&data[2-1+(DOMAINSIZE-1-1)*DOMAINSIZE], SUBDOMAIN, MPI_DOUBLE, rank_bottom, 0, MPI_COMM_WORLD);
     MPI_Wait(&request, &status);
 
     // b)
-    MPI_Isend(&data[2-1+(DOMAINSIZE-1-1)*DOMAINSIZE], SUBDOMAIN, MPI_DOUBLE, rank_right, 0, MPI_COMM_WORLD, &request);
-    MPI_Recv(&data[2-1+(1-1)*DOMAINSIZE], SUBDOMAIN, MPI_DOUBLE, rank_left, 0, MPI_COMM_WORLD, &status)    ;
+    MPI_Isend(&data[2-1+(DOMAINSIZE-1-1)*DOMAINSIZE], SUBDOMAIN, MPI_DOUBLE, rank_bottom, 0, MPI_COMM_WORLD, &request);
+    MPI_Recv(&data[2-1+(1-1)*DOMAINSIZE], SUBDOMAIN, MPI_DOUBLE, rank_top, 0, MPI_COMM_WORLD, &status)    ;
     MPI_Wait(&request, &status);
 
     // c)
-    MPI_Sendrecv(&data[2-1+(DOMAINSIZE-1-1)*DOMAINSIZE], SUBDOMAIN, MPI_DOUBLE, rank_right, 0, &data[2-1+(1-1)*DOMAINSIZE], SUBDOMAIN, MPI_DOUBLE, rank_left, 0, MPI_COMM_WORLD, &status);
+    MPI_Sendrecv(&data[2-1+(DOMAINSIZE-1-1)*DOMAINSIZE], SUBDOMAIN, MPI_DOUBLE, rank_bottom, 0, &data[2-1+(1-1)*DOMAINSIZE], SUBDOMAIN, MPI_DOUBLE, rank_top, 0, MPI_COMM_WORLD, &status);
 
     if (rank==9) {
         printf("data of rank 9 after communication\n");
