@@ -30,7 +30,7 @@ PROGRAM ghost_cell_exchange
 
 ! task: each rank has to find its left and right neighbor and
 ! send them the data they need (left array goes to left neighbor
-!                               and right array goes to bottom neighbor)
+!                               and right array goes to right neighbor)
 
   USE MPI
   IMPLICIT NONE

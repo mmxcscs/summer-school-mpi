@@ -60,7 +60,7 @@
 
 int main(int argc, char *argv[])
 {
-    int rank, size, i, j, rank_right, rank_left;
+    int rank, size, i, j, rank_bottom, rank_top;
     double data[DOMAINSIZE*DOMAINSIZE];
     MPI_Request request;
     MPI_Status status;
@@ -83,7 +83,7 @@ int main(int argc, char *argv[])
     rank_top=/* find the rank of the bottom neighbor */
 
 
-    //  ghost cell exchange with the neighbouring cells to the top and to the bottom
+    //  ghost cell exchange with the neighbouring cells to the bottom and to the top
     //  a) MPI_Send, MPI_Irecv, MPI_Wait
     //  b) MPI_Isend, MPI_Recv, MPI_Wait
     //  c) MPI_Sendrecv
