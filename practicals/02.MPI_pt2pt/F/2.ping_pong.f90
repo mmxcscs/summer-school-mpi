@@ -17,18 +17,6 @@ PROGRAM ping_pong
   USE MPI
   IMPLICIT NONE
 
-  INTEGER PROCESS_A
-  PARAMETER(PROCESS_A=0)
-
-  INTEGER PROCESS_B
-  PARAMETER(PROCESS_B=1)
-
-  INTEGER PING
-  PARAMETER(PING=17) ! message tag
-
-  INTEGER PONG
-  PARAMETER(PONG=23) ! message tag
-
   INTEGER length
   PARAMETER (length=1)
 
@@ -36,16 +24,14 @@ PROGRAM ping_pong
 
   REAL buffer(length)
 
-  INTEGER i
-
-  INTEGER ierror, my_rank, size
+  INTEGER ierror, my_rank
 
   CALL MPI_INIT(ierror)
 
   CALL MPI_COMM_RANK(MPI_COMM_WORLD, my_rank, ierror)
 
-  ! Process A sends a message(ping) to process B. 
-  ! After receiving the message, process B sends a message (pong) to process A
+  ! Process 0 sends a message(ping) to process 1.
+  ! After receiving the message, process 1 sends a message (pong) to process 0
 
   CALL MPI_FINALIZE(ierror)
 

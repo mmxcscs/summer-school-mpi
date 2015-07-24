@@ -142,11 +142,11 @@ MPI defines "handles" to allow programmers to refer to data types.
 
 \begin{Cpplisting}[]{}
 int MPI_Send(void *buf, int count, MPI_Datatype type, int dest, int tag, MPI_Comm comm);
-int MPI_Recv(void *buf, int count, MPI_Datatype type, int dest, int tag, MPI_Comm comm, MPI_Status *status);
+int MPI_Recv(void *buf, int count, MPI_Datatype type, int source, int tag, MPI_Comm comm, MPI_Status *status);
 \end{Cpplisting}
 \begin{Fortranlisting}[]{}
 MPI_SEND(buf, count, type, dest, tag, comm, ierr)
-MPI_RECV(buf, count, type, dest, tag, comm, status, ierr)
+MPI_RECV(buf, count, type, source, tag, comm, status, ierr)
 \end{Fortranlisting}
 \only<1>{
 \begin{black1block}{}
@@ -155,6 +155,7 @@ MPI_RECV(buf, count, type, dest, tag, comm, status, ierr)
     \textbf{count} & (INTEGER) number of element of buf to be sent\\
     \textbf{type} & (INTEGER) MPI type of buf\\
     \textbf{dest} & (INTEGER) rank of the destination process\\
+    \textbf{source} & (INTEGER) rank of the source process\\
     \textbf{tag} & (INTEGER) number identifying the message\\
     \textbf{comm} & (INTEGER) communicator of the sender and receiver\\
     \textbf{status} & (INTEGER) array containing communication status\\
@@ -168,7 +169,7 @@ MPI_RECV(buf, count, type, dest, tag, comm, status, ierr)
     \color{cscsbrown}\textbf{buf} & \multirow{3}{*}{\color{cscsbrown}BODY}\\
     \color{cscsbrown}\textbf{count} & \\
     \color{cscsbrown}\textbf{type} & \\\hline
-    \color{cscsgreen}\textbf{dest} &  \multirow{4}{*}{\color{cscsgreen}ENVELOPE}\\
+    \color{cscsgreen}\textbf{source/dest} &  \multirow{4}{*}{\color{cscsgreen}ENVELOPE}\\
     \color{cscsgreen}\textbf{tag} & \\
     \color{cscsgreen}\textbf{comm} & \\
     \color{cscsgreen}\textbf{status} & \\\hline
@@ -213,22 +214,18 @@ A send resp. a receive can be triggered before or after its corresponding receiv
 \item Is the receiving rank prepared to receive the data?...
 \end{itemize}
 \begin{blue1block}{Rendez-vous protocol}
-\vspace{-0.3cm}
+{\color{cscsred}Internal to MPI not expose to the user}
 \begin{Cpplisting}[Pseudo-code]{}
   if (size_to_send < CSTE ) {
-     /*
-     EAGER protocol
+     /* EAGER protocol
      copy the send buffer to a kernel buffer
-     post a send request using kernel buffer
-     */
+     post a send request using kernel buffer */
   } else {
-     /*
-     RENDEZ-VOUS protocol
+     /* RENDEZ-VOUS protocol
      prepare a rendez-vous buffer (send buffer size)
      post a send request using the rendez-vous buffer
      wait for the send request to be acknowledged
-     post a send request using buffer
-     */
+     post a send request using buffer */
   }
 \end{Cpplisting}
 \end{blue1block}
@@ -297,11 +294,11 @@ The \lstinlineCpp{I} in \lstinlineCpp{MPI_Isend} means {\color{cscsred}immediate
 \begin{frame}[fragile]{Non-blocking MPI\_Isend and MPI\_Irecv}
 \begin{Cpplisting}[]{}
 int MPI_Isend(void *buf, int count, MPI_Datatype type, int dest, int tag, MPI_Comm comm, MPI_Request *req);
-int MPI_Irecv(void *buf, int count, MPI_Datatype type, int dest, int tag, MPI_Comm comm, MPI_Request *req);
+int MPI_Irecv(void *buf, int count, MPI_Datatype type, int source, int tag, MPI_Comm comm, MPI_Request *req);
 \end{Cpplisting}
 \begin{Fortranlisting}[]{}
 MPI_ISEND(buf, count, type, dest, tag, comm, req, ierr)
-MPI_IRECV(buf, count, type, dest, tag, comm, req, ierr)
+MPI_IRECV(buf, count, type, source, tag, comm, req, ierr)
 \end{Fortranlisting}
 \begin{black1block}{}
 \begin{tabular}{rl}
@@ -309,6 +306,7 @@ MPI_IRECV(buf, count, type, dest, tag, comm, req, ierr)
     \textbf{count} & (INTEGER) number of element of buf to be sent\\
     \textbf{type} & (INTEGER) MPI type of buf\\
     \textbf{dest} & (INTEGER) rank of the destination process\\
+    \textbf{source} & (INTEGER) rank of the source process\\
     \textbf{tag} & (INTEGER) number identifying the message\\
     \textbf{comm} & (INTEGER) communicator of the sender and receiver\\
     \textbf{req} & (INTEGER) identifier of the communications handle\\
@@ -473,9 +471,17 @@ CALL MPI_SENDRECV(sndbuf, snd_size, snd_type, rcvid, tag,
     \begin{brown2block}{Exercise: 02.MPI\_pt2pt}
     \begin{enumerate}
         \setcounter{enumi}{3}
-        \item Parallel sum using a ring
-        \item Send and Recv neighbor ghost cells
-        \item Identify (not solve) bugs in the buffer management (only in C, no Fortran version)
+    \item Parallel sum using a ring:\\
+        without using \lstinlineCpp{if (rank == 0) ... else ...}\\
+            \begin{tabular}{|c||c|c|c|}\hline
+                Rank 0 & 0 & 1 & 2 \\\hline
+                Rank 1 & 1 & 2 & 0 \\\hline
+                Rank 2 & 2 & 0 & 1 \\\hline
+        \end{tabular}\\
+        All ranks obtain the sum.
+        \item Send and Recv neighbor ghost cells:\\
+            Top to bottom for C and right to left for Fortran
+        \item Identify (not solve) 3 bugs in the buffer management (only in C, no Fortran version)
     \end{enumerate}
     \end{brown2block}
 \end{frame}

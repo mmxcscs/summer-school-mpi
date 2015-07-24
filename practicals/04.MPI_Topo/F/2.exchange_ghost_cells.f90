@@ -66,7 +66,7 @@ PROGRAM ghost_cell_exchange
   ! CREATE a cartesian communicator (4*4) with periodic boundaries and use it to find your neighboring
   ! ranks in all dimensions.
 
-  ! derived datatype
+  ! derived datatype, use this datatype to send the rows
   CALL MPI_Type_vector(SUBDOMAIN, 1, DOMAINSIZE, MPI_DOUBLE, data_ghost, ierror)
   CALL MPI_Type_commit(data_ghost, ierror)
 

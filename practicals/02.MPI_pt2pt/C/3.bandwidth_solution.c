@@ -50,7 +50,7 @@ int main(int argc, char *argv[])
     char buffer[MAX_SIZE];
     char output_str[512];
 
-    FILE* f = fopen("bwd.dat","w");
+    FILE* f = fopen("bandwidth.dat","w");
 
     MPI_Init(&argc, &argv);
 

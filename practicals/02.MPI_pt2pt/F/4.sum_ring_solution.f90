@@ -26,15 +26,12 @@ PROGRAM sum_ring
 
   INTEGER :: i, sum
 
-  INTEGER, ASYNCHRONOUS :: snd_buf
+  INTEGER :: snd_buf
   INTEGER :: rcv_buf
 
   INTEGER :: status(MPI_STATUS_SIZE)
 
   INTEGER :: request
-
-  INTEGER(KIND=MPI_ADDRESS_KIND) :: iadummy
-
 
   CALL MPI_INIT(ierror)
 
@@ -51,6 +48,8 @@ PROGRAM sum_ring
 
 
   ! below write ring addition code.
+  ! do not use IF (RANK.EQ.0) THEN .. ELSE ..
+  ! all ranks obtain the sum
   sum = 0
   snd_buf = my_rank
 
@@ -61,10 +60,6 @@ PROGRAM sum_ring
      CALL MPI_RECV(rcv_buf, 1, MPI_INTEGER, left, to_right, MPI_COMM_WORLD, status, ierror)
 
      CALL MPI_WAIT(request, status, ierror)
-
-!     CALL MPI_GET_ADDRESS(snd_buf, iadummy, ierror)
-!    ... or with MPI-3.0 and later:
-!    IF (.NOT.MPI_ASYNC_PROTECTS_NONBLOCKING) CALL MPI_F_sync_reg(snd_buf)
 
      snd_buf = rcv_buf
      sum = sum + rcv_buf

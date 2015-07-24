@@ -73,7 +73,7 @@ PROGRAM ghost_cell_exchange
   CALL MPI_Cart_shift(comm_cart, 0, 1, rank_left, rank_right, ierror)
   CALL MPI_Cart_shift(comm_cart, 1, 1, rank_top, rank_bottom, ierror)
 
-  ! derived datatype
+  ! derived datatype, use this datatype to send the rows
   CALL MPI_Type_vector(SUBDOMAIN, 1, DOMAINSIZE, MPI_DOUBLE, data_ghost, ierror)
   CALL MPI_Type_commit(data_ghost, ierror)
 
@@ -82,15 +82,18 @@ PROGRAM ghost_cell_exchange
   CALL MPI_Irecv(data(2,DOMAINSIZE), SUBDOMAIN, MPI_DOUBLE, rank_right, 0, MPI_COMM_WORLD, request, ierror)
   CALL MPI_Send(data(2,2), SUBDOMAIN, MPI_DOUBLE, rank_left, 0, MPI_COMM_WORLD, ierror)
   CALL MPI_Wait(request, status, ierror)
-!  to the right
+
+  !  to the right
   CALL MPI_Irecv(data(2,1), SUBDOMAIN, MPI_DOUBLE, rank_left, 0, MPI_COMM_WORLD, request, ierror)
   CALL MPI_Send(data(2,DOMAINSIZE-1), SUBDOMAIN, MPI_DOUBLE, rank_right, 0, MPI_COMM_WORLD, ierror)
   CALL MPI_Wait(request, status, ierror)
-!  to the top
+
+  !  to the top
   CALL MPI_Irecv(data(DOMAINSIZE,2), 1, data_ghost, rank_bottom, 0, MPI_COMM_WORLD, request, ierror)
   CALL MPI_Send(data(2,2), 1, data_ghost, rank_top, 0, MPI_COMM_WORLD, ierror)
   CALL MPI_Wait(request, status, ierror)
-!  to the bottom
+
+  !  to the bottom
   CALL MPI_Irecv(data(1,2), 1, data_ghost, rank_top, 0, MPI_COMM_WORLD, request, ierror)
   CALL MPI_Send(data(SUBDOMAIN+1,2), 1, data_ghost, rank_bottom, 0, MPI_COMM_WORLD, ierror)
   CALL MPI_Wait(request, status, ierror)

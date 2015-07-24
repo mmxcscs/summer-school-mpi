@@ -24,15 +24,12 @@ PROGRAM sum_ring
 
   INTEGER :: i, sum
 
-  INTEGER, ASYNCHRONOUS :: snd_buf
+  INTEGER :: snd_buf
   INTEGER :: rcv_buf
 
   INTEGER :: status(MPI_STATUS_SIZE)
 
   INTEGER :: request
-
-  INTEGER(KIND=MPI_ADDRESS_KIND) :: iadummy
-
 
   CALL MPI_INIT(ierror)
 
@@ -43,6 +40,8 @@ PROGRAM sum_ring
   left  = 0 !calculate the rank of the neighbor to your left
 
   ! below write ring addition code.
+  ! do not use IF (RANK.EQ.0) THEN .. ELSE ..
+  ! all ranks obtain the sum
 
   WRITE(*,*) "PE", my_rank, ": Sum =", sum
 

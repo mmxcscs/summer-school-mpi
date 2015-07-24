@@ -13,10 +13,11 @@
  *                                                              *
  ****************************************************************/
 
-/* There is two bugs in this application.
+/* There is three bugs in this application.
  * If compiled with cray compiler and ran with 4 ranks the program works
  * If 16 ranks are used the program fails (easy to find)
  * If compiled with Intel compiler, the program fails (hard to find)
+ * There is one silent bug that do not cause an error (easy to find)
  * DO NOT TRY TO FIX THE BUGS - YOU JUST HAVE TO IDENTIFY THEM
  */
 
@@ -84,6 +85,11 @@ int main(int argc, char *argv[])
          size[k-1] = (unsigned long)(MAX_SIZE_COMPUTE*root[k-1]);
          MPI_Isend(&size[k-1], 1, MPI_UNSIGNED_LONG, k, 2, MPI_COMM_WORLD, &req[k-1+(np-1)]);
 
+      /* EASY BUG (silent):
+       * The pointer buffer is reused in the MPI_Isend with the iteration counts.
+       * However, the standard specifies that a buffer hold by a Immediate communication cannot be
+       * read or written. Nevertheless most implementations are ok with read accesses.
+       */
       }
 
       for( k = 1; k < np; k++ ) {

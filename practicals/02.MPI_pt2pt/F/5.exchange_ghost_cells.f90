@@ -1,6 +1,6 @@
 PROGRAM ghost_cell_exchange
 
-! process decomposition on 4*4 grid 
+! process decomposition on 4*4 grid
 !  |-----------|
 !  | 0| 4| 8|12|
 !  |-----------|

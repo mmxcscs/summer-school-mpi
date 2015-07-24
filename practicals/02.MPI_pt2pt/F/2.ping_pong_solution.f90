@@ -17,42 +17,33 @@ PROGRAM ping_pong
   USE MPI
   IMPLICIT NONE
 
-  INTEGER PROCESS_A
-  PARAMETER(PROCESS_A=0)
-
-  INTEGER PROCESS_B
-  PARAMETER(PROCESS_B=1)
-
-  INTEGER PING
-  PARAMETER(PING=17) ! message tag
-
-  INTEGER PONG
-  PARAMETER(PONG=23) ! message tag
-
   INTEGER length
   PARAMETER (length=1)
+
+  INTEGER PING
+  PARAMETER (PING=0)
+
+  INTEGER PONG
+  PARAMETER (PONG=1)
 
   INTEGER status(MPI_STATUS_SIZE)
 
   REAL buffer(length)
 
-  INTEGER i
-
-  INTEGER ierror, my_rank, size
+  INTEGER ierror, my_rank
 
   CALL MPI_INIT(ierror)
 
   CALL MPI_COMM_RANK(MPI_COMM_WORLD, my_rank, ierror)
 
-  ! write a loop of number_of_messages iterations. Within the loop, process A sends a message
-  ! (ping) to process B. After receiving the message, process B sends a message (pong) to process A) 
-
-  IF (my_rank.EQ.PROCESS_A) THEN
-     CALL MPI_SEND(buffer, length, MPI_REAL, PROCESS_B, PING, MPI_COMM_WORLD, ierror)
-     CALL MPI_RECV(buffer, length, MPI_REAL, PROCESS_B, PONG, MPI_COMM_WORLD, status, ierror)
-  ELSE IF (my_rank.EQ.PROCESS_B) THEN
-     CALL MPI_RECV(buffer, length, MPI_REAL, PROCESS_A, PING, MPI_COMM_WORLD, status, ierror)
-     CALL MPI_SEND(buffer, length, MPI_REAL, PROCESS_A, PONG, MPI_COMM_WORLD, ierror)
+  ! Process 0 sends a message(ping) to process 1.
+  ! After receiving the message, process 1 sends a message (pong) to process 0
+  IF (my_rank.EQ.0) THEN
+     CALL MPI_SEND(buffer, length, MPI_REAL, 1, PING, MPI_COMM_WORLD, ierror)
+     CALL MPI_RECV(buffer, length, MPI_REAL, 1, PONG, MPI_COMM_WORLD, status, ierror)
+  ELSE IF (my_rank.EQ.1) THEN
+     CALL MPI_RECV(buffer, length, MPI_REAL, 0, PING, MPI_COMM_WORLD, status, ierror)
+     CALL MPI_SEND(buffer, length, MPI_REAL, 0, PONG, MPI_COMM_WORLD, ierror)
   END IF
 
   WRITE (*,*) 'Ping-ping complete - no deadlock'

@@ -46,7 +46,10 @@ int main (int argc, char *argv[])
      * if (left == -1) left = size-1;
      */
 
-    /* Implement ring addition code */
+    /* Implement ring addition code 
+     * do not use if (rank == 0) .. else ..
+     * all ranks will obtain the sum.
+     */
     sum = 0;
     snd_buf = my_rank;
 

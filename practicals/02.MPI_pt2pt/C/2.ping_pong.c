@@ -16,10 +16,8 @@
 #include <stdio.h>
 #include <mpi.h>
 
-#define PROCESS_A 0
-#define PROCESS_B 1
-#define PING  17 //message tag
-#define PONG  23 //message tag
+#define PING  0 //message tag
+#define PONG  1 //message tag
 #define SIZE  1024
 
 int main(int argc, char *argv[])
@@ -28,13 +26,12 @@ int main(int argc, char *argv[])
     float buffer[SIZE];
     MPI_Status status;
 
-
     MPI_Init(&argc, &argv);
 
     MPI_Comm_rank(MPI_COMM_WORLD, &my_rank);
 
-    /* Process A sends a message (ping) to process B.
-     * After receiving the message, process B sends a message (pong) to process A.
+    /* Process 0 sends a message (ping) to process 1.
+     * After receiving the message, process 1 sends a message (pong) to process 0.
      */
 
     MPI_Finalize();

@@ -70,7 +70,7 @@ PROGRAM bandwidth
 
   ALLOCATE(buffer(MAX_SIZE))
 
-  OPEN(1,file='bwd.dat',status='old')
+  OPEN(1,file='bandwidth.dat',status='old')
 
   CALL MPI_INIT(ierror)
 

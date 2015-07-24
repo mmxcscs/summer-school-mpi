@@ -297,19 +297,19 @@ Rank 2: MPI_Recv(<recv data buffer>, 1, MyCommunicator)
 \begin{frame}[fragile]{Example of MPI source code}
 \begin{Cpplisting}[]{}
 #include<mpi.h>
-int main(argc, argv) {
+int main(int argc, char *argv[])
     int data[64];
     int nranks, my_rank;
 
-    MPI_Init(argc, argv);
+    MPI_Init(&argc, &argv);
     MPI_Comm_size(MPI_COMM_WORLD, &nranks);
     MPI_Comm_rank(MPI_COMM_WORLD, &my_rank);
     assert(nranks % 2 == 0);// if not?
 
     if (my_rank % 2 == 0) {
-        MPI_Send(&data, 64, MPI_INT, my_rank+1, 0, MPI_COMM_WORLD);
+        MPI_Send(data, 64, MPI_INT, my_rank+1, 0, MPI_COMM_WORLD);
     } else {
-        MPI_Recv(&data, 64, MPI_INT, my_rank-1, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+        MPI_Recv(data, 64, MPI_INT, my_rank-1, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
     }
     MPI_Finalize();
 }
@@ -375,6 +375,10 @@ int main(argc, argv) {
     \item Hello World! with rank number
     \end{enumerate}
     \end{brown2block}
+    \begin{brown0block}{Reminder}
+        \lstinlineCpp{aprun -n 2 ./my_application my_args}\\
+        Starts with 2 MPI ranks.
+    \end{brown0block}
 \end{frame}
 
 \section{Point-to-point communications}

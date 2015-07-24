@@ -65,12 +65,13 @@ PROGRAM bandwidth
 
   CHARACTER, ALLOCATABLE :: buffer(:)
 
-  INTEGER length_of_message, k
+  INTEGER length_of_message
   INTEGER ierror, my_rank, size
+  INTEGER k
 
   ALLOCATE(buffer(MAX_SIZE))
 
-  OPEN(1,file='bwd.dat',status='old')
+  OPEN(1,file='bandwidth.dat',status='old')
 
   CALL MPI_INIT(ierror)
 

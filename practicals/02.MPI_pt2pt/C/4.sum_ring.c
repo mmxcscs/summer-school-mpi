@@ -39,7 +39,10 @@ int main (int argc, char *argv[])
     right = /* get rank of neighbor to your right */
     left  = /* get rank of neighbor to your left */
 
-    /* Implement ring addition code */
+    /* Implement ring addition code 
+     * do not use if (rank == 0) .. else ..
+     * all ranks will obtain the sum.
+     */
 
     printf ("Process %i:\tSum = %i\n", my_rank, sum);
 
