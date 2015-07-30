@@ -14,7 +14,7 @@
    id="svg4828"
    version="1.1"
    inkscape:version="0.48.4 r9939"
-   sodipodi:docname="New document 16">
+   sodipodi:docname="barrier.svg">
   <defs
      id="defs4830">
     <marker
@@ -155,9 +155,9 @@
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="true"
-     inkscape:window-width="1918"
+     inkscape:window-width="958"
      inkscape:window-height="1059"
-     inkscape:window-x="1920"
+     inkscape:window-x="2880"
      inkscape:window-y="0"
      inkscape:window-maximized="0">
     <inkscape:grid
@@ -172,7 +172,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -205,7 +205,7 @@
       <path
          inkscape:connector-curvature="0"
          id="path4838-0"
-         d="m 110,72.362183 0,119.999997"
+         d="m 110,72.362183 0,179.999997"
          style="fill:none;stroke:#000000;stroke-width:7;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;marker-end:url(#Arrow2Send)"
          sodipodi:nodetypes="cc" />
       <text
@@ -266,12 +266,6 @@
        style="fill:#974806;stroke:#974806;stroke-width:7;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:14,7;stroke-dashoffset:0"
        d="m 110,162.36218 0,100"
        id="path6054"
-       inkscape:connector-curvature="0"
-       sodipodi:nodetypes="cc" />
-    <path
-       style="fill:#974806;stroke:#974806;stroke-width:7;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:14,7;stroke-dashoffset:0"
-       d="M 180.71429,204.50504 180,262.36218"
-       id="path6054-9"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cc" />
     <path

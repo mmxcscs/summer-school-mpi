@@ -87,7 +87,7 @@ int main(int argc, char *argv[])
     MPI_Cart_shift(comm_cart, 0, 1, &rank_top, &rank_bottom);
     MPI_Cart_shift(comm_cart, 1, 1, &rank_left, &rank_right);
 
-    //  derived datatype, use it as the datatype sending for the column
+    //  derived datatype, create a datatype for sending the column
     MPI_Type_vector(SUBDOMAIN, 1, DOMAINSIZE, MPI_DOUBLE, &data_ghost);
     MPI_Type_commit(&data_ghost);
 

@@ -271,48 +271,48 @@ Selected blocks are:
 
 \end{frame}
 
-\subsection{Sub-array datatype}
-\begin{frame}[fragile]{Sub-array Datatype}
-\justifying
-The subarray type constructor creates an MPI datatype describing an n-dimensional subarray of an n-dimensional array. The subarray may be placed anywhere within the full array. Usefull to write in parallel an array to disk using only one pointer.
-\begin{Cpplisting}[]{}
-MPI_TYPE_CREATE_SUBARRAY(ndims, array_sizes, array_subsizes, array_starts, order, oldtype, newtype)
-\end{Cpplisting}
-\begin{black1block}{}
-\begin{tabular}{rp{6.5cm}}
-\textbf{ndims} & number of array dimensions\\
-\textbf{array\_sizes} & number of elements of type oldtype in each dimension of the full array\\
-\textbf{array\_subsizes} & number of elements of type oldtype in each dimension of the subarray\\
-\textbf{order} & array storage order flag (as C or Fortran)\\
-\textbf{array\_starts} & starting coordinates of the subarray in each dimension\\
-\textbf{oldtype} & oldtype Datatype of each element\\
-\textbf{newtype} & new derived datatype\\
-\end{tabular}
-\end{black1block}
-\end{frame}
-
-\begin{frame}[fragile]{Sub-array Datatype: example}
-A 100x100 2D array of double precision floating point numbers distributed among 4 processes such that each process has a block of 25 columns.
-
-\begin{Cpplisting}[]{}
-double data[100][100];
-double subarray[100][25];
-MPI_Datatype filetype;
-int sizes[2], subsizes[2], starts[2];
-int rank;
-
-MPI_Comm_rank(MPI_COMM_WORLD, &rank);
-
-sizes[0]=100; sizes[1]=100;
-subsizes[0]=100; subsizes[1]=25;
-starts[0]=0; starts[1]=rank*25;
-
-MPI_Type_create_subarray(2, sizes, subsizes, starts, MPI_ORDER_C, MPI_DOUBLE, &filetype);
-
-MPI_File_write(.., data, 1, filetype,...);
-\end{Cpplisting}
-
-\end{frame}
+%\subsection{Sub-array datatype}
+%\begin{frame}[fragile]{Sub-array Datatype}
+%\justifying
+%The subarray type constructor creates an MPI datatype describing an n-dimensional subarray of an n-dimensional array. The subarray may be placed anywhere within the full array. Usefull to write in parallel an array to disk using only one pointer.
+%\begin{Cpplisting}[]{}
+%MPI_TYPE_CREATE_SUBARRAY(ndims, array_sizes, array_subsizes, array_starts, order, oldtype, newtype)
+%\end{Cpplisting}
+%\begin{black1block}{}
+%\begin{tabular}{rp{6.5cm}}
+%\textbf{ndims} & number of array dimensions\\
+%\textbf{array\_sizes} & number of elements of type oldtype in each dimension of the full array\\
+%\textbf{array\_subsizes} & number of elements of type oldtype in each dimension of the subarray\\
+%\textbf{order} & array storage order flag (as C or Fortran)\\
+%\textbf{array\_starts} & starting coordinates of the subarray in each dimension\\
+%\textbf{oldtype} & oldtype Datatype of each element\\
+%\textbf{newtype} & new derived datatype\\
+%\end{tabular}
+%\end{black1block}
+%\end{frame}
+%
+%\begin{frame}[fragile]{Sub-array Datatype: example}
+%A 100x100 2D array of double precision floating point numbers distributed among 4 processes such that each process has a block of 25 columns.
+%
+%\begin{Cpplisting}[]{}
+%double data[100][100];
+%double subarray[100][25];
+%MPI_Datatype filetype;
+%int sizes[2], subsizes[2], starts[2];
+%int rank;
+%
+%MPI_Comm_rank(MPI_COMM_WORLD, &rank);
+%
+%sizes[0]=100; sizes[1]=100;
+%subsizes[0]=100; subsizes[1]=25;
+%starts[0]=0; starts[1]=rank*25;
+%
+%MPI_Type_create_subarray(2, sizes, subsizes, starts, MPI_ORDER_C, MPI_DOUBLE, &filetype);
+%
+%MPI_File_write(.., data, 1, filetype,...);
+%\end{Cpplisting}
+%
+%\end{frame}
 
 \begin{frame}[fragile]{Other functions}
 \begin{itemize}

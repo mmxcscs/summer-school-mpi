@@ -82,9 +82,7 @@ int main(int argc, char *argv[])
     // CREATE a cartesian communicator (4*4) with periodic boundaries and use it to find your neighboring
     // ranks in all dimensions.
 
-    //  derived datatype, use it as the datatype for sending the column
-    MPI_Type_vector(SUBDOMAIN, 1, DOMAINSIZE, MPI_DOUBLE, &data_ghost);
-    MPI_Type_commit(&data_ghost);
+    //  derived datatype, create a datatype for sending the column
 
     //  ghost cell exchange with the neighbouring cells in all directions
     //  to the top

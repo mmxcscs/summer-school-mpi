@@ -10,7 +10,6 @@
 \RequirePackage{listings}
 \tcbuselibrary{listings,skins}
 
-
 \newlength{\@headerdist}
 \setlength{\@headerdist}{5mm}
 
@@ -27,7 +26,6 @@
 \definecolor{cscsyellow}{RGB}{167,135,32}
 \definecolor{cscsblack}{RGB}{0,0,0}
 \definecolor{cscswhite}{RGB}{255,255,255}
-
 
 % no navigation
 \setbeamertemplate{navigation symbols}{}
@@ -263,7 +261,6 @@
 % Code listing
 \newcommand{\lstfont}[1]{\color{#1}\scriptsize\ttfamily}
 \newcommand{\lsttinyfont}[1]{\color{#1}\fontsize{7}{7}\ttfamily}
-\newcommand{\lstinlinefont}[1]{\color{#1}\scriptsize\ttfamily}
 
 \lstdefinestyle{CppStyle}{
 language=[ANSI]C++,
@@ -277,16 +274,18 @@ stringstyle=\lstfont{cyan},
 commentstyle=\lstfont{cscsyellow!80!cscswhite},
 moredelim=[is][\lstfont{cscsgreen!60!cscswhite}]{@}{@},
 emph={
-        pragma, omp, shared, private, reduction,
+        omp, shared, private, reduction, parallel, critical, atomic,
         omp_get_wtime, omp_get_max_threads, omp_get_thread_num
 },
-emphstyle={\lstfont{cscsgreen!60!cscswhite}},
+emphstyle={\lstfont{green!60!cscswhite}},
+alsoother={\#},
+otherkeywords={\#pragma},
 breaklines=true
 }
 
 \newtcblisting{Cpplisting}[2][]{
-colback=cscsblack,
-colframe=cscsblack,
+colback=cscswhite!10!cscsblack,
+colframe=cscswhite!10!cscsblack,
 colbacktitle=cscswhite!75!cscsblack,
 coltitle=cscsblack,
 arc=0pt, outer arc=0pt,
@@ -310,19 +309,14 @@ identifierstyle=\lstfont{cscswhite},
 keywordstyle=\lstfont{magenta!40!cscswhite},
 numberstyle=\lstfont{cscswhite},
 stringstyle=\lstfont{cyan},
-commentstyle=\lstfont{cscsyellow!30!cscswhite},
+commentstyle=\lstfont{cscsyellow!80!cscswhite},
 moredelim=[is][\lstfont{cscsgreen!60!cscswhite}]{@}{@},
-emph={
-        pragma, omp, shared, private, reduction,
-        omp_get_wtime, omp_get_max_threads, omp_get_thread_num
-},
-emphstyle={\lstfont{cscsgreen!60!cscswhite}},
 breaklines=true
 }
 
 \newtcblisting{Fortranlisting}[2][]{
-colback=cscsblack,
-colframe=cscsblack,
+colback=cscswhite!10!cscsblack,
+colframe=cscswhite!10!cscsblack,
 colbacktitle=cscswhite!75!cscsblack,
 coltitle=cscsblack,
 arc=0pt, outer arc=0pt,

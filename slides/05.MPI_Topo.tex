@@ -74,7 +74,7 @@ Groups/communicators can be created and destroyed during program execution.
 Processes may be in more than one group/communicator having a unique rank within each group/communicator.
 \end{column}
 \begin{column}{0.5\paperwidth}
-\includegraphics[scale=0.36]{04.MPI_Topo/world.pdf}
+\includegraphics[scale=0.36]{05.MPI_Topo/world.pdf}
 \end{column}
 \end{columns}
 \end{frame}
@@ -188,8 +188,8 @@ CALL MPI_COMM_SPLIT(comm2D, jCol, iRow, col_comm, ierr)
 \textbf{Planar distribution}: data are distributed “linearly” between processors.
 Default mapping when using \verb+MPI_COMM_WORLD+.\\
 \visible<2>{Ghost cells are exchanged: processor N communicates with N-1 and N+1}
-\includegraphics<1>[scale=0.5]{04.MPI_Topo/decomp1.pdf}
-\includegraphics<2>[scale=0.5]{04.MPI_Topo/decomp1gc.pdf}
+\includegraphics<1>[scale=0.5]{05.MPI_Topo/decomp1.pdf}
+\includegraphics<2>[scale=0.5]{05.MPI_Topo/decomp1gc.pdf}
 \end{frame}
 
 \begin{frame}[fragile]{Domain decomposition}
@@ -197,7 +197,7 @@ Default mapping when using \verb+MPI_COMM_WORLD+.\\
 \vspace{0.5cm}
 \begin{columns}
 \begin{column}{0.322\paperwidth}
-\includegraphics[scale=0.4]{04.MPI_Topo/decomp2.pdf}
+\includegraphics[scale=0.4]{05.MPI_Topo/decomp2.pdf}
 \end{column}
 \begin{column}{0.5\paperwidth}
 This is in general a more effective way of distribute the domain, since:
@@ -269,7 +269,7 @@ Call MPI_CART_CREATE (MPI_COMM_WORLD, 3, dims, periods, .TRUE., comm_cart, ierr)
 \end{Fortranlisting}
 \end{column}
 \begin{column}{0.4\paperwidth}
-\includegraphics[scale=0.36]{04.MPI_Topo/3dcube.pdf}
+\includegraphics[scale=0.36]{05.MPI_Topo/3dcube.pdf}
 \end{column}
 \end{columns}
 \end{frame}
@@ -343,7 +343,7 @@ Call MPI_CART_SHIFT(comm_cart, 2, 1, down, up, ierr)
 \end{column}
 \begin{column}{0.3\paperwidth}
 \vspace{4cm}
-\includegraphics[scale=0.36]{04.MPI_Topo/shift.pdf}
+\includegraphics[scale=0.36]{05.MPI_Topo/shift.pdf}
 \end{column}
 \end{columns}
 
@@ -364,7 +364,7 @@ MPI_CART_SUB(comm, remain_dims, newcomm)
 \end{black1block}
 \end{column}
 \begin{column}{0.49\paperwidth}
-\includegraphics[scale=0.29]{04.MPI_Topo/subgrid.pdf}
+\includegraphics[scale=0.29]{05.MPI_Topo/subgrid.pdf}
 \end{column}
 \end{columns}
 \end{frame}
@@ -406,7 +406,7 @@ edges = 1, 3, 0, 3, 0, 2\\
 \end{column}
 
     \begin{column}{0.2\paperwidth}
-\includegraphics[scale=0.36]{04.MPI_Topo/graph.pdf}
+\includegraphics[scale=0.36]{05.MPI_Topo/graph.pdf}
     \end{column}
 \end{columns}
 

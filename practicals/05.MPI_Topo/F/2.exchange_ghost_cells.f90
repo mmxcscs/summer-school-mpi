@@ -60,43 +60,22 @@ PROGRAM ghost_cell_exchange
 
   ! neighbouring ranks with cartesian grid communicator
   ! we do not allow the reordering of ranks here
-  dims(1)=4
-  dims(2)=4
-  periods(1)=1
-  periods(2)=1
 
   ! an alternative solution would be to allow the reordering and to use the new communicator for the communication
   ! then the MPI library has the opportunity to choose the best rank order with respect to performance
   ! CREATE a cartesian communicator (4*4) with periodic boundaries and use it to find your neighboring
   ! ranks in all dimensions.
-  CALL MPI_Cart_create(MPI_COMM_WORLD, 2, dims, periods, 0, comm_cart, ierror)
-  CALL MPI_Cart_shift(comm_cart, 0, 1, rank_left, rank_right, ierror)
-  CALL MPI_Cart_shift(comm_cart, 1, 1, rank_top, rank_bottom, ierror)
 
-  ! derived datatype, use this datatype to send the rows
-  CALL MPI_Type_vector(SUBDOMAIN, 1, DOMAINSIZE, MPI_DOUBLE, data_ghost, ierror)
-  CALL MPI_Type_commit(data_ghost, ierror)
+  ! derived datatype, create a datatype to send the rows
 
   !  ghost cell exchange with the neighbouring cells in all directions
   !  to the left
-  CALL MPI_Irecv(data(2,DOMAINSIZE), SUBDOMAIN, MPI_DOUBLE, rank_right, 0, MPI_COMM_WORLD, request, ierror)
-  CALL MPI_Send(data(2,2), SUBDOMAIN, MPI_DOUBLE, rank_left, 0, MPI_COMM_WORLD, ierror)
-  CALL MPI_Wait(request, status, ierror)
 
   !  to the right
-  CALL MPI_Irecv(data(2,1), SUBDOMAIN, MPI_DOUBLE, rank_left, 0, MPI_COMM_WORLD, request, ierror)
-  CALL MPI_Send(data(2,DOMAINSIZE-1), SUBDOMAIN, MPI_DOUBLE, rank_right, 0, MPI_COMM_WORLD, ierror)
-  CALL MPI_Wait(request, status, ierror)
 
   !  to the top
-  CALL MPI_Irecv(data(DOMAINSIZE,2), 1, data_ghost, rank_bottom, 0, MPI_COMM_WORLD, request, ierror)
-  CALL MPI_Send(data(2,2), 1, data_ghost, rank_top, 0, MPI_COMM_WORLD, ierror)
-  CALL MPI_Wait(request, status, ierror)
 
   !  to the bottom
-  CALL MPI_Irecv(data(1,2), 1, data_ghost, rank_top, 0, MPI_COMM_WORLD, request, ierror)
-  CALL MPI_Send(data(SUBDOMAIN+1,2), 1, data_ghost, rank_bottom, 0, MPI_COMM_WORLD, ierror)
-  CALL MPI_Wait(request, status, ierror)
 
   IF (rank.EQ.9) THEN
      WRITE (*,*) 'data of rank 9 after communication'

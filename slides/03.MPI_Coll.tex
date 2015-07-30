@@ -103,15 +103,6 @@ CALL MPI_BCAST(buf, count, type, root, comm, ierr)
 \end{center}
 \end{frame}
 
-\begin{frame}{Practicals}
-\begin{brown2block}{Exercise: 03.MPI\_Coll}
-    \begin{enumerate}
-        \item Read from the terminal and broadcast the input
-    \end{enumerate}
-    \end{brown2block}
-\end{frame}
-
-
 \subsection{Scatter/Gather}
 \begin{frame}{Scatter and Gather}
 \begin{tabular}{c|c}
@@ -215,16 +206,6 @@ CALL MPI_GATHERV(sndbuf, sndcount, sndtype,
 \begin{frame}{Gather with different buffers size}
 \includegraphics[scale=0.5]{03.MPI_Coll/gather2.pdf}
 \end{frame}
-
-\begin{frame}{Practicals}
-    \begin{brown2block}{Exercise: 03.MPI\_Coll}
-    \begin{enumerate}
-        \setcounter{enumi}{1}
-        \item Initialise an array and scatter it
-    \end{enumerate}
-    \end{brown2block}
-\end{frame}
-
 
 \subsection{All to all}
 \begin{frame}[fragile]{Global exchange: All to All}
@@ -332,7 +313,8 @@ MPI_Ibarrier, MPI_Igather, MPI_Igatherv, MPI_Ireduce, MPI_Iscatter, MPI_Iscatter
 \begin{frame}{Practicals}
     \begin{brown2block}{Exercise: 03.MPI\_Coll}
     \begin{enumerate}
-        \setcounter{enumi}{2}
+        \item Read from the terminal and broadcast the input
+        \item Initialise an array and scatter it
         \item Read data from the terminal and reduce
         \item Read data from the terminal and reduce if to all rank (allreduce)
     \end{enumerate}
