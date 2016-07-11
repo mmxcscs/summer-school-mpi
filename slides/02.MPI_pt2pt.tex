@@ -4,17 +4,13 @@
 
 \usetheme{CSCS}
 
-\newcommand{\footlinetext}{Summer School 2015 - MPI}
+\include{SummerSchool.conf}
+
 
 % Select the image for the title page
 %\newcommand{\picturetitle}{cscs_images/image3.pdf}
 %\newcommand{\picturetitle}{cscs_images/image5.pdf}
 \newcommand{\picturetitle}{cscs_images/image6.pdf}
-
-\author{Maxime Martinasso, CSCS}
-\title{Message Passing Interface (MPI)}
-\subtitle{Summer School 2015 - Effective High Performance Computing}
-\date{July 22-23, 2015}
 
 \begin{document}
 
@@ -210,8 +206,8 @@ There may also be other fields in the structure, but these are reserved for the 
 \begin{itemize}
 \item In a perfect world, every send operation would be perfectly synchronized with its matching receive.
 This is actually never the case.
-A send resp. a receive can be triggered before or after its corresponding receive resp. send.\\
-\item Is the receiving rank prepared to receive the data?...
+A send resp.\ a receive can be triggered before or after its corresponding receive resp.\ send.\\
+\item Is the receiving rank prepared to receive the data?\ldots
 \end{itemize}
 \begin{blue1block}{Rendez-vous protocol}
 {\color{cscsred}Internal to MPI not expose to the user}
@@ -243,14 +239,14 @@ A send resp. a receive can be triggered before or after its corresponding receiv
 
 \subsection{Blocking and non-blocking}
 \begin{frame}{Blocking and non-blocking communications}
-\begin{green1block}{A blocking communication means...}
+\begin{green1block}{A blocking communication means\ldots}
     That the buffer can be re-used after the function as returned.
 \end{green1block}
-\begin{green1block}{A non-blocking communication means...}
+\begin{green1block}{A non-blocking communication means\ldots}
     That the buffer can only be re-used after a wait function as returned.\\
     Until then, the buffer must not be overwritten (and even read).
 \end{green1block}
-\begin{red1block}{\textbf{Blocking} and non-blocking do not mean...}
+\begin{red1block}{\textbf{Blocking} and non-blocking do not mean\ldots}
     That the communication is completed after the function as returned.
 \end{red1block}
 \begin{itemize}

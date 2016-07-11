@@ -38,3 +38,4 @@ clean:
 	rm -f 05.MPI_Topo.pdf 05.MPI_Topo.aux 05.MPI_Topo.dvi 05.MPI_Topo.log 05.MPI_Topo.nav 05.MPI_Topo.out 05.MPI_Topo.snm 05.MPI_Topo.toc 05.MPI_Topo.vrb 05.MPI_Topo.listing
 	rm -f 06.MPI_Miniapp.pdf 06.MPI_Miniapp.aux 06.MPI_Miniapp.dvi 06.MPI_Miniapp.log 06.MPI_Miniapp.nav 06.MPI_Miniapp.out 06.MPI_Miniapp.snm 06.MPI_Miniapp.toc 06.MPI_Miniapp.vrb 06.MPI_Miniapp.listing
 	rm -f 07.MPI_Extra.pdf 07.MPI_Extra.aux 07.MPI_Extra.dvi 07.MPI_Extra.log 07.MPI_Extra.nav 07.MPI_Extra.out 07.MPI_Extra.snm 07.MPI_Extra.toc 07.MPI_Extra.vrb 07.MPI_Extra.listing
+	rm -f SummerSchool.conf.tex.aux SummerSchool.conf.aux

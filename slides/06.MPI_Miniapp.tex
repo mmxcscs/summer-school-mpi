@@ -5,17 +5,12 @@
 
 \usetheme{CSCS}
 
-\newcommand{\footlinetext}{Summer School 2015 - MPI}
+\include{SummerSchool.conf}
 
 % Select the image for the title page
 \newcommand{\picturetitle}{cscs_images/image3.pdf}
 %\newcommand{\picturetitle}{cscs_images/image5.pdf}
 %\newcommand{\picturetitle}{cscs_images/image6.pdf}
-
-\author{Maxime Martinasso, CSCS}
-\title{MiniApp with MPI}
-\subtitle{Summer School 2015 - Effective High Performance Computing}
-\date{July 22-23, 2015}
 
 \begin{document}
 
@@ -82,7 +77,7 @@ Use point to point communication to exchange ghost cells among neighbours.
 \section{Summary}
 \begin{frame}[fragile]{Summary}
 \begin{itemize}
-\item Initialize MPI: \lstinlineCpp{main.cpp} or \lstinlineCpp{main.f90}
+\item Initialize MPI:\@ \lstinlineCpp{main.cpp} or \lstinlineCpp{main.f90}
 \item Domain decomposition: \lstinlineCpp{data.cpp} or \lstinlineCpp{main.f90}
 \item Parallel linear algebra: \lstinlineCpp{linalg.cpp} or \lstinlineCpp{linalg.f90}
 \item Exchange ghost cells: \lstinlineCpp{operators.cpp} or \lstinlineCpp{operators.f90}
