@@ -46,7 +46,7 @@ PROGRAM ping_pong
      CALL MPI_SEND(buffer, length, MPI_REAL, 0, PONG, MPI_COMM_WORLD, ierror)
   END IF
 
-  WRITE (*,*) 'Ping-ping complete - no deadlock'
+  WRITE (*,*) 'Ping-ping completed - rank ',my_rank
 
   CALL MPI_FINALIZE(ierror)
 

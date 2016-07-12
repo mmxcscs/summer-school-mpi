@@ -83,10 +83,11 @@ int main(int argc, char *argv[])
     rank_top=(rank+16-4)%16;
 
 
-    //  ghost cell exchange with the neighbouring cells to the bottom and to the top
+    //  ghost cell exchange with the neighbouring cells to the bottom and to the top using:
     //  a) MPI_Send, MPI_Irecv, MPI_Wait
     //  b) MPI_Isend, MPI_Recv, MPI_Wait
     //  c) MPI_Sendrecv
+
     //  to the top
 
     // a)

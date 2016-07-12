@@ -38,6 +38,7 @@ int main(int argc, char *argv[])
     }
     if (rank == 0) {
         printf("enter number \n");
+        fflush(stdout);
         scanf("%d",&number);
     }
     /* send the contents of number from rank 0 to rank 1 using MPI_Send --- MPI_Recv */

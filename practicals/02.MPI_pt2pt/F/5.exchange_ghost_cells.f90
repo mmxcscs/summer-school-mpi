@@ -61,10 +61,11 @@ PROGRAM ghost_cell_exchange
   rank_right = 0 !find the rank of my right neighbour
   rank_left = 0 !find the rank of my left neighbour
 
-  !  ghost cell exchange with the neighbouring cells on the left and on the right
+  !  ghost cell exchange with the neighbouring cells on the left and on the right using:
   !  a) MPI_Send, MPI_Irecv
   !  b) MPI_Isend, MPI_Recv
   !  c) MPI_Sendrecv
+
   !  to the left
   ! a)
 

@@ -17,22 +17,19 @@
  * NOTE: make a reservation with two nodes:
  * salloc ... -N 2 -n 2 ....
  * start mpi using 2 nodes with one process per node:
- * aprun -N 1 -n 2 .......
+ * srun -N 1 -n 2 .......
  * use gnuplot to plot the result:
  * gnuplot bandwidth.gp
  *
  * Advanced: try on only one node, explain the bandwidth values
- * aprun -N 2 -n 2 .......
+ * srun -N 2 -n 2 .......
  */
 
 #include <stdio.h>
 #include <string.h>
-#include <mpi.h>
+#include <stdlib.h>
 
-#define PROCESS_A 0
-#define PROCESS_B 1
-#define PING  17
-#define PONG  23
+#include <mpi.h>
 
 #define NMESSAGES 100
 #define INI_SIZE 1
@@ -48,14 +45,19 @@ int main(int argc, char *argv[])
     int length_of_message;
     double start, stop, time, transfer_time;
     MPI_Status status;
-    char buffer[MAX_SIZE];
+    char* buffer;
     char output_str[512];
-
-    FILE* f = fopen("bandwidth.dat","w");
+    FILE* f;
 
     MPI_Init(&argc, &argv);
 
     MPI_Comm_rank(MPI_COMM_WORLD, &my_rank);
+
+    buffer = (char*)malloc(MAX_SIZE*sizeof(char));
+
+    if (my_rank == 0) {
+        f = fopen("bandwidth.dat","w");
+    }
 
     length_of_message = INI_SIZE;
 
@@ -67,7 +69,7 @@ int main(int argc, char *argv[])
         start = MPI_Wtime();
 
         stop = MPI_Wtime();
-        if (my_rank == PROCESS_A) {
+        if (my_rank == 0) {
             time = stop - start;
 
             transfer_time = time / (2 * NMESSAGES);
@@ -88,7 +90,11 @@ int main(int argc, char *argv[])
         }
 
     }
-    fclose(f);
+
+    if (my_rank == 0) {
+        fclose(f);
+    }
     MPI_Finalize();
+    free(buffer);
     return 0;
 }

@@ -33,14 +33,14 @@ PROGRAM simple_send_recv
    END IF
 
    IF (rank.EQ.0) THEN
-      WRITE (*,*) 'enter number'
+      WRITE (*,*) 'enter a number: '
       READ (*,*) number
    END IF
 
    ! Send the contents of number from rank 0 to rank 1 using MPI_Send --- MPI_Recv
 
    IF (rank.EQ.1) THEN
-      WRITE (*,*) 'number communicated', number
+      WRITE (*,*) 'communicated number: ', number
    END IF
 
    CALL MPI_Finalize(ierror)
