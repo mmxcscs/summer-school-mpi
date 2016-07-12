@@ -318,7 +318,7 @@ int main(int argc, char *argv[])
     \item[\color{cscsred}$\Rightarrow$]\textbf{\color{cscsred}Implementation dependent!}
 \end{itemize}
 
-\begin{blue1block}{Launcher: mpirun/aprun}
+\begin{blue1block}{Launcher: mpirun/srun}
 \begin{itemize}
     \item Starts all process on all computer nodes (ssh)
     \item Attributes rank numbers by setting argc and argv
@@ -371,7 +371,7 @@ int main(int argc, char *argv[])
     \end{enumerate}
     \end{brown2block}
     \begin{brown0block}{Reminder}
-        \lstinlineCpp{aprun -n 2 ./my_application my_args}\\
+        \lstinlineCpp{srun -n 2 ./my_application my_args}\\
         Starts with 2 MPI ranks.
     \end{brown0block}
 \end{frame}

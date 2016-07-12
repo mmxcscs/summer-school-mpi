@@ -21,6 +21,7 @@
 \begin{itemize}
 \item Point-to-point communication, Blocking and non-blocking
 \item Collective operations
+\item Derived datatypes
 \end{itemize}
 \end{frame}
 
@@ -37,6 +38,7 @@
 \section{An introduction to MPI}
 \section{Point-to-point communications}
 \section{Collective communications}
+\section{Datatypes}
 \section{Topology}
 \cscstableofcontents[currentsection]{General Course Structure}
 
@@ -48,7 +50,7 @@
 \begin{frame}[fragile]{Groups and communicator}
 \begin{itemize}
 \item A group is an ordered set of processes, each with a unique integer rank. In MPI, a group is represented within system memory as an object. It is accessible to the programmer only by a "handle". A group is always associated with a communicator object.
-\item A communicator encompasses a group of processes that may communicate with each other. All MPI messages must specify a communicator. Like groups, communicators are accessible to the programmer only by "handles". The handle for the communicator that comprises all tasks is \verb+MPI_COMM_WORLD+.
+\item A communicator encompasses a group of processes that may communicate with each other. All MPI messages must specify a communicator. Like groups, communicators are accessible to the programmer only by "handles". The handle for the communicator that comprises all processes is \verb+MPI_COMM_WORLD+.
 \end{itemize}
 From the programmer's perspective, a group and a communicator are
 one. The group routines are primarily used to specify which
@@ -419,7 +421,7 @@ edges = 1, 3, 0, 3, 0, 2\\
 
 
 \begin{frame}{Practicals}
-    \begin{brown2block}{Exercise: 04.MPI\_Topo}
+    \begin{brown2block}{Exercise: 05.MPI\_Topo}
     \begin{enumerate}
         \item Create a 1-dimension topology - a ring
         \item Ghost cell exchanges using a topology
@@ -429,7 +431,6 @@ edges = 1, 3, 0, 3, 0, 2\\
 
 
 
-\section{Datatypes}
 
 % THANK YOU SLIDE
 \cscsthankyou{Thank you for your attention.}
