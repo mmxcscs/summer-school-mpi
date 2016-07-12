@@ -29,7 +29,7 @@ int main(int argc, char *argv[]) {
    MPI_Reduce(&input, &result, 1, MPI_INT, MPI_SUM, 0, MPI_COMM_WORLD);
 
    if (rank==0)
-      printf("result %i\n", result);
+      printf("Rank 0 says: result is %i\n", result);
    MPI_Finalize();
    return 0;
 }

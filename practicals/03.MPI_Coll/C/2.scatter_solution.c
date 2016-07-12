@@ -31,7 +31,8 @@ int main(int argc, char *argv[]) {
    }
    if (rank==0){
       for (i=0; i<size; i++){
-         printf("enter value\n");
+         printf("enter a value:\n");
+         fflush(stdout);
          scanf ("%d",&senddata[i]);
       }
    }

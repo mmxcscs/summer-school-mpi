@@ -24,7 +24,7 @@ PROGRAM allreduce
 
   ! calculate sum of all ranks
 
-  WRITE(*,*) "PE", my_rank, ": Sum =", sum
+  WRITE(*,*) "Rank", my_rank, ": Sum =", sum
 
   CALL MPI_Finalize(ierror)
 

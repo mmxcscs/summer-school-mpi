@@ -31,7 +31,8 @@ PROGRAM scatter
    END IF
    IF (rank.EQ.0) THEN
       DO i=1, size, 1
-         WRITE (*,*) 'enter value'
+         WRITE (6,*) 'enter a value:'
+         CALL FLUSH(6)
          READ (*,*) senddata(i)
       END DO
    END IF

@@ -28,7 +28,7 @@ PROGRAM reduce
    ! with the operation sum (max, logical and)
 
    IF (rank.EQ.0) THEN
-      write (*,*) 'result', result
+      write (*,*) 'Rank 0 says: result is', result
    END IF
 
    CALL MPI_Finalize(ierror)

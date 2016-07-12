@@ -32,7 +32,7 @@ int main (int argc, char *argv[])
 
     /* Compute sum of all ranks. */
 
-    printf ("PE%i:\tSum = %i\n", my_rank, sum);
+    printf ("Rank %i:\tSum = %i\n", my_rank, sum);
 
     MPI_Finalize();
     return 0;

@@ -33,7 +33,8 @@ PROGRAM simple_send_recv
    END IF
 
    IF (rank.EQ.0) THEN
-      WRITE (*,*) 'enter a number: '
+      WRITE (6,*) 'enter a number: '
+      CALL FLUSH(6)
       READ (*,*) number
    END IF
 

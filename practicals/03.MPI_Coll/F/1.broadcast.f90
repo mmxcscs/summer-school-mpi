@@ -22,7 +22,8 @@ PROGRAM broadcast
    CALL MPI_Comm_rank(MPI_COMM_WORLD, rank, ierror)
 
    IF (rank.EQ.0) THEN
-      WRITE (*,*) 'enter value'
+      WRITE (6,*) 'enter a value:'
+      CALL FLUSH(6)
       READ (*,*) data
    END IF
 

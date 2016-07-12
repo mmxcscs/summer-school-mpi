@@ -29,7 +29,7 @@ PROGRAM reduce
    CALL MPI_Reduce(input, result, 1, MPI_INT, MPI_SUM, 0, MPI_COMM_WORLD, ierror)
 
    IF (rank.EQ.0) THEN
-      write (*,*) 'result', result
+      write (*,*) 'Rank 0 says: result is', result
    END IF
 
    CALL MPI_Finalize(ierror)
