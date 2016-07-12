@@ -61,8 +61,8 @@ int main (int argc, char *argv[])
         sum += rcv_buf;
     }
 
-    printf ("PE%i:\tSum = %i\n", my_rank, sum);
-    /* printf ("PE%i, Coords = %i: Sum = %i\n",
+    printf ("Rank %i:\tSum = %i\n", my_rank, sum);
+    /* printf ("Rank %i, Coords = %i: Sum = %i\n",
                 my_rank, my_coords[0], sum); */
 
     MPI_Finalize();

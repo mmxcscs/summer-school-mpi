@@ -70,8 +70,8 @@ PROGRAM ring
 
   END DO
 
-  WRITE(*,*) "PE", my_rank, ": Sum =", sum
-! WRITE(*,*) "PE", my_rank, " Coord =", coords(1), ": Sum =", sum
+  WRITE(*,*) "Rank", my_rank, ": Sum =", sum
+! WRITE(*,*) "Rank", my_rank, " Coord =", coords(1), ": Sum =", sum
 
   CALL MPI_Finalize(ierror)
 
