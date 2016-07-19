@@ -37,7 +37,7 @@ int main(int argc, char *argv[])
         exit(1);
     }
     if (rank == 0) {
-        printf("enter number \n");
+        printf("enter a number:\n");
         fflush(stdout);
         scanf("%d",&number);
     }
