@@ -51,7 +51,7 @@ int main(int argc, char *argv[]) {
    blockcounts[1] = 2;
 
    /* Now define structured type and commit it */
-   MPI_Type_struct(2, blockcounts, offsets, oldtypes, &particletype);
+   MPI_Type_create_struct(2, blockcounts, offsets, oldtypes, &particletype);
    MPI_Type_commit(&particletype);
 
    /* setup and send particules */

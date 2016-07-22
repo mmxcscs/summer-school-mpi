@@ -48,7 +48,7 @@ PROGRAM struct
    blockcounts(1) = 2
 
    ! Now define structured type and commit it
-   CALL MPI_Type_struct(2, blockcounts, offsets, oldtypes, particletype, ierror)
+   CALL MPI_Type_create_struct(2, blockcounts, offsets, oldtypes, particletype, ierror)
    CALL MPI_Type_commit(particletype, ierror)
 
    ! Initialize the particle array and then send it to each task
