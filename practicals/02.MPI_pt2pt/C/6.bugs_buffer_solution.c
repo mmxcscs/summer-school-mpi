@@ -33,18 +33,19 @@
 #include <mpi.h>
 #include <vector>
 
-#define MAX_SIZE_STRING 58
+#define MAX_SIZE_STRING 64
 #define MAX_SIZE_COMPUTE (1<<20)
 
-void compute_and_send(size_t size, float root, int k, MPI_Request* req) {
-     std::vector<float> data(size);
-     int j;
+void compute_and_send(size_t size, float root, int k, MPI_Request* req)
+{
+    std::vector<float> data(size);
+    int j;
 
-     for(j = 0; j < size; j++) {
+    for(j = 0; j < size; j++) {
         data.push_back(rand()*root);
-     }
+    }
 
-     MPI_Isend(&data[0], size, MPI_FLOAT, k, 3, MPI_COMM_WORLD, req);
+    MPI_Isend(&data[0], size, MPI_FLOAT, k, 3, MPI_COMM_WORLD, req);
 
     /* HARD BUG:
      * when exiting the function, the object data of type vector will call its destructor
@@ -73,53 +74,53 @@ int main(int argc, char *argv[])
     buffer = (char*)malloc(MAX_SIZE_STRING*sizeof(char));
 
     if (my_rank == 0) {
-      req = (MPI_Request*)malloc(3*(np-1)*sizeof(MPI_Request));
-      root = (float*)malloc((np-1)*sizeof(float));
-      size = (unsigned long*)malloc((np-1)*sizeof(unsigned long));
+        req = (MPI_Request*)malloc(3*(np-1)*sizeof(MPI_Request));
+        root = (float*)malloc((np-1)*sizeof(float));
+        size = (unsigned long*)malloc((np-1)*sizeof(unsigned long));
 
-      /* Non-blocking send buffer */
-      for( k = 1; k < np; k++ ) {
-         root[k-1] = sqrt(k);
-         sprintf(buffer, "Hello! This rank %d has the data computed with root %.4f.", k, root[k-1]);
-         MPI_Isend(buffer, strlen(buffer), MPI_CHAR, k, 1, MPI_COMM_WORLD, &req[k-1]);
+        /* Non-blocking send buffer */
+        for( k = 1; k < np; k++ ) {
+            root[k-1] = sqrt(k);
+            sprintf(buffer, "Hello World! This rank %d has the data computed with root %.4f.", k, root[k-1]);
+            MPI_Isend(buffer, strlen(buffer), MPI_CHAR, k, 1, MPI_COMM_WORLD, &req[k-1]);
 
-         size[k-1] = (unsigned long)(MAX_SIZE_COMPUTE*root[k-1]);
-         MPI_Isend(&size[k-1], 1, MPI_UNSIGNED_LONG, k, 2, MPI_COMM_WORLD, &req[k-1+(np-1)]);
+            size[k-1] = (unsigned long)(MAX_SIZE_COMPUTE*root[k-1]);
+            MPI_Isend(&size[k-1], 1, MPI_UNSIGNED_LONG, k, 2, MPI_COMM_WORLD, &req[k-1+(np-1)]);
 
-      /* EASY BUG (silent):
-       * The pointer buffer is reused in the MPI_Isend with the iteration counts.
-       * However, the standard specifies that a buffer hold by a Immediate communication cannot be
-       * read or written. Nevertheless most implementations are ok with read accesses.
-       */
-      }
+            /* EASY BUG (silent):
+             * The pointer buffer is reused in the MPI_Isend with the iteration counts.
+             * However, the standard specifies that a buffer hold by a Immediate communication cannot be
+             * read or written. Nevertheless most implementations are ok with read accesses.
+             */
+        }
 
-      for( k = 1; k < np; k++ ) {
-         compute_and_send(size[k-1], root[k-1], k, &req[k-1+2*(np-1)]);
-      }
+        for( k = 1; k < np; k++ ) {
+            compute_and_send(size[k-1], root[k-1], k, &req[k-1+2*(np-1)]);
+        }
 
-      MPI_Waitall(3*(np-1), req, MPI_STATUS_IGNORE);
-      free(req);
-      free(buffer);
+        MPI_Waitall(3*(np-1), req, MPI_STATUS_IGNORE);
+        free(req);
+        free(buffer);
 
     } else {
-      /* EASY BUG:
-       * With more than 9 ranks the string buffer has a size of MAX_SIZE_STRING+1,
-       * because the number of ranks require 2 characters.
-       */
+        /* EASY BUG:
+         * With more than 9 ranks the string buffer has a size of MAX_SIZE_STRING+1,
+         * because the number of ranks require 2 characters.
+         */
 
-      // receive string
-      MPI_Recv(buffer, MAX_SIZE_STRING, MPI_CHAR, 0, 1, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
-      printf("%s\n",buffer);
+        // receive string
+        MPI_Recv(buffer, MAX_SIZE_STRING, MPI_CHAR, 0, 1, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+        printf("%s\n",buffer);
 
-      // receive size
-      MPI_Recv(&rcv_size, 1, MPI_UNSIGNED_LONG, 0, 2, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
-      printf("rank %d received size of %d\n",my_rank, rcv_size);
-      data = (float*)malloc(rcv_size*sizeof(float));
+        // receive size
+        MPI_Recv(&rcv_size, 1, MPI_UNSIGNED_LONG, 0, 2, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+        printf("rank %d received size of %d\n",my_rank, rcv_size);
+        data = (float*)malloc(rcv_size*sizeof(float));
 
-      // receive data
-      MPI_Recv(data, rcv_size, MPI_FLOAT, 0, 3, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+        // receive data
+        MPI_Recv(data, rcv_size, MPI_FLOAT, 0, 3, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
 
-      free(data);
+        free(data);
     }
 
     MPI_Finalize();

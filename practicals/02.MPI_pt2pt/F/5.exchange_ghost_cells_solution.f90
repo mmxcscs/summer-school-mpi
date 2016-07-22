@@ -1,6 +1,7 @@
 PROGRAM ghost_cell_exchange
 
-! process decomposition on 4*4 grid
+! process decomposition on 4*4 grid, ranks are connected in a cyclic manner
+! for instance, rank 0 and 12 are connected
 !  |-----------|
 !  | 0| 4| 8|12|
 !  |-----------|
@@ -61,7 +62,7 @@ PROGRAM ghost_cell_exchange
   rank_right=mod(rank+4,16)
   rank_left=mod(rank+16-4,16)
 
-  !  ghost cell exchange with the neighbouring cells on the left and on the right using:
+  !  ghost cell exchange with the neighbouring cells (cyclic) on the left and on the right using:
   !  a) MPI_Send, MPI_Irecv
   !  b) MPI_Isend, MPI_Recv
   !  c) MPI_Sendrecv

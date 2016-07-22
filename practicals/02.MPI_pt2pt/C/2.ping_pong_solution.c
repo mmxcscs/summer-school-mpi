@@ -34,12 +34,12 @@ int main(int argc, char *argv[])
      * After receiving the message, process 1 sends a message (pong) to process 0.
      */
     if (my_rank == 0) {
-       MPI_Send(buffer, SIZE, MPI_FLOAT, 1, PING, MPI_COMM_WORLD);
-       MPI_Recv(buffer, SIZE, MPI_FLOAT, 1, PONG, MPI_COMM_WORLD, &status);
+        MPI_Send(buffer, SIZE, MPI_FLOAT, 1, PING, MPI_COMM_WORLD);
+        MPI_Recv(buffer, SIZE, MPI_FLOAT, 1, PONG, MPI_COMM_WORLD, &status);
     }
     if (my_rank == 1) {
-       MPI_Recv(buffer, SIZE, MPI_FLOAT, 0, PING, MPI_COMM_WORLD, &status);
-       MPI_Send(buffer, SIZE, MPI_FLOAT, 0, PONG, MPI_COMM_WORLD);
+        MPI_Recv(buffer, SIZE, MPI_FLOAT, 0, PING, MPI_COMM_WORLD, &status);
+        MPI_Send(buffer, SIZE, MPI_FLOAT, 0, PONG, MPI_COMM_WORLD);
     }
     printf("Rank %d says: Ping-pong complete.\n",my_rank);
 

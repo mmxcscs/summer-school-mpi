@@ -17,7 +17,6 @@
 #include <stdio.h>
 #include <mpi.h>
 
-#define to_right 201
 #define max_dims 1
 
 
@@ -30,7 +29,6 @@ int main (int argc, char *argv[])
 
     MPI_Comm    new_comm;
     int  dims[max_dims], periods[max_dims], reorder;
-    /*int         my_coords[max_dims]; */
 
     MPI_Status  status;
     MPI_Request request;
@@ -47,10 +45,6 @@ int main (int argc, char *argv[])
 
     MPI_Cart_create(MPI_COMM_WORLD, max_dims, dims, periods, reorder,&new_comm);
 
-    /* Get coords */
-    MPI_Comm_rank(new_comm, &my_rank);
-    /* MPI_Cart_coords(new_comm, my_rank, max_dims, my_coords); */
-
     /* Get nearest neighbour rank. */
     MPI_Cart_shift(new_comm, 0, 1, &left, &right);
 
@@ -60,9 +54,9 @@ int main (int argc, char *argv[])
     snd_buf = my_rank;
 
     for( i = 0; i < size; i++) {
-        MPI_Isend(&snd_buf, 1, MPI_INT, right, to_right, new_comm, &request);
+        MPI_Isend(&snd_buf, 1, MPI_INT, right, 0, new_comm, &request);
 
-        MPI_Recv(&rcv_buf, 1, MPI_INT, left, to_right, new_comm, &status);
+        MPI_Recv(&rcv_buf, 1, MPI_INT, left, 0, new_comm, &status);
 
         MPI_Wait(&request, &status);
 
@@ -71,8 +65,6 @@ int main (int argc, char *argv[])
     }
 
     printf ("Rank %i:\tSum = %i\n", my_rank, sum);
-    /* printf ("Rank %i, Coords = %i: Sum = %i\n",
-                my_rank, my_coords[0], sum); */
 
     MPI_Finalize();
 }

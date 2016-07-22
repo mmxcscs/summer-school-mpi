@@ -18,8 +18,6 @@ PROGRAM sum_ring
   USE MPI
   IMPLICIT NONE
 
-  INTEGER, PARAMETER :: to_right=201
-
   INTEGER :: ierror, my_rank, size
 
   INTEGER :: right, left
@@ -57,9 +55,9 @@ PROGRAM sum_ring
 
   DO i = 1, size
 
-     CALL MPI_ISEND(snd_buf, 1, MPI_INTEGER, right, to_right, MPI_COMM_WORLD, request, ierror)
+     CALL MPI_ISEND(snd_buf, 1, MPI_INTEGER, right, 0, MPI_COMM_WORLD, request, ierror)
 
-     CALL MPI_RECV(rcv_buf, 1, MPI_INTEGER, left, to_right, MPI_COMM_WORLD, status, ierror)
+     CALL MPI_RECV(rcv_buf, 1, MPI_INTEGER, left, 0, MPI_COMM_WORLD, status, ierror)
 
      CALL MPI_WAIT(request, status, ierror)
 

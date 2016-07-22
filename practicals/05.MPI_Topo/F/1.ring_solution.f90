@@ -31,7 +31,6 @@ PROGRAM ring
   INTEGER :: new_comm
   INTEGER :: dims(max_dims)
   LOGICAL :: reorder, periods(max_dims)
-! INTEGER :: coords(max_dims)
 
 
   CALL MPI_Init(ierror)
@@ -46,7 +45,6 @@ PROGRAM ring
 
   CALL MPI_CART_CREATE(MPI_COMM_WORLD, max_dims, dims, periods, reorder, new_comm, ierror)
   CALL MPI_COMM_RANK(new_comm, my_rank, ierror)
-! CALL MPI_CART_COORDS(new_comm,my_rank, max_dims, coords, ierror) 
 
   ! Get nearest neighbour ranks.
   CALL MPI_CART_SHIFT(new_comm, 0, 1, left, right, ierror)
@@ -71,7 +69,6 @@ PROGRAM ring
   END DO
 
   WRITE(*,*) "Rank", my_rank, ": Sum =", sum
-! WRITE(*,*) "Rank", my_rank, " Coord =", coords(1), ": Sum =", sum
 
   CALL MPI_Finalize(ierror)
 

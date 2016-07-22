@@ -1,5 +1,8 @@
 PROGRAM ghost_cell_exchange
 
+! Use only 16 processes for this exercise
+! Send the ghost cell in two directions: left<->right and top<->bottom
+! ranks are connected in a cyclic manner, for instance, rank 0 and 12 are connected
 ! process decomposition on 4*4 grid 
 !  |-----------|
 !  | 0| 4| 8|12|

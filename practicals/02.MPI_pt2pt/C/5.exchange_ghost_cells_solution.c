@@ -15,6 +15,7 @@
 
 /* Use only 16 processes for this exercise
  * Send the ghost cell in two directions: top to bottom and bottom to top
+ * consider cyclic boundaries, for instance, rank 0 and rank 12 are connected together
  *
  * process decomposition on 4*4 grid
  *
@@ -83,7 +84,7 @@ int main(int argc, char *argv[])
     rank_top=(rank+16-4)%16;
 
 
-    //  ghost cell exchange with the neighbouring cells to the bottom and to the top using:
+    //  ghost cell exchange with the neighbouring cells (cyclic) to the bottom and to the top using:
     //  a) MPI_Send, MPI_Irecv, MPI_Wait
     //  b) MPI_Isend, MPI_Recv, MPI_Wait
     //  c) MPI_Sendrecv

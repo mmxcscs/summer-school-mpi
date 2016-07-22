@@ -17,12 +17,12 @@ PROGRAM bandwidth
 ! NOTE: make a reservation with two nodes:
 ! salloc ... -N 2 -n 2 ....
 ! start mpi using 2 nodes with one process per node:
-! srun -N 1 -n 2 .......
+! srun -N 2 -n 2 .......
 ! use gnuplot to plot the result:
 ! gnuplot bandwidth.gp
 !
 ! Advanced: try on only one node, explain the bandwidth values
-! srun -N 2 -n 2 .......
+! srun -N 1 -n 2 .......
 
   USE MPI
   IMPLICIT NONE
@@ -94,7 +94,6 @@ PROGRAM bandwidth
            CALL MPI_SEND(buffer, length_of_message, MPI_BYTE, PROCESS_A, PONG, MPI_COMM_WORLD, ierror)
         END IF
      END DO
-
      tstop = MPI_Wtime();
 
      IF (my_rank.EQ.PROCESS_A) THEN
