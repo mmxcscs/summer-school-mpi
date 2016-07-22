@@ -35,7 +35,7 @@
         \item Bandwidth: ratio of message size / time (GB/s)
         \item Latency: minimal time to send one bit ($\mu s$)
     \end{itemize}
-    \item To think in parallel ;-)
+    \item To think parallel !
 \end{itemize}
 \end{frame}
 
@@ -60,9 +60,9 @@
         \item Parallel Programming with MPI - Oct 96
         \item MPI: The Complete Reference - Sept 98
         \item Using MPI - 2nd Edition - Nov 99
-
     \end{itemize}
 \end{itemize}
+    {\textbf{A lot of references and tutorials on Internet!}}
 \end{frame}
 
 % TABLE OF CONTENT SLIDE
@@ -153,6 +153,7 @@ Message Passing is a \textbf{COOPERATIVE} approach,\\based on \textbf{THREE} bas
 \end{black1block}
 \end{frame}
 
+
 \begin{frame}{Distributed memory}
 \begin{blue1block}{Distributed Memory}
 \begin{itemize}
@@ -168,6 +169,19 @@ Message Passing is a \textbf{COOPERATIVE} approach,\\based on \textbf{THREE} bas
 \end{center}
 \end{frame}
 
+\begin{frame}{Send/Recv}
+
+\begin{center}
+\includegraphics[scale=0.9]{01.MPI_Intro/sndrecv.pdf}
+\end{center}
+
+\begin{itemize}
+\item description of data?
+\item process identification?
+\item when an operation is completed?
+\end{itemize}
+\end{frame}
+
 \subsection{Using MPI in a program}
 \begin{frame}{Using MPI in a program}
 \begin{itemize}
@@ -181,9 +195,9 @@ Message Passing is a \textbf{COOPERATIVE} approach,\\based on \textbf{THREE} bas
 
 \begin{frame}[fragile]{Header files}
 All Subprogram that contains calls to MPI subroutine must include the MPI header file.\\
-\begin{Cpplisting}[]{}
+\begin{Pseudolisting}[]{}
 #include <mpi.h>
-\end{Cpplisting}
+\end{Pseudolisting}
 \begin{Fortranlisting}[77]{}
 include 'mpif.h'
 \end{Fortranlisting}
@@ -197,21 +211,13 @@ The header file contains definitions of MPI constants, types and functions
 \begin{frame}[fragile]{MPI initialize and finalize}
 \begin{itemize}
     \item Every MPI program starts by calling MPI\_Init:\\
-\begin{Cpplisting}[]{}
-int MPI_Init(int*argc, char***argv)
-\end{Cpplisting}
-\begin{Fortranlisting}[]{}
-INTEGER IERR
-MPI_INIT(IERR)
-\end{Fortranlisting}
+\begin{Pseudolisting}[]{}
+MPI_Init(argc, argv)
+\end{Pseudolisting}
     \item Every MPI program ends by calling MPI\_Finalize\\
-\begin{Cpplisting}[]{}
-int MPI_Finalize()
-\end{Cpplisting}
-\begin{Fortranlisting}[]{}
-INTEGER IERR
-MPI_FINALIZE(IERR)
-\end{Fortranlisting}
+\begin{Pseudolisting}[]{}
+MPI_Finalize()
+\end{Pseudolisting}
 \end{itemize}
 \end{frame}
 
@@ -234,32 +240,23 @@ MPI_FINALIZE(IERR)
 \begin{frame}[fragile]{Process identification}
 \begin{itemize}
     \item How many processes are associated with a communicator?\\
-\begin{Cpplisting}[]{}
-MPI_Comm_size(MPI_Comm comm, int *size)
-\end{Cpplisting}[]{}
-\begin{Fortranlisting}[]{}
-INTEGER COMM, SIZE, IERR
-CALL MPI_COMM_SIZE(COMM, SIZE, IERR)
-\end{Fortranlisting}[]{}
+\begin{Pseudolisting}[]{}
+MPI_Comm_size(MPI_Comm comm, size)
+\end{Pseudolisting}[]{}
     \item How to get the rank of a process?\\
-\begin{Cpplisting}[]{}
-MPI_Comm_rank(MPI_Comm comm, int *rank)
-\end{Cpplisting}[]{}
-\begin{Fortranlisting}[]{}
-INTEGER COMM, RANK, IERR
-CALL MPI_COMM_RANK(COMM, RANK, IERR)
-OUTPUT: RANK
-\end{Fortranlisting}[]{}
+\begin{Pseudolisting}[]{}
+MPI_Comm_rank(MPI_Comm comm, rank)
+\end{Pseudolisting}[]{}
 \end{itemize}
 \end{frame}
 
 \begin{frame}[fragile]{Simple MPI communication model}
 
 Process with rank 1 sends to process with rank 2
-\begin{Cpplisting}[Pseudo-code]{}
+\begin{Pseudolisting}[]{}
 Rank 1: MPI_Send(<send data buffer>, 2, MyCommunicator)
 Rank 2: MPI_Recv(<recv data buffer>, 1, MyCommunicator)
-\end{Cpplisting}
+\end{Pseudolisting}
 
 \visible<2->{
 \begin{black0block}{}
@@ -279,10 +276,10 @@ Rank 2: MPI_Recv(<recv data buffer>, 1, MyCommunicator)
 \begin{itemize}
     \item Rank 2 is prepare to receive data from Rank 1
         \begin{itemize}
-            \item \lstinlineCpp{MPI_Recv} is called in "the right order" (deadlock)
+            \item \lstinlinePseudo{MPI_Recv} is called in "the right order" (deadlock)
         \item Rank 2 knows the maximum bound on the buffer size
         \end{itemize}
-    \item[\color{cscsred}$\Rightarrow$]\textbf{\color{cscsred}Start to think in parallel!}
+    \item[\color{cscsred}$\Rightarrow$]\textbf{\color{cscsred}Parallel!}
 \end{itemize}
 \end{black0block}
 }
@@ -371,7 +368,7 @@ int main(int argc, char *argv[])
     \end{enumerate}
     \end{brown2block}
     \begin{brown0block}{Reminder}
-        \lstinlineCpp{srun -n 2 ./my_application my_args}\\
+        \lstinlinePseudo{srun -n 2 ./my_application my_args}\\
         Starts with 2 MPI ranks.
     \end{brown0block}
 \end{frame}

@@ -51,25 +51,22 @@
 \begin{frame}[fragile]{Preparing MPI for OpenMP}
 MPI requires to be setup with threads enabled:
 \begin{itemize}
-\item \lstinlineCpp{MPI_Init} should be replaced by \lstinlineCpp{MPI_Init_thread}
+\item \lstinlinePseudo{MPI_Init} should be replaced by \lstinlinePseudo{MPI_Init_thread}
 \end{itemize}
-\begin{Cpplisting}[]{}
-int MPI_Init_thread(int *argc, char ***argv, int required, int *provided)
-\end{Cpplisting}
-\begin{Fortranlisting}[]{}
-MPI_INIT_THREAD(required, provided, ierror)
-\end{Fortranlisting}
+\begin{Pseudolisting}[]{}
+MPI_Init_thread(required, provided, ierror)
+\end{Pseudolisting}
 
-\lstinlineCpp{required} specifies the requested level of thread support, and the actual level of support is then returned into \lstinlineCpp{provided}.\\
-You should check the value of \lstinlineCpp{provided} after the call
+\lstinlinePseudo{required} specifies the requested level of thread support, and the actual level of support is then returned into \lstinlinePseudo{provided}.\\
+You should check the value of \lstinlinePseudo{provided} after the call
 \end{frame}
 
 \begin{frame}[fragile]{MPI Thread level}
 \begin{itemize}
-    \item \lstinlineCpp{MPI_THREAD_SINGLE}: only one thread (MPI-only application)
-    \item \lstinlineCpp{MPI_THREAD_FUNNELED}: Only master thread will make threads (master = the thread calling \lstinlineCpp{MPI_Init_thread})
-    \item \lstinlineCpp{MPI_THREAD_SERIALIZED}: Only one thread at a time will call MPI (user responsibility)
-    \item \lstinlineCpp{MPI_THREAD_MULTIPLE}: Any thread may call MPI at any time, however that leads to slower performance (lock mechanism in MPI)
+    \item \lstinlinePseudo{MPI_THREAD_SINGLE}: only one thread (MPI-only application)
+    \item \lstinlinePseudo{MPI_THREAD_FUNNELED}: Only master thread will make threads (master = the thread calling \lstinlinePseudo{MPI_Init_thread})
+    \item \lstinlinePseudo{MPI_THREAD_SERIALIZED}: Only one thread at a time will call MPI (user responsibility)
+    \item \lstinlinePseudo{MPI_THREAD_MULTIPLE}: Any thread may call MPI at any time, however that leads to slower performance (lock mechanism in MPI)
 \end{itemize}
 \end{frame}
 
@@ -110,43 +107,49 @@ You should check the value of \lstinlineCpp{provided} after the call
 
 \begin{frame}[fragile]{Expose memory}
 
-\begin{Cpplisting}[]{}
-MPI_Win_create(void *base, MPI_Aint size, int disp_unit, MPI_Info info, MPI_Comm comm, MPI_Win *win)
-MPI_Win_allocate(MPI_Aint size, int disp_unit, MPI_Info info, MPI_Comm comm, void *baseptr, MPI_Win *win)
-MPI_Win_free(MPI_Win *win)
-\end{Cpplisting}
+\begin{Pseudolisting}[]{}
+MPI_Win_create(ptr, MPI_Aint size, disp_unit, MPI_Info info,
+               MPI_Comm comm, MPI_Win win)
+MPI_Win_allocate(MPI_Aint size, disp_unit, MPI_Info info,
+                 MPI_Comm comm, ptrptr, MPI_Win win)
+MPI_Win_free(MPI_Win win)
+\end{Pseudolisting}
 Exposes (and allocate) the memory buffer to other ranks.\\
 It is a collective operations among all ranks.\\
 
-\lstinlineCpp{MPI_Info} contains user configuration.\\
-%\lstinlineCpp{MPI_Aint} type that holds any valid address.
+\lstinlinePseudo{MPI_Info} contains user configuration.\\
+\lstinlinePseudo{MPI_Aint} type that holds any valid address.
 \end{frame}
 
 \begin{frame}[fragile]{Dynamic memory}
 It is possible to create a window with no memory attached.
 
-\begin{Cpplisting}[]{}
-MPI_Win_create_dynamic(MPI_Info info, MPI_Comm comm, MPI_Win *win)
-\end{Cpplisting}
+\begin{Pseudolisting}[]{}
+MPI_Win_create_dynamic(MPI_Info info, MPI_Comm comm,
+                       MPI_Win win)
+\end{Pseudolisting}
 
 It is possible to attach/detach memory to/from a window.
-\begin{Cpplisting}[]{}
-MPI_Win_attach(MPI_Win win, void *base, MPI_Aint size)
-MPI_Win_detach(MPI_Win win, const void *base)
-\end{Cpplisting}
+\begin{Pseudolisting}[]{}
+MPI_Win_attach(MPI_Win win, ptr, MPI_Aint size)
+MPI_Win_detach(MPI_Win win, ptr)
+\end{Pseudolisting}
 \end{frame}
 
 \begin{frame}[fragile]{Communication}
 Two functions:
 Write data into the window (put)
-\begin{Cpplisting}[]{}
-MPI_Put(const void *origin_addr, int origin_count, MPI_Datatype origin_datatype, int target_rank, MPI_Aint target_disp, int target_count, MPI_Datatype target_datatype, MPI_Win win)
-\end{Cpplisting}
+\begin{Pseudolisting}[]{}
+MPI_Put(origin_addr, origin_count, origin_datatype, 
+        target_rank, target_disp, target_count, target_datatype, win)
+\end{Pseudolisting}
 
 Read data from the window (get)
-\begin{Cpplisting}[]{}
-MPI_Get(void *origin_addr, int origin_count, MPI_Datatype origin_datatype, int target_rank, MPI_Aint target_disp, int target_count, MPI_Datatype target_datatype, MPI_Win win)
-\end{Cpplisting}
+\begin{Pseudolisting}[]{}
+MPI_Get(origin_addr, origin_count, origin_datatype, 
+        target_rank, target_disp, target_count, 
+        target_datatype, win)
+\end{Pseudolisting}
 
 \begin{itemize}
 \item Non blocking communication
@@ -157,9 +160,11 @@ MPI_Get(void *origin_addr, int origin_count, MPI_Datatype origin_datatype, int t
 
 
 \begin{frame}[fragile]{Accumulate}
-\begin{Cpplisting}[]{}
-MPI_Accumulate(const void *origin_addr, int origin_count, MPI_Datatype origin_datatype, int target_rank, MPI_Aint target_disp, int target_count, MPI_Datatype target_datatype, MPI_Op op, MPI_Win win)
-\end{Cpplisting}
+\begin{Pseudolisting}[]{}
+MPI_Accumulate(origin_addr, origin_count, origin_datatype,
+               target_rank, target_disp, target_count, 
+               target_datatype, op, win)
+\end{Pseudolisting}
 
 Remote accumulations, replace value in target buffer with accumulated.
 
@@ -168,13 +173,13 @@ Remote accumulations, replace value in target buffer with accumulated.
 \item Conflicting accesses are managed by the selected ordering
 \end{itemize}
 
-Other operations: \lstinlineCpp{MPI_Fetch_and_op, MPI_Compare_and_swap}
+Other operations: \lstinlinePseudo{MPI_Fetch_and_op, MPI_Compare_and_swap}
 \end{frame}
 
 \begin{frame}[fragile]{Synchronisation}
-\begin{Cpplisting}[]{}
-MPI_Win_fence(int assert, MPI_Win win)
-\end{Cpplisting}
+\begin{Pseudolisting}[]{}
+MPI_Win_fence(assert, win)
+\end{Pseudolisting}
 Collectively synchronizes all RMA calls started before fence on the window.
 
 Other synchronisation:

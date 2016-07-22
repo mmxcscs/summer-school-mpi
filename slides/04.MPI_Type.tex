@@ -45,7 +45,7 @@
 \subsection{Construct datatype}
 
 \begin{frame}[fragile]{Using MPI derived datatypes}
-MPI derived datatypes (differently from C or Fortran) are created (and destroyed) at run-time through calls to MPI library routines.\\
+MPI derived datatypes (differently from C or Pseudo) are created (and destroyed) at run-time through calls to MPI library routines.\\
 Implementation steps:
 \begin{enumerate}
 \item Construct the datatype;
@@ -57,18 +57,18 @@ Implementation steps:
 
 \begin{frame}[fragile]{Construct a datatype}
 \begin{itemize}
-\item \lstinlineCpp{MPI_Type_contiguous}\\
+\item \lstinlinePseudo{MPI_Type_contiguous}\\
 Produces a new datatype by making count copies of an existing data type.
 
-\item \lstinlineCpp{MPI_Type_vector, MPI_Type_hvector}\\
+\item \lstinlinePseudo{MPI_Type_vector, MPI_Type_create_hvector}\\
 Similar to contiguous, but allows for regular gaps (stride) in the displacements.
-\lstinlineCpp{MPI_Type_hvector} is identical to \lstinlineCpp{MPI_Type_vector} except that stride is specified in bytes.
+\lstinlinePseudo{MPI_Type_create_hvector} is identical to \lstinlinePseudo{MPI_Type_vector} except that stride is specified in bytes.
 
-\item \lstinlineCpp{MPI_Type_indexed, MPI_Type_hindexed}\\
+\item \lstinlinePseudo{MPI_Type_indexed, MPI_Type_create_hindexed}\\
 An array of displacements of the input data type is provided as the map for the new data type.
-\lstinlineCpp{MPI_Type_hindexed} is identical to \lstinlineCpp{MPI_Type_indexed} except that offsets are specified in bytes.
+\lstinlinePseudo{MPI_Type_create_hindexed} is identical to \lstinlinePseudo{MPI_Type_indexed} except that offsets are specified in bytes.
 
-\item \lstinlineCpp{MPI_Type_struct}\\
+\item \lstinlinePseudo{MPI_Type_create_struct}\\
 The most general of all derived datatypes. The new data type is formed according to completely defined map of the component data types.
 \end{itemize}
 
@@ -76,21 +76,17 @@ The most general of all derived datatypes. The new data type is formed according
 
 \begin{frame}[fragile]{Allocate and destroy the Datatype}
 A constructed datatype must be committed to the system before it can be used in a communication.\\
-\begin{Cpplisting}[]{}
-int MPI_Type_commit(MPI_datatype *datatype)
-int MPI_Type_free(MPI_datatype *datatype)
-\end{Cpplisting}
-\begin{Fortranlisting}[]{}
-MPI_TYPE_COMMIT(DATATYPE, IERR)
-MPI_TYPE_FREE(DATATYPE, IERR)
-\end{Fortranlisting}
+\begin{Pseudolisting}[]{}
+MPI_Type_Commit(datatype)
+MPI_Type_Free(datatype)
+\end{Pseudolisting}
 \end{frame}
 
 \begin{frame}[fragile]{Contiguous Datatype}
-\lstinlineFortran{MPI_TYPE_CONTIGOUS} constructs a typemap consisting of the replication of a datatype into contiguous locations.
-\begin{Fortranlisting}[]{}
-MPI_TYPE_CONTIGUOUS(count, oldtype, newtype, ierr)
-\end{Fortranlisting}
+\lstinlinePseudo{MPI_Type_contigous} constructs a typemap consisting of the replication of a datatype into contiguous locations.
+\begin{Pseudolisting}[]{}
+MPI_Type_contiguous(count, oldtype, newtype)
+\end{Pseudolisting}
 \begin{black1block}{}
 \begin{tabular}{rp{8cm}}
 \textbf{count} & number of BLOCKs to be added\\
@@ -112,9 +108,9 @@ REMEMBER:\@ BLOCK = contiguous elements of the same type.
 \end{tabular}
 \end{center}
 Create a new type of 4 floats representing a row in $a$.\\
-\lstinlineCpp{MPI_Type_contiguous(4, MPI_FLOAT, &MyRowType)}\\[0.5cm]
+\lstinlinePseudo{MPI_Type_contiguous(4, MPI_FLOAT, &MyRowType)}\\[0.5cm]
 Use the new type to send one row:\\
-\lstinlineCpp{MPI_Send(&a[2][0], 1, MyRowType, dest, tag, comm)}\\[0.5cm]
+\lstinlinePseudo{MPI_Send(&a[2][0], 1, MyRowType, dest, tag, comm)}\\[0.5cm]
 Data sent is:
 \begin{tabular}{|c|c|c|c|}
 \hline
@@ -126,10 +122,11 @@ Data sent is:
 
 \subsection{Contiguous datatype}
 \begin{frame}[fragile]{Contiguous Datatype with stride}
-\lstinlineFortran{MPI_TYPE_CONTIGOUS} constructs a typemap consisting of the replication of a datatype into contiguous locations.
-\begin{Fortranlisting}[]{}
-MPI_TYPE_VECTOR(count, blocklength, stride, oldtype, newtype, ierr)
-\end{Fortranlisting}
+\lstinlinePseudo{MPI_Type_contigous} constructs a typemap consisting of the replication of a datatype into contiguous locations.
+\begin{Pseudolisting}[]{}
+MPI_Type_vector(count, blocklength, stride, 
+                oldtype, newtype)
+\end{Pseudolisting}
 \begin{black1block}{}
 \begin{tabular}{rp{7.5cm}}
 \textbf{count} & number of BLOCKs to be added\\
@@ -153,14 +150,14 @@ The Vector constructor is similar to contiguous, but allows for regular gaps or 
 \end{tabular}
 \end{center}
 Create a new type of 4 floats representing a col in $a$.\\
-\begin{Cpplisting}[]{}
+\begin{Pseudolisting}[]{}
 count = 4; blocklength=1; stride = 4;
 MPI_Type_vector(count, blocklength, stride, MPI_FLOAT, &MyColType)
-\end{Cpplisting}
+\end{Pseudolisting}
 Use the new type to send one column:\\
-\begin{Cpplisting}[]{}
+\begin{Pseudolisting}[]{}
 MPI_Send(&a[0][2], 1, MyColType, dest, tag, comm)
-\end{Cpplisting}
+\end{Pseudolisting}
 Data sent is:
 \begin{tabular}{|c|c|c|c|}
 \hline
@@ -172,15 +169,16 @@ Data sent is:
 
 \subsection{Indexed datatype}
 \begin{frame}[fragile]{Indexed Datatype}
-\lstinlineCpp{MPI_TYPE_INDEXED} constructs a typemap consisting of the replication of a datatype from locations defined by an array of block lengths and an array of displacements.
-\begin{Cpplisting}[]{}
-MPI_TYPE_INDEXED(count, array_blocklengths, array_displacements, oldtype, newtype, ierr)
-\end{Cpplisting}
+\lstinlinePseudo{MPI_Type_indexed} constructs a typemap consisting of the replication of a datatype from locations defined by an array of block lengths and an array of displacements.
+\begin{Pseudolisting}[]{}
+MPI_Type_indexed(count, blocklength[], displacement[], 
+                 oldtype, newtype)
+\end{Pseudolisting}
 \begin{black1block}{}
 \begin{tabular}{rp{6.4cm}}
 \textbf{count} & number of BLOCKs to be added and number of elements in the following arrays\\
-\textbf{array\_blocklengths} & number of instances of oldtype in each block\\
-\textbf{array\_displacements} & displacement of each block in units of extent (oldtype)\\
+\textbf{blocklength} & number of instances of oldtype in each block\\
+\textbf{displacement} & displacement of each block in units of extent (oldtype)\\
 \textbf{oldtype} & oldtype Datatype of each element\\
 \textbf{newtype} & new derived datatype\\
 \end{tabular}
@@ -189,14 +187,14 @@ MPI_TYPE_INDEXED(count, array_blocklengths, array_displacements, oldtype, newtyp
 
 \begin{frame}[fragile]{Indexed Datatype: example}
 count = 3;\\
-oldtype = \lstinlineFortran{MPI_INT}\\
-array\_blocklengths=
+oldtype = \lstinlinePseudo{MPI_INT}\\
+blocklength=
 \begin{tabular}{|c|c|c|}
 \hline
 2  & 3  & 1 \\
 \hline
 \end{tabular}\\
-array\_displacements=
+displacement=
 \begin{tabular}{|c|c|c|}
 \hline
 0  & 3  & 9 \\
@@ -214,17 +212,18 @@ Selected blocks are:
 
 \subsection{Struct datatype}
 \begin{frame}[fragile]{Struct Datatype}
-\lstinlineCpp{MPI_TYPE_STRUCT} constructs a typemap consisting of different datatype from locations defined by an array of block lengths and an array of displacements.
+\lstinlinePseudo{MPI_Type_create_struct} constructs a typemap consisting of different datatype from locations defined by an array of block lengths and an array of displacements.
 Displacements are expressed in bytes (since the type can change!!!).
-\begin{Fortranlisting}[]{}
-MPI_TYPE_STRUCT(count, array_blocklengths, array_displacements, array_oldtype, newtype, ierr)
-\end{Fortranlisting}
+\begin{Pseudolisting}[]{}
+MPI_Type_create_struct(count, blocklength[], displacement[], 
+                       oldtype[], newtype)
+\end{Pseudolisting}
 \begin{black1block}{}
 \begin{tabular}{rp{6.4cm}}
 \textbf{count} & number of BLOCKs to be added and number of elements in the following arrays\\
-\textbf{array\_blocklengths} & number of instances of oldtype in each block\\
-\textbf{array\_displacements} & displacement in BYTES of each block\\
-\textbf{array\_oldtype} & oldtype Datatype of each element\\
+\textbf{blocklength} & number of instances of oldtype in each block\\
+\textbf{displacement} & displacement in BYTES of each block\\
+\textbf{oldtype} & oldtype Datatype of each element\\
 \textbf{newtype} & new derived datatype\\
 \end{tabular}
 \end{black1block}
@@ -232,23 +231,23 @@ MPI_TYPE_STRUCT(count, array_blocklengths, array_displacements, array_oldtype, n
 
 \begin{frame}[fragile]{Struct Datatype: example}
 count = 3;\\
-oldtype = \lstinlineCpp{MPI_INT}\\
-array\_blocklengths=
+oldtype = \lstinlinePseudo{MPI_INT}\\
+blocklength=
 \begin{tabular}{|c|c|c|}
 \hline
 2  & 2  & 1 \\
 \hline
 \end{tabular}\\
-array\_displacements (in bytes)=
+displacement (in bytes)=
 \begin{tabular}{|c|c|c|}
 \hline
 0  & 12  & 36 \\
 \hline
 \end{tabular}\\
-array\_oldtypes=
+oldtype=
 \begin{tabular}{|c|c|c|}
 \hline
-\lstinlineCpp{MPI_INT}  & \lstinlineCpp{MPI_DOUBLE}  & \lstinlineCpp{MPI_FLOAT} \\
+\lstinlinePseudo{MPI_INT}  & \lstinlinePseudo{MPI_DOUBLE}  & \lstinlinePseudo{MPI_FLOAT} \\
 \hline
 \end{tabular}\\[0.5cm]
 
@@ -267,15 +266,15 @@ Selected blocks are:
 %\begin{frame}[fragile]{Sub-array Datatype}
 %\justifying
 %The subarray type constructor creates an MPI datatype describing an n-dimensional subarray of an n-dimensional array. The subarray may be placed anywhere within the full array. Usefull to write in parallel an array to disk using only one pointer.
-%\begin{Cpplisting}[]{}
+%\begin{Pseudolisting}[]{}
 %MPI_TYPE_CREATE_SUBARRAY(ndims, array_sizes, array_subsizes, array_starts, order, oldtype, newtype)
-%\end{Cpplisting}
+%\end{Pseudolisting}
 %\begin{black1block}{}
 %\begin{tabular}{rp{6.5cm}}
 %\textbf{ndims} & number of array dimensions\\
 %\textbf{array\_sizes} & number of elements of type oldtype in each dimension of the full array\\
 %\textbf{array\_subsizes} & number of elements of type oldtype in each dimension of the subarray\\
-%\textbf{order} & array storage order flag (as C or Fortran)\\
+%\textbf{order} & array storage order flag (as C or Pseudo)\\
 %\textbf{array\_starts} & starting coordinates of the subarray in each dimension\\
 %\textbf{oldtype} & oldtype Datatype of each element\\
 %\textbf{newtype} & new derived datatype\\
@@ -286,7 +285,7 @@ Selected blocks are:
 %\begin{frame}[fragile]{Sub-array Datatype: example}
 %A 100x100 2D array of double precision floating point numbers distributed among 4 processes such that each process has a block of 25 columns.
 %
-%\begin{Cpplisting}[]{}
+%\begin{Pseudolisting}[]{}
 %double data[100][100];
 %double subarray[100][25];
 %MPI_Datatype filetype;
@@ -302,14 +301,14 @@ Selected blocks are:
 %MPI_Type_create_subarray(2, sizes, subsizes, starts, MPI_ORDER_C, MPI_DOUBLE, &filetype);
 %
 %MPI_File_write(.., data, 1, filetype,...);
-%\end{Cpplisting}
+%\end{Pseudolisting}
 %
 %\end{frame}
 
 \begin{frame}[fragile]{Other functions}
 \begin{itemize}
-    \item Manage types:\\\hspace{1cm}\lstinlineCpp{MPI_Comm_extent, MPI_Type_dup} \ldots
-    \item Getter for types:\\\hspace{1cm}\lstinlineCpp{MPI_Type_size, MPI_Type_get_contents} \ldots
+    \item Manage types:\\\hspace{1cm}\lstinlinePseudo{MPI_Type_dup} \ldots
+    \item Getter for types:\\\hspace{1cm}\lstinlinePseudo{MPI_Type_get_extent}, \lstinlinePseudo{MPI_Type_size}, \lstinlinePseudo{MPI_Type_get_contents}\ldots
 \end{itemize}
 \end{frame}
 

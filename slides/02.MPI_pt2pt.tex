@@ -92,42 +92,23 @@ MPI defines "handles" to allow programmers to refer to data types.
 \end{frame}
 
 
-\begin{frame}[fragile]{Fortran - MPI Intrinsic Datatypes}
+\begin{frame}[fragile]{Some - MPI Intrinsic Datatypes}
 \begin{center}
 \begin{tabular}{|c||c|}
     \hline
-    \color{cscsblue}\textbf{MPI Data type} & \color{cscsbrown}\textbf{Fortran Data type} \\\hline\hline
+    \color{cscsblue}\textbf{MPI Data type} & \color{cscsbrown}\textbf{Fortran/C Data type} \\\hline\hline
     \verb+MPI_INTEGER+ & \verb+INTEGER+ \\\hline
     \verb+MPI_REAL+ & \verb+REAL+ \\\hline
     \verb+MPI_DOUBLE_PRECISION+ & \verb+DOUBLE PRECISION+ \\\hline
     \verb+MPI_COMPLEX+ & \verb+COMPLEX+ \\\hline
-    \verb+MPI_DOUBLE_COMPLEX+ & \verb+DOUBLE COMPLEX+\\\hline
     \verb+MPI_LOGICAL+ & \verb+LOGICAL+ \\\hline
-    \verb+MPI_CHARACTER+ & \verb+CHARACTER(1)+ \\\hline
-    \verb+MPI_PACKED+ & -\\\hline
-    \verb+MPI_BYTE+ & -\\\hline
-\end{tabular}
-\end{center}
-\end{frame}
-
-\begin{frame}[fragile]{C - MPI Intrinsic Datatypes}
-\begin{center}
-\begin{tabular}{|c||c|}
-    \hline
-    \color{cscsblue}\textbf{MPI Data type} & \color{cscsbrown}\textbf{C Data type} \\\hline\hline
+    \verb+MPI_CHARACTER+ & \verb+CHARACTER(1)+ \\\hline\hline
     \verb+MPI_CHAR+ & \verb+signed char+\\\hline
-    \verb+MPI_SHORT+ & \verb+signed short int+\\\hline
     \verb+MPI_INT+ & \verb+signed int+\\\hline
     \verb+MPI_LONG+ & \verb+signed long int+\\\hline
-    \verb+MPI_UNSIGNED_CHAR+ & \verb+unsigned char+\\\hline
-    \verb+MPI_UNSIGNED_SHORT+ & \verb+unsigned short int+\\\hline
-    \verb+MPI_UNSIGNED+ & \verb+unsigned int+\\\hline
     \verb+MPI_UNSIGNED_LONG+ & \verb+unsigned long int+\\\hline
     \verb+MPI_FLOAT+ & \verb+float+\\\hline
     \verb+MPI_DOUBLE+ & \verb+double+\\\hline
-    \verb+MPI_LONG_DOUBLE+ & \verb+long double+\\\hline
-    \verb+MPI_BYTE+ & -\\\hline
-    \verb+MPI_PACKED+ & -\\\hline
 \end{tabular}
 \end{center}
 \end{frame}
@@ -136,26 +117,21 @@ MPI defines "handles" to allow programmers to refer to data types.
 \subsection{Standard Send/Recv}
 \begin{frame}[fragile]{Basic Send/Recv}
 
-\begin{Cpplisting}[]{}
-int MPI_Send(void *buf, int count, MPI_Datatype type, int dest, int tag, MPI_Comm comm);
-int MPI_Recv(void *buf, int count, MPI_Datatype type, int source, int tag, MPI_Comm comm, MPI_Status *status);
-\end{Cpplisting}
-\begin{Fortranlisting}[]{}
-MPI_SEND(buf, count, type, dest, tag, comm, ierr)
-MPI_RECV(buf, count, type, source, tag, comm, status, ierr)
-\end{Fortranlisting}
+\begin{Pseudolisting}[]{}
+MPI_SEND(buf, count, type, dest, tag, comm)
+MPI_RECV(buf, count, type, source, tag, comm, status)
+\end{Pseudolisting}
 \only<1>{
 \begin{black1block}{}
 \begin{tabular}{rl}
-    \textbf{buf} & array of type type see table\\
-    \textbf{count} & (INTEGER) number of element of buf to be sent\\
-    \textbf{type} & (INTEGER) MPI type of buf\\
-    \textbf{dest} & (INTEGER) rank of the destination process\\
-    \textbf{source} & (INTEGER) rank of the source process\\
-    \textbf{tag} & (INTEGER) number identifying the message\\
-    \textbf{comm} & (INTEGER) communicator of the sender and receiver\\
-    \textbf{status} & (INTEGER) array containing communication status\\
-    \textbf{ierr} & (INTEGER) error code (if ierr=0 no error occurs)\\
+    \textbf{buf}    & array of type type see table\\
+    \textbf{count}  & number of element of buf to be sent\\
+    \textbf{type}   & MPI type of buf\\
+    \textbf{dest}   & rank of the destination process\\
+    \textbf{source} & rank of the source process\\
+    \textbf{tag}    & number identifying the message\\
+    \textbf{comm}   & communicator of the sender and receiver\\
+    \textbf{status} & array containing communication status\\
 \end{tabular}
 \end{black1block}
 }
@@ -169,32 +145,34 @@ MPI_RECV(buf, count, type, source, tag, comm, status, ierr)
     \color{cscsgreen}\textbf{tag} & \\
     \color{cscsgreen}\textbf{comm} & \\
     \color{cscsgreen}\textbf{status} & \\\hline
-    \textbf{ierr} & (INTEGER) error code (if ierr=0 no error occurs)\\
 \end{tabular}
 \end{black1block}
 }
 \end{frame}
 
 \subsection{Communication status}
-\begin{frame}[fragile]{MPI Status}
+\begin{frame}[fragile]{MPI Status and tag}
 \justifying
-\lstinlineCpp{MPI_Status} structures are used by the message receiving functions to return data about a message.
-It is an \lstinlineFortran{INTEGER} array of \lstinlineCpp{MPI_STATUS_SIZE} elements in Fortran.
+\lstinlinePseudo{MPI_Status} structures are used by the message receiving functions to return data about a message.
+It is an \lstinlineFortran{INTEGER} array of \lstinlinePseudo{MPI_STATUS_SIZE} elements in Fortran.
 The array contains the following info:
 \begin{itemize}
-\item \lstinlineCpp{MPI_SOURCE} - id of processor sending the message
-\item \lstinlineCpp{MPI_TAG} - the message tag
-\item \lstinlineCpp{MPI_ERROR} - error status
+\item \lstinlinePseudo{MPI_SOURCE} - id of processor sending the message
+\item \lstinlinePseudo{MPI_TAG} - the message tag
+\item \lstinlinePseudo{MPI_ERROR} - error status
 \end{itemize}
 There may also be other fields in the structure, but these are reserved for the implementation.
+
+A tag is a user-defined identity for a message.
+
 \end{frame}
 
 \subsection{Wildcards}
 \begin{frame}[fragile]{Wildcards}
-    Both in Fortran and C,  \lstinlineCpp{MPI_Recv} accepts wildcards:
+    Both in Fortran and C,  \lstinlinePseudo{MPI_Recv} accepts wildcards:
 \begin{itemize}
-    \item To receive from any source: \lstinlineCpp{MPI_ANY_SOURCE}
-    \item To receive with any tag: \lstinlineCpp{MPI_ANY_TAG}
+    \item To receive from any source: \lstinlinePseudo{MPI_ANY_SOURCE}
+    \item To receive with any tag: \lstinlinePseudo{MPI_ANY_TAG}
 \item Actual source and tag are returned in the receiver’s status parameter
 \end{itemize}
 \end{frame}
@@ -209,21 +187,21 @@ This is actually never the case.
 A send resp.\ a receive can be triggered before or after its corresponding receive resp.\ send.\\
 \item Is the receiving rank prepared to receive the data?\ldots
 \end{itemize}
-\begin{blue1block}{Rendez-vous protocol}
-{\color{cscsred}Internal to MPI not expose to the user}
-\begin{Cpplisting}[Pseudo-code]{}
-  if (size_to_send < CSTE ) {
-     /* EAGER protocol
-     copy the send buffer to a kernel buffer
-     post a send request using kernel buffer */
-  } else {
-     /* RENDEZ-VOUS protocol
-     prepare a rendez-vous buffer (send buffer size)
-     post a send request using the rendez-vous buffer
-     wait for the send request to be acknowledged
-     post a send request using buffer */
-  }
-\end{Cpplisting}
+\begin{blue1block}{Common MPI protocol}
+{\color{cscsred}Internal to MPI not expose to the user, not defined by the standard}
+\begin{Pseudolisting}[Pseudo-code]{}
+if (size_to_send < CSTE ) {
+  /* EAGER protocol:
+  post a send request using a buffer
+  expecting the receive to store it */
+} else {
+  /* RENDEZ-VOUS protocol:
+  post an envelope to ask the receive to be prepared
+  wait for the receive to acknowledge it
+  then the receive is able to store the data
+  post a send request using a buffer */
+}
+\end{Pseudolisting}
 \end{blue1block}
 \end{frame}
 
@@ -238,6 +216,16 @@ A send resp.\ a receive can be triggered before or after its corresponding recei
 \end{frame}
 
 \subsection{Blocking and non-blocking}
+\begin{frame}{Blocking and non-blocking ?}
+Without non-blocking communications there is potential deadlocks
+
+\begin{center}
+\includegraphics[scale=1]{02.MPI_pt2pt/deadlock.pdf}
+\end{center}
+
+Also non-blocking coommunication are usefull to overlap communication and computation
+\end{frame}
+
 \begin{frame}{Blocking and non-blocking communications}
 \begin{green1block}{A blocking communication means\ldots}
     That the buffer can be re-used after the function as returned.
@@ -260,92 +248,80 @@ A send resp.\ a receive can be triggered before or after its corresponding recei
 
 \begin{frame}[fragile]{Blocking and non-blocking examples}
     \begin{columns}
-        \begin{column}{0.4\paperwidth}
+        \begin{column}{0.45\paperwidth}
             Blocking example:
-\begin{Cpplisting}[]{}
+\begin{Pseudolisting}[]{}
 int buf[120];
-MPI_Send(buf,MPI_INT,120,...);
-// from here buffer can be re-used
+MPI_Send(buf,MPI_INT,5,...);
+// after the function returns
+// the communication is done
+// the buffer can be re-used
 but[3]=5
-\end{Cpplisting}
+\end{Pseudolisting}
         \end{column}
-        \begin{column}{0.4\paperwidth}
+        \begin{column}{0.45\paperwidth}
             Non-blocking example:
-\begin{Cpplisting}[]{}
+\begin{Pseudolisting}[]{}
 int buf[120];
-MPI_Isend(buf,MPI_INT,120,...);
+MPI_Isend(buf,MPI_INT,5,...);
+// after the function returns
+// the communication is not done
 // do not overwrite buf
 // buf[3]=5 illegal
-// leads to undefined behaviour
 MPI_Wait(...);
-// from here buffer can be re-used
+// here communication is done
 but[3]=5
-\end{Cpplisting}
+\end{Pseudolisting}
         \end{column}
     \end{columns}
 Each rank does not necessary know if the communication has been completed by the time the MPI send function returns.\\
-The \lstinlineCpp{I} in \lstinlineCpp{MPI_Isend} means {\color{cscsred}immediate}, the function returns "immediately" after its call.
+The \lstinlinePseudo{I} in \lstinlinePseudo{MPI_Isend} means {\color{cscsred}immediate}, the function returns "immediately" after its call.
 \end{frame}
 
 \begin{frame}[fragile]{Non-blocking MPI\_Isend and MPI\_Irecv}
-\begin{Cpplisting}[]{}
-int MPI_Isend(void *buf, int count, MPI_Datatype type, int dest, int tag, MPI_Comm comm, MPI_Request *req);
-int MPI_Irecv(void *buf, int count, MPI_Datatype type, int source, int tag, MPI_Comm comm, MPI_Request *req);
-\end{Cpplisting}
-\begin{Fortranlisting}[]{}
-MPI_ISEND(buf, count, type, dest, tag, comm, req, ierr)
-MPI_IRECV(buf, count, type, source, tag, comm, req, ierr)
-\end{Fortranlisting}
+\begin{Pseudolisting}[]{}
+MPI_Isend(buf,count,type,dest,tag,comm, MPI_Request req)
+MPI_Irecv(buf,count,type,source,tag,comm, MPI_Request req)
+\end{Pseudolisting}
 \begin{black1block}{}
 \begin{tabular}{rl}
     \textbf{buf} & array of type type see table\\
-    \textbf{count} & (INTEGER) number of element of buf to be sent\\
-    \textbf{type} & (INTEGER) MPI type of buf\\
-    \textbf{dest} & (INTEGER) rank of the destination process\\
-    \textbf{source} & (INTEGER) rank of the source process\\
-    \textbf{tag} & (INTEGER) number identifying the message\\
-    \textbf{comm} & (INTEGER) communicator of the sender and receiver\\
-    \textbf{req} & (INTEGER) identifier of the communications handle\\
-    \textbf{ierr} & (INTEGER) error code (if ierr=0 no error occurs)\\
+    \textbf{count} & number of element of buf to be sent\\
+    \textbf{type} & MPI type of buf\\
+    \textbf{dest} & rank of the destination process\\
+    \textbf{source} & rank of the source process\\
+    \textbf{tag} & number identifying the message\\
+    \textbf{comm} & communicator of the sender and receiver\\
+    \textbf{req} &  identifier of the communications handle\\
 \end{tabular}
 \end{black1block}
 \end{frame}
 
 \begin{frame}[fragile]{Waiting for completion}
-\begin{Cpplisting}[]{}
-int MPI_Wait(MPI_Request *req, MPI_Status *status)
-int MPI_Waitall(int count, MPI_Request array_of_requests[], MPI_Status array_of_statuses[])
-\end{Cpplisting}
-\begin{Fortranlisting}[]{}
-MPI_WAIT(req, status, ierr)
-MPI_WAITALL(count, array_of_requests, array_of_statuses, ierr)
-\end{Fortranlisting}
+\begin{Pseudolisting}[]{}
+MPI_Wait(MPI_Request req, status)
+MPI_Waitall(count, MPI_Request requests[], status[])
+\end{Pseudolisting}
 \begin{black1block}{}
 \begin{tabular}{rl}
-    \textbf{req} & (INTEGER) identifier of the communications handle\\
-    \textbf{status} & (INTEGER) array containing communication status\\
-    \textbf{count} & (INTEGER) number of element of in arrays\\
-    \textbf{ierr} & (INTEGER) error code (if ierr=0 no error occurs)\\
+    \textbf{req} & identifier of the communications handle\\
+    \textbf{status} & array containing communication status\\
+    \textbf{count} & number of element of in arrays\\
 \end{tabular}
 \end{black1block}
 \end{frame}
 
 \begin{frame}[fragile]{Testing for completion}
-\begin{Cpplisting}[]{}
-int MPI_Test(MPI_Request *request, int *flag, MPI_Status *status)
-int MPI_Testall(int count, MPI_Request array_of_requests[], int *flag, MPI_Status array_of_statuses[])
-\end{Cpplisting}
-\begin{Fortranlisting}[]{}
-MPI_TEST(req, flag, status, ierr)
-MPI_TESTALL(count, array_of_requests, flag, array_of_statuses, ierr)
-\end{Fortranlisting}
+\begin{Pseudolisting}[]{}
+MPI_Test(req, flag, status)
+MPI_Testall(count, requests[], flag, status[])
+\end{Pseudolisting}
 \begin{black1block}{}
 \begin{tabular}{rl}
-    \textbf{req} & (INTEGER) identifier of the communications handle\\
-    \textbf{flag} & (LOGICAL) true if req has completed false otherwise\\
-    \textbf{status} & (INTEGER) array containing communication status\\
-    \textbf{count} & (INTEGER) number of element of in arrays\\
-    \textbf{ierr} & (INTEGER) error code (if ierr=0 no error occurs)\\
+    \textbf{req} & identifier of the communications handle\\
+    \textbf{flag} & true if req has completed false otherwise\\
+    \textbf{status} & array containing communication status\\
+    \textbf{count} & number of element of in arrays\\
 \end{tabular}
 \end{black1block}
 \end{frame}
@@ -386,7 +362,7 @@ All of them can be Blocking or Non-Blocking.
 \item A send operation can be started whether or not a matching receive has been posted
 \item It completes whether or not a matching receive has been posted (independent from the receive)
 \item The original buffer can be read and overwritten, it has been copied to user-supplied buffer
-\item Buffer space is allocated on demand \lstinlineCpp{MPI_Buffer_Attach}
+\item Buffer space is allocated on demand \lstinlinePseudo{MPI_Buffer_Attach}
 \item Local operation
 \end{itemize}
 \end{frame}
@@ -406,12 +382,12 @@ All of them can be Blocking or Non-Blocking.
 \begin{tabular}{|l|p{3.7cm}|l|l|}
 \hline
 \textbf{Mode} & \textbf{Completion Condition} & \textbf{Blocking} & \textbf{Non-blocking}\\\hline
-Standard send & Message sent (receive state unknown)&  \lstinlineCpp{MPI_Send} & \lstinlineCpp{MPI_Isend} \\\hline
-Receive & Completes when a matching message has arrived & \lstinlineCpp{MPI_Recv} & \lstinlineCpp{MPI_Irecv} \\\hline
-Synchronous send & Only completes after a matching recv() is posted and the receive operation is at some stages. & \lstinlineCpp{MPI_Ssend} & \lstinlineCpp{MPI_Issend} \\\hline
-Buffered send & Always completes, irrespective of receiver. Guarantees the message to be buffered. & \lstinlineCpp{MPI_Bsend} & \lstinlineCpp{MPI_Ibsend} \\\hline
+Standard send & Message sent (receive state unknown)&  \lstinlinePseudo{MPI_Send} & \lstinlinePseudo{MPI_Isend} \\\hline
+Receive & Completes when a matching message has arrived & \lstinlinePseudo{MPI_Recv} & \lstinlinePseudo{MPI_Irecv} \\\hline
+Synchronous send & Only completes after a matching recv() is posted and the receive operation is at some stages. & \lstinlinePseudo{MPI_Ssend} & \lstinlinePseudo{MPI_Issend} \\\hline
+Buffered send & Always completes, irrespective of receiver. Guarantees the message to be buffered. & \lstinlinePseudo{MPI_Bsend} & \lstinlinePseudo{MPI_Ibsend} \\\hline
 
-Ready send & Always completes, irrespective of whether the receive has completed. & \lstinlineCpp{MPI_Rsend} & \lstinlineCpp{MPI_Irsend} \\\hline
+Ready send & Always completes, irrespective of whether the receive has completed. & \lstinlinePseudo{MPI_Rsend} & \lstinlinePseudo{MPI_Irsend} \\\hline
 \end{tabular}
 
 
@@ -445,21 +421,20 @@ The send-receive operations combine in one call the sending of a message to one 
 The source and destination are possibly the same.
 A send-receive operation is very useful for executing a shift operation across a chain of processes.
 Will block until the sending application buffer is free for reuse and until the receiving application buffer contains the received message.
-\begin{Fortranlisting}[]{}
-CALL MPI_SENDRECV(sndbuf, snd_size, snd_type, rcvid, tag,
-                  rcvbuf, rcv_size, rcv_type, sndid, tag,
-                  comm, status, ierr)
-\end{Fortranlisting}
+\begin{Pseudolisting}[]{}
+MPI_Sendrecv(sndbuf, snd_size, snd_type, rcvid, tag,
+             rcvbuf, rcv_size, rcv_type, sndid, tag,
+             comm, status)
+\end{Pseudolisting}
 \end{frame}
 
 \begin{frame}[fragile]{Other functions}
 \begin{itemize}
-\item Test if a message has arrived:\\\hspace{1cm}\lstinlineCpp{MPI_Probe, MPI_Iprobe}
-\item Abort the application:\\\hspace{1cm}\lstinlineCpp{MPI_Abort}
-\item Buffer management:\\\hspace{1cm}\lstinlineCpp{MPI_Buffer_attach, MPI_Buffer_detach}
-\item Wait functions:\\\hspace{1cm}\lstinlineCpp{MPI_Waitany, MPI_Waitsome}
-\item Test functions:\\\hspace{1cm}\lstinlineCpp{MPI_Testany, MPI_Testsome}
-\item Cancel a request:\\\hspace{1cm}\lstinlineCpp{MPI_Cancel}
+\item Look into incomming message before to do a recv:\\\hspace{1cm}\lstinlinePseudo{MPI_Probe, MPI_Iprobe}
+\item Buffer management:\\\hspace{1cm}\lstinlinePseudo{MPI_Buffer_attach, MPI_Buffer_detach}
+\item Wait functions:\\\hspace{1cm}\lstinlinePseudo{MPI_Waitany, MPI_Waitsome}
+\item Test functions:\\\hspace{1cm}\lstinlinePseudo{MPI_Testany, MPI_Testsome}
+\item Cancel a request:\\\hspace{1cm}\lstinlinePseudo{MPI_Cancel}
 \end{itemize}
 \end{frame}
 
@@ -468,16 +443,21 @@ CALL MPI_SENDRECV(sndbuf, snd_size, snd_type, rcvid, tag,
     \begin{enumerate}
         \setcounter{enumi}{3}
     \item Parallel sum using a ring:\\
-        without using \lstinlineCpp{if (rank == 0) ... else ...}\\
+        without using \lstinlinePseudo{if (rank == 0) ... else ...}\\
+        {{\small
             \begin{tabular}{|c||c|c|c|}\hline
-                Rank 0 & 0 & 1 & 2 \\\hline
-                Rank 1 & 1 & 2 & 0 \\\hline
-                Rank 2 & 2 & 0 & 1 \\\hline
-        \end{tabular}\\
+                 & Rank 0 & Rank 1 & Rank 2\\\hline
+            Send & 0 & 1 & 2 \\\hline
+            Recv & 2 & 0 & 1 \\\hline\hline
+            Send & 2 & 0 & 1 \\\hline
+            Recv & 1 & 2 & 0 \\\hline\hline
+            Send & 1 & 2 & 0 \\\hline
+            Recv & 0 & 1 & 2 \\\hline
+            \end{tabular}\\}}
         All ranks obtain the sum.
         \item Send and Recv neighbor ghost cells:\\
             Top to bottom for C and right to left for Fortran
-        \item Identify (not solve) 3 bugs in the buffer management (only in C, no Fortran version)
+        \item Identify (not solve) 4 bugs in the buffer management (only in C, no Fortran version)
     \end{enumerate}
     \end{brown2block}
 \end{frame}

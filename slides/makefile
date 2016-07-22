@@ -1,32 +1,32 @@
 
 
-all: 01MPI_Intro 02MPI_pt2pt 03MPI_Coll 04MPI_Type 05MPI_Topo 06MPI_Miniapp 07MPI_Extra
+all: 1 2 3 4 5 6 7
 
-01MPI_Intro:
+1:
 	pdflatex 01.MPI_Intro.tex
 	pdflatex 01.MPI_Intro.tex
 
-02MPI_pt2pt:
+2:
 	pdflatex 02.MPI_pt2pt.tex
 	pdflatex 02.MPI_pt2pt.tex
 
-03MPI_Coll:
+3:
 	pdflatex 03.MPI_Coll.tex
 	pdflatex 03.MPI_Coll.tex
 
-04MPI_Type:
+4:
 	pdflatex 04.MPI_Type.tex
 	pdflatex 04.MPI_Type.tex
 
-05MPI_Topo:
+5:
 	pdflatex 05.MPI_Topo.tex
 	pdflatex 05.MPI_Topo.tex
 
-06MPI_Miniapp:
+6:
 	pdflatex 06.MPI_Miniapp.tex
 	pdflatex 06.MPI_Miniapp.tex
 
-07MPI_Extra:
+7:
 	pdflatex 07.MPI_Extra.tex
 	pdflatex 07.MPI_Extra.tex
 

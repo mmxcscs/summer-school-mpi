@@ -300,6 +300,23 @@ adjusted title=\lsttinyfont{cscsblack}{C/C++ #1},
 
 \newcommand{\lstinlineCpp}[1]{\colorbox{cscswhite!20!cscsblack}{\lstinline[style=CppStyle]!#1!}}
 
+\newtcblisting{Pseudolisting}[2][]{
+colback=cscswhite!10!cscsblack,
+colframe=cscswhite!10!cscsblack,
+colbacktitle=cscswhite!75!cscsblack,
+coltitle=cscsblack,
+arc=0pt, outer arc=0pt,
+leftrule=0pt, rightrule=0pt, toprule=0pt, bottomrule=0pt, titlerule=0pt,
+boxsep=0pt,
+left=0pt, right=0pt, top=-6pt, bottom=-6pt, bottomtitle=0pt, toptitle=0pt,
+listing only,
+listing style=CppStyle,
+adjusted title=\lsttinyfont{cscsblack}{Pseudo-code #1},
+#2
+}
+
+\newcommand{\lstinlinePseudo}[1]{\colorbox{cscswhite!20!cscsblack}{\lstinline[style=CppStyle]!#1!}}
+
 \lstdefinestyle{FortranStyle}{
 language=[90]Fortran,
 showstringspaces=false,
