@@ -41,7 +41,7 @@ int main(int argc, char *argv[])
         MPI_Recv(buffer, SIZE, MPI_FLOAT, 0, PING, MPI_COMM_WORLD, &status);
         MPI_Send(buffer, SIZE, MPI_FLOAT, 0, PONG, MPI_COMM_WORLD);
     }
-    printf("Rank %d says: Ping-pong complete.\n",my_rank);
+    printf("Rank %d says: Ping-pong is completed.\n",my_rank);
 
     MPI_Finalize();
     return 0;

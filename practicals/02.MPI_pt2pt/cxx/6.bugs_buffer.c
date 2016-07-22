@@ -7,7 +7,7 @@
  * CSCS take no responsibility for the use of the enclosed      *
  * teaching material.                                           *
  *                                                              *
- * Purpose: There is 2 bugs related to buffer                   *
+ * Purpose: There is 4 bugs related to buffer                   *
  *                                                              *
  * Contents: C-Source                                           *
  *                                                              *
@@ -36,8 +36,7 @@
 #define MAX_SIZE_STRING 64
 #define MAX_SIZE_COMPUTE (1<<20)
 
-void compute_and_send(size_t size, float root, int k, MPI_Request* req)
-{
+void compute_and_send(size_t size, float root, int k, MPI_Request* req) {
     std::vector<float> data(size);
     int j;
 
@@ -83,7 +82,7 @@ int main(int argc, char *argv[])
         }
 
         for( k = 1; k < np; k++ ) {
-            compute_and_send(size[k-1], root[k-1], k, &req[k-1+2*(np-1)]);
+           compute_and_send(size[k-1], root[k-1], k, &req[k-1+2*(np-1)]);
         }
 
         MPI_Waitall(3*(np-1), req, MPI_STATUS_IGNORE);

@@ -7,7 +7,7 @@
  * CSCS take no responsibility for the use of the enclosed      *
  * teaching material.                                           *
  *                                                              *
- * Purpose: There is 2 bugs related to buffer                   *
+ * Purpose: There is 4 bugs related to buffer                   *
  *                                                              *
  * Contents: C-Source                                           *
  *                                                              *
@@ -49,8 +49,8 @@ void compute_and_send(size_t size, float root, int k, MPI_Request* req)
 
     /* HARD BUG:
      * when exiting the function, the object data of type vector will call its destructor
-     * because it is a local variable to the function.
-     * However, the send may not be completed and it may lost its buffer after the object is destroyed.
+     * because it is a local variable of the function.
+     * However, the send may not be completed and it may lose its buffer after the object is destroyed.
      * Different compilers implement different strategies to destroy local variables when a function exits.
      */
 }
@@ -125,4 +125,5 @@ int main(int argc, char *argv[])
 
     MPI_Finalize();
     return 0;
+
 }
