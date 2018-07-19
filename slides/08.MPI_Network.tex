@@ -363,31 +363,12 @@ MPI_Isend(send_data, 100, MPI_DOUBLE, target, tag, MPI_COMM_WORLD, &srequest);
 \begin{frame}[fragile]{Exercise: MPI with G2G}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     \begin{itemize}
-        \item 2D stencil with MPI in \lstterm{diffusion/diffusion2d_mpi.cu}
+        \item 2D stencil with MPI in \lst{08.MPI\_Network/cxx/1.diffusion2d\_mpi.cu}
         \item Implement the G2G version
         \begin{enumerate}
             \item can you observe any performance differences?
-            \item why are we restricted to just 1 MPI rank per node?
         \end{enumerate}
     \end{itemize}
-
-    \begin{terminal}{}
-        \begin{lstlisting}[style=terminal]
-# load modules require to compile MPI
-module swap PrgEnv-cray PrgEnv-gnu
-module load cudatoolkit
-
-# launch with 2 MPI ranks
-MPICH_RDMA_ENABLED_CUDA=1 srun -C gpu -n2 -N2 --reservation=course
-        diffusion2d_mpi.cuda 8
-
-# plot the solution
-source ../../../../scripts/plot.sh
-
-# once it gets the correct results:
-sbatch job.batch
-        \end{lstlisting}
-   \end{terminal}
 
 \end{frame}
 
