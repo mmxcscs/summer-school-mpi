@@ -19,7 +19,8 @@ PROGRAM simple_send_recv
    USE MPI
    IMPLICIT NONE
 
-   INTEGER rank, size, number, stat, ierror
+   INTEGER rank, size, number, ierror
+   INTEGER stat(MPI_STATUS_SIZE)
 
    CALL MPI_Init(ierror)
 
